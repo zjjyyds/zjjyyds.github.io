@@ -19,24 +19,24 @@
   <meta name="author" content="Jay">
   <meta name="keywords" content="">
   
-    <meta name="description" content="1. 准备工作确保你的电脑环境已经安装了以下软件：  Node.js: 建议安装 LTS 版本。 Git: 用于将代码推送到 GitHub。  2. 安装 Hexo在终端依次输入以下命令进行初始化： 123456789# 全局安装脚手架npm install -g hexo-cli# 初始化项目文件夹hexo init myblogcd myblog# 安装依赖npm install 3. 联动">
+    <meta name="description" content="很多新手在开始使用 Hexo 时，习惯性地每次修改都执行 hexo clean, hexo g, hexo s。但在实际开发和写作中，这样做非常浪费时间。以下是根据不同场景推荐的最佳工作流，帮你把时间花在写作上，而不是等待编译。 1. 场景一：日常写文章 &#x2F; 修改内容（最常见）场景描述：你在 source&#x2F;_posts 下新建了一个 .md，或者修改了已有的文章内容、错别字。  是否需要">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo和GitHub搭建博客全记录">
-<meta property="og:url" content="https://zjjyyds.github.io/2025/12/21/Hexo%E5%92%8CGitHub%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E5%85%A8%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:title" content="Hexo每次一定要“三件套”吗？">
+<meta property="og:url" content="https://zjjyyds.github.io/2025/12/22/%E6%AF%8F%E6%AC%A1%E4%B8%80%E5%AE%9A%E8%A6%81%E2%80%9C%E4%B8%89%E4%BB%B6%E5%A5%97%E2%80%9D%E5%90%97%EF%BC%9F/index.html">
 <meta property="og:site_name" content="大雪深埋">
-<meta property="og:description" content="1. 准备工作确保你的电脑环境已经安装了以下软件：  Node.js: 建议安装 LTS 版本。 Git: 用于将代码推送到 GitHub。  2. 安装 Hexo在终端依次输入以下命令进行初始化： 123456789# 全局安装脚手架npm install -g hexo-cli# 初始化项目文件夹hexo init myblogcd myblog# 安装依赖npm install 3. 联动">
+<meta property="og:description" content="很多新手在开始使用 Hexo 时，习惯性地每次修改都执行 hexo clean, hexo g, hexo s。但在实际开发和写作中，这样做非常浪费时间。以下是根据不同场景推荐的最佳工作流，帮你把时间花在写作上，而不是等待编译。 1. 场景一：日常写文章 &#x2F; 修改内容（最常见）场景描述：你在 source&#x2F;_posts 下新建了一个 .md，或者修改了已有的文章内容、错别字。  是否需要">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-21T15:45:00.000Z">
-<meta property="article:modified_time" content="2025-12-22T12:16:40.765Z">
+<meta property="article:published_time" content="2025-12-22T12:16:00.000Z">
+<meta property="article:modified_time" content="2025-12-22T12:17:46.945Z">
 <meta property="article:author" content="Jay">
 <meta property="article:tag" content="Hexo">
-<meta property="article:tag" content="GitHub">
 <meta property="article:tag" content="教程">
+<meta property="article:tag" content="效率">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>Hexo和GitHub搭建博客全记录 - 大雪深埋</title>
+  <title>Hexo每次一定要“三件套”吗？ - 大雪深埋</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -202,7 +202,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Hexo和GitHub搭建博客全记录"></span>
+            <span id="subtitle" data-typed-text="Hexo每次一定要“三件套”吗？"></span>
           
         </div>
 
@@ -213,8 +213,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-12-21 23:45" pubdate>
-          2025年12月21日 晚上
+        <time datetime="2025-12-22 20:16" pubdate>
+          2025年12月22日 晚上
         </time>
       </span>
     
@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          494 字
+          633 字
         
       </span>
     
@@ -236,7 +236,7 @@
         
         
         
-          5 分钟
+          6 分钟
         
       </span>
     
@@ -273,91 +273,57 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Hexo和GitHub搭建博客全记录</h1>
+            <h1 id="seo-header">Hexo每次一定要“三件套”吗？</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1. 准备工作"></a>1. 准备工作</h2><p>确保你的电脑环境已经安装了以下软件：</p>
+                <p>很多新手在开始使用 Hexo 时，习惯性地每次修改都执行 <code>hexo clean</code>, <code>hexo g</code>, <code>hexo s</code>。但在实际开发和写作中，这样做非常浪费时间。以下是根据不同场景推荐的最佳工作流，帮你把时间花在写作上，而不是等待编译。</p>
+<h2 id="1-场景一：日常写文章-修改内容（最常见）"><a href="#1-场景一：日常写文章-修改内容（最常见）" class="headerlink" title="1. 场景一：日常写文章 &#x2F; 修改内容（最常见）"></a>1. 场景一：日常写文章 &#x2F; 修改内容（最常见）</h2><p><strong>场景描述</strong>：你在 <code>source/_posts</code> 下新建了一个 <code>.md</code>，或者修改了已有的文章内容、错别字。</p>
 <ul>
-<li><strong>Node.js</strong>: 建议安装 LTS 版本。</li>
-<li><strong>Git</strong>: 用于将代码推送到 GitHub。</li>
+<li><strong>是否需要三连？</strong>：<strong>完全不需要。</strong></li>
+<li><strong>最佳操作</strong>：<ol>
+<li>保持终端里的 <code>hexo s</code> 运行着不要关闭。</li>
+<li>在编辑器里直接修改并保存 <code>.md</code> 文件。</li>
+<li><strong>直接刷新浏览器页面</strong>。</li>
+</ol>
+</li>
+<li><strong>原理</strong>：<code>hexo s</code> 带有“局部监听”功能，它会自动检测 <code>source</code> 文件夹的变化并实时渲染，速度极快。</li>
 </ul>
-<h2 id="2-安装-Hexo"><a href="#2-安装-Hexo" class="headerlink" title="2. 安装 Hexo"></a>2. 安装 Hexo</h2><p>在终端依次输入以下命令进行初始化：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 全局安装脚手架</span><br>npm install -g hexo-cli<br><br><span class="hljs-comment"># 初始化项目文件夹</span><br>hexo init myblog<br><span class="hljs-built_in">cd</span> myblog<br><br><span class="hljs-comment"># 安装依赖</span><br>npm install<br></code></pre></td></tr></table></figure>
-<h2 id="3-联动-GitHub-关键步骤"><a href="#3-联动-GitHub-关键步骤" class="headerlink" title="3. 联动 GitHub (关键步骤)"></a>3. 联动 GitHub (关键步骤)</h2><p>在本地搭建好 Hexo 后，需要通过以下配置将其发布到 GitHub。</p>
-<h3 id="3-1-创建-GitHub-仓库"><a href="#3-1-创建-GitHub-仓库" class="headerlink" title="3.1 创建 GitHub 仓库"></a>3.1 创建 GitHub 仓库</h3><ol>
-<li><p>登录 GitHub，新建一个仓库（New repository）。</p>
-</li>
-<li><p><strong>仓库名（Repository Name）</strong> 必须填：<code>你的用户名.github.io</code>。</p>
-</li>
-<li><p>确保仓库设为 <strong>Public</strong>。</p>
-</li>
+<h2 id="2-场景二：修改了配置文件"><a href="#2-场景二：修改了配置文件" class="headerlink" title="2. 场景二：修改了配置文件"></a>2. 场景二：修改了配置文件</h2><p><strong>场景描述</strong>：你修改了根目录的 <code>_config.yml</code> 或主题的 <code>_config.fluid.yml</code>（例如改了网站标题、换了封面图路径）。</p>
+<ul>
+<li><strong>是否需要三连？</strong>：<strong>建议重启并 Clean。</strong></li>
+<li><strong>最佳操作</strong>：<ol>
+<li>在终端按下 <code>Ctrl + C</code> 关闭当前预览服务。</li>
+<li>执行 <code>hexo clean</code>（确保清除旧的配置缓存）。</li>
+<li>执行 <code>hexo s</code> 重新启动。</li>
 </ol>
-<h3 id="3-2-安装-Git-部署插件"><a href="#3-2-安装-Git-部署插件" class="headerlink" title="3.2 安装 Git 部署插件"></a>3.2 安装 Git 部署插件</h3><p>在你的博客根目录（<code>myblog</code>）下运行：</p>
-<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">npm install hexo-deployer-git <span class="hljs-comment">--save</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="3-3-修改站点配置文件"><a href="#3-3-修改站点配置文件" class="headerlink" title="3.3 修改站点配置文件"></a>3.3 修改站点配置文件</h3><p>打开目录下的 <code>_config.yml</code> 文件，拉到最底部，修改 <code>deploy</code> 部分：</p>
-<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">deploy:</span><br><span class="hljs-symbol">  type:</span> git<br><span class="hljs-symbol">  repo:</span> git@github.com:你的用户名/你的用户名.github.io.git<br><span class="hljs-symbol">  branch:</span> main<br></code></pre></td></tr></table></figure>
-
-<blockquote>
-<p><strong>注意</strong>：YAML 格式要求冒号 <code>:</code> 后必须留一个空格。建议使用 SSH 链接以避免频繁输入密码。</p>
-</blockquote>
-<h2 id="4-遇到的坑与解决方法"><a href="#4-遇到的坑与解决方法" class="headerlink" title="4. 遇到的坑与解决方法"></a>4. 遇到的坑与解决方法</h2><h3 id="问题一：无法连接-GitHub"><a href="#问题一：无法连接-GitHub" class="headerlink" title="问题一：无法连接 GitHub"></a>问题一：无法连接 GitHub</h3><p>报错信息：fatal: unable to access … Failed to connect to port 443</p>
-<p>解决方法：</p>
-<p>这是因为网络问题导致无法直接访问 GitHub。如果你有代理服务器（例如端口是 10808），可以设置 Git 全局代理：</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">git config <span class="hljs-attr">--global</span> http<span class="hljs-selector-class">.proxy</span> <span class="hljs-selector-attr">[http://127.0.0.1:10808]</span>(http:<span class="hljs-comment">//127.0.0.1:10808)</span><br>git config <span class="hljs-attr">--global</span> http<span class="hljs-selector-class">.proxy</span> <span class="hljs-selector-attr">[https://127.0.0.1:10808]</span>(https:<span class="hljs-comment">//127.0.0.1:10808)</span><br></code></pre></td></tr></table></figure>
-
-<h3 id="问题二：部署后-404-或样式乱码"><a href="#问题二：部署后-404-或样式乱码" class="headerlink" title="问题二：部署后 404 或样式乱码"></a>问题二：部署后 404 或样式乱码</h3><p><strong>原因</strong>：</p>
-<ol>
-<li><p>仓库设为了 Private（私有）。</p>
 </li>
-<li><p>_config.yml 中的 url 配置不正确。</p>
-<p> 解决方法：</p>
-</li>
-<li><p>进入 GitHub 仓库 Settings -&gt; Danger Zone -&gt; Change visibility，改为 <strong>Public</strong>。</p>
-</li>
-<li><p>检查 <code>_config.yml</code> 中的 <code>url</code> 是否填写的为 <code>https://你的用户名.github.io</code>。</p>
-</li>
-</ol>
-<h2 id="5-常用命令"><a href="#5-常用命令" class="headerlink" title="5. 常用命令"></a>5. 常用命令</h2><p>每次更新博客只需要这三步：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>命令</strong></td>
-<td><strong>作用</strong></td>
-<td><strong>简写</strong></td>
-</tr>
-<tr>
-<td><code>hexo clean</code></td>
-<td>清除缓存（推荐部署前执行）</td>
-<td>无</td>
-</tr>
-<tr>
-<td><code>hexo generate</code></td>
-<td>生成静态网页文件</td>
-<td><code>hexo g</code></td>
-</tr>
-<tr>
-<td><code>hexo server</code></td>
-<td>启动本地预览（localhost:4000）</td>
-<td><code>hexo s</code></td>
-</tr>
-<tr>
-<td><code>hexo deploy</code></td>
-<td>推送到 GitHub 线上</td>
-<td><code>hexo d</code></td>
-</tr>
-</tbody></table>
-<p><strong>标准发布流程：</strong></p>
-<figure class="highlight sas"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sas">hexo clean <span class="hljs-variable">&amp;&amp;</span> hexo g <span class="hljs-variable">&amp;&amp;</span> hexo d<br></code></pre></td></tr></table></figure>
+<li><strong>原理</strong>：配置文件只在服务器启动的一瞬间被读取，热重载通常无法捕捉到这些全局参数的变化。</li>
+</ul>
+<h2 id="3-场景三：删除了文件或移动了文件夹"><a href="#3-场景三：删除了文件或移动了文件夹" class="headerlink" title="3. 场景三：删除了文件或移动了文件夹"></a>3. 场景三：删除了文件或移动了文件夹</h2><p><strong>场景描述</strong>：你删除了某篇旧文章，或者把 <code>source/img</code> 里的图片重命名了。</p>
+<ul>
+<li><strong>是否需要三连？</strong>：<strong>必须执行。</strong></li>
+<li><strong>原因</strong>：如果不执行 <code>clean</code>，<code>public</code>（生成的静态文件夹）里还会残留以前生成的旧文件。这会导致预览时出现已经删掉的文章依然存在，或者图片出现 404 的情况。</li>
+</ul>
+<h2 id="4-场景四：发布到正式环境（如-GitHub-Pages）"><a href="#4-场景四：发布到正式环境（如-GitHub-Pages）" class="headerlink" title="4. 场景四：发布到正式环境（如 GitHub Pages）"></a>4. 场景四：发布到正式环境（如 GitHub Pages）</h2><p><strong>场景描述</strong>：你在本地预览一切完美，准备部署上线。</p>
+<ul>
+<li><strong>最佳操作</strong>：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo clean<br>hexo g<br>hexo d  <span class="hljs-comment"># 部署命令</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<hr>
+<h2 id="⚡-提高效率的小技巧"><a href="#⚡-提高效率的小技巧" class="headerlink" title="⚡ 提高效率的小技巧"></a>⚡ 提高效率的小技巧</h2><h3 id="1-复合命令"><a href="#1-复合命令" class="headerlink" title="1. 复合命令"></a>1. 复合命令</h3><p>你可以用 <code>&amp;&amp;</code> 符号把命令连起来，输入一次回车，电脑会自动按顺序执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 修改了配置想重启预览</span><br>hexo clean &amp;&amp; hexo s<br><br><span class="hljs-comment"># 准备一键部署</span><br>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d<br></code></pre></td></tr></table></figure>
 
+<h3 id="2-什么时候才必须用-clean？"><a href="#2-什么时候才必须用-clean？" class="headerlink" title="2. 什么时候才必须用 clean？"></a>2. 什么时候才必须用 <code>clean</code>？</h3><ul>
+<li><p>修改了主题的源码（如 CSS 或 JS 文件）。</p>
+</li>
+<li><p>发现网页显示莫名其妙。</p>
+</li>
+<li><p>在准备提交发布（<code>hexo d</code>）之前。</p>
+</li>
+</ul>
+<hr>
+<p><strong>总结</strong>：<strong>写文只需 <code>Ctrl + S</code> + 刷新；改配置才需要 <code>Clean</code> 重启。</strong> </p>
 
                 
               </div>
@@ -393,9 +359,9 @@
       
         <a href="/tags/Hexo/" class="print-no-link">#Hexo</a>
       
-        <a href="/tags/GitHub/" class="print-no-link">#GitHub</a>
-      
         <a href="/tags/%E6%95%99%E7%A8%8B/" class="print-no-link">#教程</a>
+      
+        <a href="/tags/%E6%95%88%E7%8E%87/" class="print-no-link">#效率</a>
       
     </div>
   
@@ -407,8 +373,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Hexo和GitHub搭建博客全记录</div>
-      <div>https://zjjyyds.github.io/2025/12/21/Hexo和GitHub搭建博客全记录/</div>
+      <div>Hexo每次一定要“三件套”吗？</div>
+      <div>https://zjjyyds.github.io/2025/12/22/每次一定要“三件套”吗？/</div>
     </div>
     <div class="license-meta">
       
@@ -420,7 +386,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年12月21日</div>
+          <div>2025年12月22日</div>
         </div>
       
       
@@ -452,15 +418,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/12/22/%E6%9B%B4%E6%8D%A2Fluid%E4%B8%BB%E9%A2%98/" title="Hexo 主题更换Fluid">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Hexo 主题更换Fluid</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2025/12/22/%E6%9B%B4%E6%8D%A2Fluid%E4%B8%BB%E9%A2%98/" title="Hexo 主题更换Fluid">
+                        <span class="hidden-mobile">Hexo 主题更换Fluid</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>

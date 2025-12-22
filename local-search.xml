@@ -4,7 +4,36 @@
   
   
   <entry>
-    <title>Hexo 主题更换与 Fluid 配置踩坑实录</title>
+    <title>Hexo每次一定要“三件套”吗？</title>
+    <link href="/2025/12/22/%E6%AF%8F%E6%AC%A1%E4%B8%80%E5%AE%9A%E8%A6%81%E2%80%9C%E4%B8%89%E4%BB%B6%E5%A5%97%E2%80%9D%E5%90%97%EF%BC%9F/"/>
+    <url>/2025/12/22/%E6%AF%8F%E6%AC%A1%E4%B8%80%E5%AE%9A%E8%A6%81%E2%80%9C%E4%B8%89%E4%BB%B6%E5%A5%97%E2%80%9D%E5%90%97%EF%BC%9F/</url>
+    
+    <content type="html"><![CDATA[<p>很多新手在开始使用 Hexo 时，习惯性地每次修改都执行 <code>hexo clean</code>, <code>hexo g</code>, <code>hexo s</code>。但在实际开发和写作中，这样做非常浪费时间。以下是根据不同场景推荐的最佳工作流，帮你把时间花在写作上，而不是等待编译。</p><h2 id="1-场景一：日常写文章-修改内容（最常见）"><a href="#1-场景一：日常写文章-修改内容（最常见）" class="headerlink" title="1. 场景一：日常写文章 &#x2F; 修改内容（最常见）"></a>1. 场景一：日常写文章 &#x2F; 修改内容（最常见）</h2><p><strong>场景描述</strong>：你在 <code>source/_posts</code> 下新建了一个 <code>.md</code>，或者修改了已有的文章内容、错别字。</p><ul><li><strong>是否需要三连？</strong>：<strong>完全不需要。</strong></li><li><strong>最佳操作</strong>：<ol><li>保持终端里的 <code>hexo s</code> 运行着不要关闭。</li><li>在编辑器里直接修改并保存 <code>.md</code> 文件。</li><li><strong>直接刷新浏览器页面</strong>。</li></ol></li><li><strong>原理</strong>：<code>hexo s</code> 带有“局部监听”功能，它会自动检测 <code>source</code> 文件夹的变化并实时渲染，速度极快。</li></ul><h2 id="2-场景二：修改了配置文件"><a href="#2-场景二：修改了配置文件" class="headerlink" title="2. 场景二：修改了配置文件"></a>2. 场景二：修改了配置文件</h2><p><strong>场景描述</strong>：你修改了根目录的 <code>_config.yml</code> 或主题的 <code>_config.fluid.yml</code>（例如改了网站标题、换了封面图路径）。</p><ul><li><strong>是否需要三连？</strong>：<strong>建议重启并 Clean。</strong></li><li><strong>最佳操作</strong>：<ol><li>在终端按下 <code>Ctrl + C</code> 关闭当前预览服务。</li><li>执行 <code>hexo clean</code>（确保清除旧的配置缓存）。</li><li>执行 <code>hexo s</code> 重新启动。</li></ol></li><li><strong>原理</strong>：配置文件只在服务器启动的一瞬间被读取，热重载通常无法捕捉到这些全局参数的变化。</li></ul><h2 id="3-场景三：删除了文件或移动了文件夹"><a href="#3-场景三：删除了文件或移动了文件夹" class="headerlink" title="3. 场景三：删除了文件或移动了文件夹"></a>3. 场景三：删除了文件或移动了文件夹</h2><p><strong>场景描述</strong>：你删除了某篇旧文章，或者把 <code>source/img</code> 里的图片重命名了。</p><ul><li><strong>是否需要三连？</strong>：<strong>必须执行。</strong></li><li><strong>原因</strong>：如果不执行 <code>clean</code>，<code>public</code>（生成的静态文件夹）里还会残留以前生成的旧文件。这会导致预览时出现已经删掉的文章依然存在，或者图片出现 404 的情况。</li></ul><h2 id="4-场景四：发布到正式环境（如-GitHub-Pages）"><a href="#4-场景四：发布到正式环境（如-GitHub-Pages）" class="headerlink" title="4. 场景四：发布到正式环境（如 GitHub Pages）"></a>4. 场景四：发布到正式环境（如 GitHub Pages）</h2><p><strong>场景描述</strong>：你在本地预览一切完美，准备部署上线。</p><ul><li><strong>最佳操作</strong>：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">hexo clean<br>hexo g<br>hexo d  <span class="hljs-comment"># 部署命令</span><br></code></pre></td></tr></table></figure></li></ul><hr><h2 id="⚡-提高效率的小技巧"><a href="#⚡-提高效率的小技巧" class="headerlink" title="⚡ 提高效率的小技巧"></a>⚡ 提高效率的小技巧</h2><h3 id="1-复合命令"><a href="#1-复合命令" class="headerlink" title="1. 复合命令"></a>1. 复合命令</h3><p>你可以用 <code>&amp;&amp;</code> 符号把命令连起来，输入一次回车，电脑会自动按顺序执行：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 修改了配置想重启预览</span><br>hexo clean &amp;&amp; hexo s<br><br><span class="hljs-comment"># 准备一键部署</span><br>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d<br></code></pre></td></tr></table></figure><h3 id="2-什么时候才必须用-clean？"><a href="#2-什么时候才必须用-clean？" class="headerlink" title="2. 什么时候才必须用 clean？"></a>2. 什么时候才必须用 <code>clean</code>？</h3><ul><li><p>修改了主题的源码（如 CSS 或 JS 文件）。</p></li><li><p>发现网页显示莫名其妙。</p></li><li><p>在准备提交发布（<code>hexo d</code>）之前。</p></li></ul><hr><p><strong>总结</strong>：<strong>写文只需 <code>Ctrl + S</code> + 刷新；改配置才需要 <code>Clean</code> 重启。</strong> </p>]]></content>
+    
+    
+    <categories>
+      
+      <category>博客搭建</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Hexo</tag>
+      
+      <tag>教程</tag>
+      
+      <tag>效率</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Hexo 主题更换Fluid</title>
     <link href="/2025/12/22/%E6%9B%B4%E6%8D%A2Fluid%E4%B8%BB%E9%A2%98/"/>
     <url>/2025/12/22/%E6%9B%B4%E6%8D%A2Fluid%E4%B8%BB%E9%A2%98/</url>
     
@@ -13,7 +42,7 @@
     
     <categories>
       
-      <category>技术分享</category>
+      <category>博客搭建</category>
       
     </categories>
     
@@ -42,7 +71,7 @@
     
     <categories>
       
-      <category>技术分享</category>
+      <category>博客搭建</category>
       
     </categories>
     
