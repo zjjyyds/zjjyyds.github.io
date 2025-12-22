@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+  
+  <entry>
+    <title>Hexo和GitHub搭建博客全记录</title>
+    <link href="/2025/12/21/Hexo%E5%92%8CGitHub%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E5%85%A8%E8%AE%B0%E5%BD%95/"/>
+    <url>/2025/12/21/Hexo%E5%92%8CGitHub%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E5%85%A8%E8%AE%B0%E5%BD%95/</url>
+    
+    <content type="html"><![CDATA[<h2 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1. 准备工作"></a>1. 准备工作</h2><p>确保你的电脑环境已经安装了以下软件：</p><ul><li><strong>Node.js</strong>: 建议安装 LTS 版本。</li><li><strong>Git</strong>: 用于将代码推送到 GitHub。</li></ul><h2 id="2-安装-Hexo"><a href="#2-安装-Hexo" class="headerlink" title="2. 安装 Hexo"></a>2. 安装 Hexo</h2><p>在终端依次输入以下命令进行初始化：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 全局安装脚手架</span><br>npm install -g hexo-cli<br><br><span class="hljs-comment"># 初始化项目文件夹</span><br>hexo init myblog<br><span class="hljs-built_in">cd</span> myblog<br><br><span class="hljs-comment"># 安装依赖</span><br>npm install<br></code></pre></td></tr></table></figure><h2 id="3-联动-GitHub-关键步骤"><a href="#3-联动-GitHub-关键步骤" class="headerlink" title="3. 联动 GitHub (关键步骤)"></a>3. 联动 GitHub (关键步骤)</h2><p>在本地搭建好 Hexo 后，需要通过以下配置将其发布到 GitHub。</p><h3 id="3-1-创建-GitHub-仓库"><a href="#3-1-创建-GitHub-仓库" class="headerlink" title="3.1 创建 GitHub 仓库"></a>3.1 创建 GitHub 仓库</h3><ol><li><p>登录 GitHub，新建一个仓库（New repository）。</p></li><li><p><strong>仓库名（Repository Name）</strong> 必须填：<code>你的用户名.github.io</code>。</p></li><li><p>确保仓库设为 <strong>Public</strong>。</p></li></ol><h3 id="3-2-安装-Git-部署插件"><a href="#3-2-安装-Git-部署插件" class="headerlink" title="3.2 安装 Git 部署插件"></a>3.2 安装 Git 部署插件</h3><p>在你的博客根目录（<code>myblog</code>）下运行：</p><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">npm install hexo-deployer-git <span class="hljs-comment">--save</span><br></code></pre></td></tr></table></figure><h3 id="3-3-修改站点配置文件"><a href="#3-3-修改站点配置文件" class="headerlink" title="3.3 修改站点配置文件"></a>3.3 修改站点配置文件</h3><p>打开目录下的 <code>_config.yml</code> 文件，拉到最底部，修改 <code>deploy</code> 部分：</p><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">deploy:</span><br><span class="hljs-symbol">  type:</span> git<br><span class="hljs-symbol">  repo:</span> git@github.com:你的用户名/你的用户名.github.io.git<br><span class="hljs-symbol">  branch:</span> main<br></code></pre></td></tr></table></figure><blockquote><p><strong>注意</strong>：YAML 格式要求冒号 <code>:</code> 后必须留一个空格。建议使用 SSH 链接以避免频繁输入密码。</p></blockquote><h2 id="4-遇到的坑与解决方法"><a href="#4-遇到的坑与解决方法" class="headerlink" title="4. 遇到的坑与解决方法"></a>4. 遇到的坑与解决方法</h2><h3 id="问题一：无法连接-GitHub"><a href="#问题一：无法连接-GitHub" class="headerlink" title="问题一：无法连接 GitHub"></a>问题一：无法连接 GitHub</h3><p>报错信息：fatal: unable to access … Failed to connect to port 443</p><p>解决方法：</p><p>这是因为网络问题导致无法直接访问 GitHub。如果你有代理服务器（例如端口是 10808），可以设置 Git 全局代理：</p><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus">git config <span class="hljs-attr">--global</span> http<span class="hljs-selector-class">.proxy</span> <span class="hljs-selector-attr">[http://127.0.0.1:10808]</span>(http:<span class="hljs-comment">//127.0.0.1:10808)</span><br>git config <span class="hljs-attr">--global</span> http<span class="hljs-selector-class">.proxy</span> <span class="hljs-selector-attr">[https://127.0.0.1:10808]</span>(https:<span class="hljs-comment">//127.0.0.1:10808)</span><br></code></pre></td></tr></table></figure><h3 id="问题二：部署后-404-或样式乱码"><a href="#问题二：部署后-404-或样式乱码" class="headerlink" title="问题二：部署后 404 或样式乱码"></a>问题二：部署后 404 或样式乱码</h3><p><strong>原因</strong>：</p><ol><li><p>仓库设为了 Private（私有）。</p></li><li><p>_config.yml 中的 url 配置不正确。</p><p> 解决方法：</p></li><li><p>进入 GitHub 仓库 Settings -&gt; Danger Zone -&gt; Change visibility，改为 <strong>Public</strong>。</p></li><li><p>检查 <code>_config.yml</code> 中的 <code>url</code> 是否填写的为 <code>https://你的用户名.github.io</code>。</p></li></ol><h2 id="5-常用命令"><a href="#5-常用命令" class="headerlink" title="5. 常用命令"></a>5. 常用命令</h2><p>每次更新博客只需要这三步：</p><table><thead><tr><th></th><th></th><th></th></tr></thead><tbody><tr><td><strong>命令</strong></td><td><strong>作用</strong></td><td><strong>简写</strong></td></tr><tr><td><code>hexo clean</code></td><td>清除缓存（推荐部署前执行）</td><td>无</td></tr><tr><td><code>hexo generate</code></td><td>生成静态网页文件</td><td><code>hexo g</code></td></tr><tr><td><code>hexo server</code></td><td>启动本地预览（localhost:4000）</td><td><code>hexo s</code></td></tr><tr><td><code>hexo deploy</code></td><td>推送到 GitHub 线上</td><td><code>hexo d</code></td></tr></tbody></table><p><strong>标准发布流程：</strong></p><figure class="highlight sas"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sas">hexo clean <span class="hljs-variable">&amp;&amp;</span> hexo g <span class="hljs-variable">&amp;&amp;</span> hexo d<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术分享</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Hexo</tag>
+      
+      <tag>GitHub</tag>
+      
+      <tag>教程</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  
+</search>
