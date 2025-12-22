@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>Hexo 主题更换与 Fluid 配置踩坑实录</title>
+    <link href="/2025/12/22/%E6%9B%B4%E6%8D%A2Fluid%E4%B8%BB%E9%A2%98/"/>
+    <url>/2025/12/22/%E6%9B%B4%E6%8D%A2Fluid%E4%B8%BB%E9%A2%98/</url>
+    
+    <content type="html"><![CDATA[<p>今天对 Hexo 博客进行了“大整容”，将默认主题更换为了 <strong>Fluid</strong>。过程中由于安装方式和文件路径问题踩了不少坑，现将完整的更换流程与解决方案总结如下。</p><h2 id="1-主题更换流程"><a href="#1-主题更换流程" class="headerlink" title="1 主题更换流程"></a>1 主题更换流程</h2><p><a href="https://github.com/fluid-dev/hexo-theme-fluid">主题官网</a></p><h3 id="1-1-安装主题"><a href="#1-1-安装主题" class="headerlink" title="1.1 安装主题"></a>1.1 安装主题</h3><p>按照官网教程，Hexo 5.0.0 版本以上，推荐通过 npm 直接安装，进入博客目录执行命令：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">npm install --save hexo-theme-fluid<br></code></pre></td></tr></table></figure><p>然后在博客目录下创建 _config.fluid.yml，将主题的 _config.yml 内容复制进去。</p><h3 id="1-2-配置文件初始化"><a href="#1-2-配置文件初始化" class="headerlink" title="1.2. 配置文件初始化"></a>1.2. 配置文件初始化</h3><p>由于 <code>themes</code> 文件夹为空，需要在博客根目录下手动创建 **<code>_config.fluid.yml</code>**。<br><strong>关键点</strong>：可以前往 Fluid 官方 GitHub 仓库复制完整的<a href="https://github.com/fluid-dev/hexo-theme-fluid/blob/master/_config.yml">配置模板内容</a>并粘贴进 **<code>_config.fluid.yml</code>**。</p><h2 id="2-标题修改"><a href="#2-标题修改" class="headerlink" title="2. 标题修改"></a>2. 标题修改</h2><p>标题分为三个层级：浏览器标签页标题、导航栏文字、封面大标题。</p><h3 id="2-1-浏览器标签页标题-Browser-Tab-Title"><a href="#2-1-浏览器标签页标题-Browser-Tab-Title" class="headerlink" title="2.1 浏览器标签页标题 (Browser Tab Title)"></a>2.1 浏览器标签页标题 (Browser Tab Title)</h3><p>这是显示在浏览器最顶端标签上的文字。</p><ul><li><strong>修改文件</strong>：根目录下的 <code>_config.yml</code> (全局配置)。</li><li><strong>操作</strong>：修改 <code>title</code> 字段。  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># _config.yml</span><br><span class="hljs-attr">title:</span> <span class="hljs-string">大雪深埋</span>  <span class="hljs-comment"># 这里的修改会直接改变浏览器标签页显示的内容</span><br></code></pre></td></tr></table></figure></li></ul><hr><h2 id="3-首页封面-Banner-修改"><a href="#3-首页封面-Banner-修改" class="headerlink" title="3. 首页封面 (Banner) 修改"></a>3. 首页封面 (Banner) 修改</h2><h3 id="3-1-封面背景图修改-banner-img"><a href="#3-1-封面背景图修改-banner-img" class="headerlink" title="3.1 封面背景图修改 (banner_img)"></a>3.1 封面背景图修改 (banner_img)</h3><p>这是最容易踩坑的地方，涉及路径和存放位置。</p><ul><li><strong>正确存放</strong>：将图片放入 <code>source/img/</code>（例如 <code>guts.png</code>）。</li><li><strong>路径配置</strong>：在 <code>_config.fluid.yml</code> 中搜索 <code>banner_img</code>。</li><li><strong>注意事项</strong>：必须使用**正斜杠 <code>/</code>**。  <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># _config.fluid.yml</span><br><span class="hljs-attr">index:</span><br>  <span class="hljs-attr">banner_img:</span> <span class="hljs-string">/img/guts.png</span>  <span class="hljs-comment"># 路径必须从 /img 开始</span><br></code></pre></td></tr></table></figure></li></ul><h2 id="4-问题——封面图消失"><a href="#4-问题——封面图消失" class="headerlink" title="4.问题——封面图消失"></a>4.问题——封面图消失</h2><p>在配置 <code>banner_img</code> 封面图时遇到了图片在预览时消失的问题，总结原因如下：</p><ul><li><strong>存放路径错误</strong>：图片不能直接放在 <code>public</code> 文件夹中，因为每次执行 <code>hexo clean</code> 时，该文件夹都会被清空。</li><li><strong>正确位置</strong>：必须将图片存放在 <strong><code>source/img/</code></strong> 文件夹下，由 Hexo 编译后自动同步到 public 目录。</li><li><strong>路径语法限制</strong>：在配置文件中，路径必须使用**正斜杠 <code>/</code>**（例如 <code>/img/guts.png</code>），不能使用 Windows 风格的反斜杠 <code>\</code>。</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>技术分享</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Hexo</tag>
+      
+      <tag>Fluid</tag>
+      
+      <tag>博客搭建</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Hexo和GitHub搭建博客全记录</title>
     <link href="/2025/12/21/Hexo%E5%92%8CGitHub%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E5%85%A8%E8%AE%B0%E5%BD%95/"/>
     <url>/2025/12/21/Hexo%E5%92%8CGitHub%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E5%85%A8%E8%AE%B0%E5%BD%95/</url>
