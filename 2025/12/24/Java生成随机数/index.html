@@ -1,0 +1,731 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="🎲 Java 核心：生成随机数的 4 种姿势 导读：并不是所有的随机数都是“真随机”。在 Java 中，你需要根据你的应用场景（是写个小Demo，还是写银行支付系统）来选择不同的随机数生成器。   1. 简易入门：Math.random()📖 概念定义这是 Java 最基础的工具类 Math 提供的一个静态方法。它不需要 new 对象，直接调用即可。 ⚙️ 核心规则 返回值：它固定返回一个 0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java生成随机数">
+<meta property="og:url" content="https://zjjyyds.github.io/2025/12/24/Java%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="🎲 Java 核心：生成随机数的 4 种姿势 导读：并不是所有的随机数都是“真随机”。在 Java 中，你需要根据你的应用场景（是写个小Demo，还是写银行支付系统）来选择不同的随机数生成器。   1. 简易入门：Math.random()📖 概念定义这是 Java 最基础的工具类 Math 提供的一个静态方法。它不需要 new 对象，直接调用即可。 ⚙️ 核心规则 返回值：它固定返回一个 0">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-24T12:10:00.000Z">
+<meta property="article:modified_time" content="2025-12-24T12:38:15.021Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="JavaSE">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="语法知识">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Java生成随机数 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java生成随机数"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-12-24 20:10" pubdate>
+          2025年12月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java生成随机数</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="🎲-Java-核心：生成随机数的-4-种姿势"><a href="#🎲-Java-核心：生成随机数的-4-种姿势" class="headerlink" title="🎲 Java 核心：生成随机数的 4 种姿势"></a>🎲 Java 核心：生成随机数的 4 种姿势</h1><blockquote>
+<p><strong>导读</strong>：<br>并不是所有的随机数都是“真随机”。<br>在 Java 中，你需要根据你的应用场景（是写个小Demo，还是写银行支付系统）来选择不同的随机数生成器。</p>
+</blockquote>
+<hr>
+<h2 id="1-简易入门：Math-random"><a href="#1-简易入门：Math-random" class="headerlink" title="1. 简易入门：Math.random()"></a>1. 简易入门：Math.random()</h2><h3 id="📖-概念定义"><a href="#📖-概念定义" class="headerlink" title="📖 概念定义"></a>📖 概念定义</h3><p>这是 Java 最基础的工具类 <code>Math</code> 提供的一个静态方法。它不需要 <code>new</code> 对象，直接调用即可。</p>
+<h3 id="⚙️-核心规则"><a href="#⚙️-核心规则" class="headerlink" title="⚙️ 核心规则"></a>⚙️ 核心规则</h3><ul>
+<li><strong>返回值</strong>：它固定返回一个 <code>0.0</code> (包含) 到 <code>1.0</code> (不包含) 之间的 <code>double</code> 小数。</li>
+<li><strong>底层</strong>：其实它底层也是调用了 <code>java.util.Random</code>，只是做了一层简单的封装。</li>
+</ul>
+<h3 id="💻-代码示例"><a href="#💻-代码示例" class="headerlink" title="💻 代码示例"></a>💻 代码示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MathRandomDemo</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-comment">// 1. 基础用法：生成 0.0 ~ 1.0 之间的小数</span><br>        <span class="hljs-type">double</span> <span class="hljs-variable">d</span> <span class="hljs-operator">=</span> Math.random();<br>        System.out.println(<span class="hljs-string">&quot;随机小数: &quot;</span> + d);<br><br>        <span class="hljs-comment">// 2. 进阶用法：生成 [0, 100) 之间的整数</span><br>        <span class="hljs-comment">// 逻辑：先把 0.x 放大100倍，再强制转成 int 去掉小数</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">num</span> <span class="hljs-operator">=</span> (<span class="hljs-type">int</span>) (Math.random() * <span class="hljs-number">100</span>);<br>        System.out.println(<span class="hljs-string">&quot;0到99的整数: &quot;</span> + num);<br><br>        <span class="hljs-comment">// 3. 必背公式：生成 [min, max] 之间的整数 (包含两端)</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">min</span> <span class="hljs-operator">=</span> <span class="hljs-number">50</span>;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">max</span> <span class="hljs-operator">=</span> <span class="hljs-number">100</span>;<br>        <span class="hljs-comment">// 公式：(int)(Math.random() * (最大值 - 最小值 + 1)) + 最小值</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">rangeNum</span> <span class="hljs-operator">=</span> (<span class="hljs-type">int</span>) (Math.random() * (max - min + <span class="hljs-number">1</span>)) + min;<br>        System.out.println(<span class="hljs-string">&quot;50到100的整数: &quot;</span> + rangeNum);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="🚀-应用场景"><a href="#🚀-应用场景" class="headerlink" title="🚀 应用场景"></a>🚀 应用场景</h3><ul>
+<li>快速测试、简单的脚本。</li>
+<li><strong>缺点</strong>：写区间公式太麻烦，容易算错。</li>
+</ul>
+<hr>
+<h2 id="2-标准通用：java-util-Random"><a href="#2-标准通用：java-util-Random" class="headerlink" title="2. 标准通用：java.util.Random"></a>2. 标准通用：java.util.Random</h2><h3 id="📖-概念定义-1"><a href="#📖-概念定义-1" class="headerlink" title="📖 概念定义"></a>📖 概念定义</h3><p>这是 Java 面向对象标准的随机数生成器。你需要先创建一个“骰子”对象，然后摇它。</p>
+<h3 id="⚙️-核心规则-1"><a href="#⚙️-核心规则-1" class="headerlink" title="⚙️ 核心规则"></a>⚙️ 核心规则</h3><ul>
+<li><strong>灵活性</strong>：可以直接生成 <code>int</code>, <code>boolean</code>, <code>float</code> 等多种类型，不需要像 <code>Math.random</code> 那样手动转换。</li>
+<li><strong>种子 (Seed)<strong>：如果你在 new 的时候传入一个固定的数字（种子），那么每次运行生成的随机数序列是</strong>一模一样</strong>的（常用于复现 Bug）。</li>
+</ul>
+<h3 id="💻-代码示例-1"><a href="#💻-代码示例-1" class="headerlink" title="💻 代码示例"></a>💻 代码示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.Random;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UtilRandomDemo</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-comment">// 1. 创建随机数对象 (不带种子，默认以当前时间为种子)</span><br>        <span class="hljs-type">Random</span> <span class="hljs-variable">r</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>();<br><br>        <span class="hljs-comment">// 2. 生成各种类型的随机数</span><br>        System.out.println(<span class="hljs-string">&quot;随机布尔值: &quot;</span> + r.nextBoolean()); <span class="hljs-comment">// true 或 false</span><br>        System.out.println(<span class="hljs-string">&quot;随机Double: &quot;</span> + r.nextDouble()); <span class="hljs-comment">// 0.0 ~ 1.0</span><br><br>        <span class="hljs-comment">// 3. 最好用的方法：nextInt(bound)</span><br>        <span class="hljs-comment">// 生成 [0, 10) 之间的整数 (不包含10)</span><br>        <span class="hljs-comment">// 也就是 0 ~ 9</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> r.nextInt(<span class="hljs-number">10</span>); <br>        System.out.println(<span class="hljs-string">&quot;0到9的整数: &quot;</span> + i);<br>        <br>        <span class="hljs-comment">// ------------------------------------</span><br>        <span class="hljs-comment">// 特殊情况：带种子的随机 (伪随机的真相)</span><br>        <span class="hljs-comment">// 只要种子一样，生成的随机数顺序永远一样</span><br>        <span class="hljs-type">Random</span> <span class="hljs-variable">rFixed</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Random</span>(<span class="hljs-number">100</span>); <br>        System.out.println(<span class="hljs-string">&quot;固定随机数1: &quot;</span> + rFixed.nextInt(<span class="hljs-number">100</span>)); <span class="hljs-comment">// 每次运行都是同一个数</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="🚀-应用场景-1"><a href="#🚀-应用场景-1" class="headerlink" title="🚀 应用场景"></a>🚀 应用场景</h3><ul>
+<li>大多数业务开发、游戏逻辑、模拟数据。</li>
+</ul>
+<hr>
+<h2 id="3-高性能并发：ThreadLocalRandom-Java-7"><a href="#3-高性能并发：ThreadLocalRandom-Java-7" class="headerlink" title="3. 高性能并发：ThreadLocalRandom (Java 7+)"></a>3. 高性能并发：ThreadLocalRandom (Java 7+)</h2><h3 id="📖-概念定义-2"><a href="#📖-概念定义-2" class="headerlink" title="📖 概念定义"></a>📖 概念定义</h3><p>这是为了解决多线程问题而生的工具。</p>
+<h3 id="💡-通俗理解"><a href="#💡-通俗理解" class="headerlink" title="💡 通俗理解"></a>💡 通俗理解</h3><p><code>java.util.Random</code> 是线程安全的，但在多线程高并发时（比如 1000 个人同时去抢一个骰子），会产生<strong>竞争</strong>，导致性能下降。<br><code>ThreadLocalRandom</code> 相当于<strong>给每个线程发了一个专用的骰子</strong>，互不干扰，速度极快。</p>
+<h3 id="💻-代码示例-2"><a href="#💻-代码示例-2" class="headerlink" title="💻 代码示例"></a>💻 代码示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.concurrent.ThreadLocalRandom;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TLRDemo</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-comment">// 注意：不能 new，要用 current() 获取当前线程的实例</span><br>        <span class="hljs-type">ThreadLocalRandom</span> <span class="hljs-variable">tlr</span> <span class="hljs-operator">=</span> ThreadLocalRandom.current();<br><br>        <span class="hljs-comment">// 用法和 Random 几乎一样，但性能更高</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">val</span> <span class="hljs-operator">=</span> tlr.nextInt(<span class="hljs-number">10</span>, <span class="hljs-number">20</span>); <span class="hljs-comment">// 直接支持生成 [10, 20) 的范围，超方便！</span><br>        <br>        System.out.println(<span class="hljs-string">&quot;10到19的整数: &quot;</span> + val);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="🚀-应用场景-2"><a href="#🚀-应用场景-2" class="headerlink" title="🚀 应用场景"></a>🚀 应用场景</h3><ul>
+<li><strong>高并发系统</strong>、多线程环境。</li>
+<li>在 JDK 7 之后，<strong>强烈推荐</strong>在多线程能替代 <code>Random</code> 的地方都用这个。</li>
+</ul>
+<hr>
+<h2 id="4-银行级安全：java-security-SecureRandom"><a href="#4-银行级安全：java-security-SecureRandom" class="headerlink" title="4. 银行级安全：java.security.SecureRandom"></a>4. 银行级安全：java.security.SecureRandom</h2><h3 id="📖-概念定义-3"><a href="#📖-概念定义-3" class="headerlink" title="📖 概念定义"></a>📖 概念定义</h3><p>真·随机数生成器。前面的 <code>Random</code> 实际上是根据算法算出来的（伪随机），如果黑客知道了算法和种子，就能预测下一个数。<br><code>SecureRandom</code> 利用操作系统的随机源（如鼠标移动、键盘敲击、CPU热噪声等）来生成随机数。</p>
+<h3 id="⚙️-核心规则-2"><a href="#⚙️-核心规则-2" class="headerlink" title="⚙️ 核心规则"></a>⚙️ 核心规则</h3><ul>
+<li><strong>不可预测性</strong>：极其难以被破解。</li>
+<li><strong>性能</strong>：比普通的 Random 慢很多（因为生成过程很复杂）。</li>
+</ul>
+<h3 id="💻-代码示例-3"><a href="#💻-代码示例-3" class="headerlink" title="💻 代码示例"></a>💻 代码示例</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.security.SecureRandom;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SecureDemo</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">SecureRandom</span> <span class="hljs-variable">sr</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SecureRandom</span>();<br>        <br>        <span class="hljs-comment">// 用法和 Random 一样</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">passwordPart</span> <span class="hljs-operator">=</span> sr.nextInt(<span class="hljs-number">10000</span>);<br>        <br>        System.out.println(<span class="hljs-string">&quot;安全随机数: &quot;</span> + passwordPart);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="🚀-应用场景-3"><a href="#🚀-应用场景-3" class="headerlink" title="🚀 应用场景"></a>🚀 应用场景</h3><ul>
+<li><strong>生成密码、Token、Session ID、加密密钥</strong>。</li>
+<li>凡是涉及到<strong>钱</strong>和<strong>安全</strong>的地方，严禁使用 <code>Math.random</code> 或 <code>Random</code>，必须用 <code>SecureRandom</code>。</li>
+</ul>
+<hr>
+<h2 id="📝-总结：我该用哪个？"><a href="#📝-总结：我该用哪个？" class="headerlink" title="📝 总结：我该用哪个？"></a>📝 总结：我该用哪个？</h2><table>
+<thead>
+<tr>
+<th align="left">场景</th>
+<th align="left">推荐方式</th>
+<th align="left">理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>写个小Demo &#x2F; 教学</strong></td>
+<td align="left"><code>Math.random()</code></td>
+<td align="left">代码最短，不用导包。</td>
+</tr>
+<tr>
+<td align="left"><strong>一般业务 &#x2F; 单线程</strong></td>
+<td align="left"><code>java.util.Random</code></td>
+<td align="left">API 丰富，符合直觉。</td>
+</tr>
+<tr>
+<td align="left"><strong>高并发 &#x2F; 多线程</strong></td>
+<td align="left"><code>ThreadLocalRandom</code></td>
+<td align="left"><strong>性能王者</strong>，不堵车。</td>
+</tr>
+<tr>
+<td align="left"><strong>生成密码 &#x2F; 涉及钱</strong></td>
+<td align="left"><code>SecureRandom</code></td>
+<td align="left"><strong>安全王者</strong>，黑客猜不到。</td>
+</tr>
+</tbody></table>
+<h3 id="💡-讲师提示"><a href="#💡-讲师提示" class="headerlink" title="💡 讲师提示"></a>💡 讲师提示</h3><p>作为新手，你现阶段主要掌握 <strong><code>java.util.Random</code></strong> 就足够应对 90% 的学习场景了。但记住，等到以后做Web项目生成验证码时，一定要想起来用 <code>SecureRandom</code> 哦！</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/JavaSE/" class="category-chain-item">JavaSE</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/JavaSE/" class="print-no-link">#JavaSE</a>
+      
+        <a href="/tags/Java/" class="print-no-link">#Java</a>
+      
+        <a href="/tags/%E8%AF%AD%E6%B3%95%E7%9F%A5%E8%AF%86/" class="print-no-link">#语法知识</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java生成随机数</div>
+      <div>https://zjjyyds.github.io/2025/12/24/Java生成随机数/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年12月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/12/24/Java%E6%95%B0%E7%BB%84%E5%B8%B8%E7%94%A8API/" title="Java数组常用API">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java数组常用API</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/12/23/Java%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E7%94%A8const/" title="Java为什么不用const">
+                        <span class="hidden-mobile">Java为什么不用const</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
