@@ -225,7 +225,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          917 字
+          916 字
         
       </span>
     
@@ -283,53 +283,56 @@
 </blockquote>
 <hr>
 <h2 id="第一部分：Java-数组的“瑞士军刀”-常用-API"><a href="#第一部分：Java-数组的“瑞士军刀”-常用-API" class="headerlink" title="第一部分：Java 数组的“瑞士军刀” (常用 API)"></a>第一部分：Java 数组的“瑞士军刀” (常用 API)</h2><p>Java 官方为了不让我们重复造轮子，提供了一个强大的工具类 <code>java.util.Arrays</code>。使用前请记得 <code>import java.util.Arrays;</code>。</p>
-<h3 id="1-🔍-查看与打印：toString-deepToString"><a href="#1-🔍-查看与打印：toString-deepToString" class="headerlink" title="1. 🔍 查看与打印：toString() &amp; deepToString()"></a>1. 🔍 查看与打印：<code>toString()</code> &amp; <code>deepToString()</code></h3><p>直接打印数组变量只能看到内存地址，必须用这个方法才能看到“真面目”。</p>
+<h3 id="1-🔍-查看与打印：toString-amp-deepToString"><a href="#1-🔍-查看与打印：toString-amp-deepToString" class="headerlink" title="1. 🔍 查看与打印：toString() &amp; deepToString()"></a>1. 🔍 查看与打印：<code>toString()</code> &amp; <code>deepToString()</code></h3><p>直接打印数组变量只能看到内存地址，必须用这个方法才能看到“真面目”。</p>
 <ul>
 <li><strong>场景</strong>：调试代码，查看数组里的内容。</li>
-<li><strong>代码示例</strong>：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] arr = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125;;<br>System.out.println(Arrays.toString(arr)); <br><span class="hljs-comment">// 输出: [1, 2, 3]</span><br><br><span class="hljs-type">int</span>[][] matrix = &#123;&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;, &#123;<span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;&#125;;<br><span class="hljs-comment">// 注意：多维数组要用 deepToString，否则里面的数组还是显示地址</span><br>System.out.println(Arrays.deepToString(matrix)); <br><span class="hljs-comment">// 输出: [[1, 2], [3, 4]]</span><br></code></pre></td></tr></table></figure></li>
+<li><strong>代码示例</strong>：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] arr = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125;;<br>System.out.println(Arrays.toString(arr)); <br><span class="hljs-comment">// 输出: [1, 2, 3]</span><br><br><span class="hljs-type">int</span>[][] matrix = &#123;&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;, &#123;<span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;&#125;;<br><span class="hljs-comment">// 注意：多维数组要用 deepToString，否则里面的数组还是显示地址</span><br>System.out.println(Arrays.deepToString(matrix)); <br><span class="hljs-comment">// 输出: [[1, 2], [3, 4]]</span><br></code></pre></td></tr></table></figure>
+</li>
 </ul>
 <h3 id="2-🔢-排序：sort"><a href="#2-🔢-排序：sort" class="headerlink" title="2. 🔢 排序：sort()"></a>2. 🔢 排序：<code>sort()</code></h3><p>将数组元素按照从小到大（升序）排列。底层使用了双轴快速排序等高效算法。</p>
 <ul>
 <li><strong>场景</strong>：排行榜、数据整理。</li>
-<li><strong>代码示例</strong>：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] scores = &#123;<span class="hljs-number">88</span>, <span class="hljs-number">50</span>, <span class="hljs-number">99</span>, <span class="hljs-number">70</span>&#125;;<br>Arrays.sort(scores);<br>System.out.println(Arrays.toString(scores)); <br><span class="hljs-comment">// 输出: [50, 70, 88, 99] (自动变成有序了)</span><br></code></pre></td></tr></table></figure></li>
+<li><strong>代码示例</strong>：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] scores = &#123;<span class="hljs-number">88</span>, <span class="hljs-number">50</span>, <span class="hljs-number">99</span>, <span class="hljs-number">70</span>&#125;;<br>Arrays.sort(scores);<br>System.out.println(Arrays.toString(scores)); <br><span class="hljs-comment">// 输出: [50, 70, 88, 99] (自动变成有序了)</span><br></code></pre></td></tr></table></figure>
+</li>
 </ul>
 <h3 id="3-🔎-查找：binarySearch-二分查找"><a href="#3-🔎-查找：binarySearch-二分查找" class="headerlink" title="3. 🔎 查找：binarySearch() (二分查找)"></a>3. 🔎 查找：<code>binarySearch()</code> (二分查找)</h3><p>在一个<strong>有序</strong>的数组中快速查找某个元素的位置。</p>
 <ul>
-<li><p><strong>⚠️ 注意</strong>：使用此方法前，<strong>必须先排序</strong>！如果数组是乱序的，结果不可预测。</p>
-</li>
+<li><strong>⚠️ 注意</strong>：使用此方法前，<strong>必须先排序</strong>！如果数组是乱序的，结果不可预测。</li>
 <li><p><strong>返回值</strong>：如果找到，返回索引；如果找不到，返回负数。</p>
 </li>
 <li><p><strong>代码示例</strong>：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] nums = &#123;<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>&#125;; <span class="hljs-comment">// 必须是有序的</span><br><span class="hljs-type">int</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> Arrays.binarySearch(nums, <span class="hljs-number">30</span>);<br>System.out.println(<span class="hljs-string">&quot;30的下标是：&quot;</span> + index); <span class="hljs-comment">// 输出: 2</span><br><br><span class="hljs-type">int</span> <span class="hljs-variable">errorIndex</span> <span class="hljs-operator">=</span> Arrays.binarySearch(nums, <span class="hljs-number">25</span>);<br>System.out.println(<span class="hljs-string">&quot;找不存在的数：&quot;</span> + errorIndex); <span class="hljs-comment">// 输出负数 (例如 -3)</span><br></code></pre></td></tr></table></figure></li>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] nums = &#123;<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>&#125;; <span class="hljs-comment">// 必须是有序的</span><br><span class="hljs-type">int</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> Arrays.binarySearch(nums, <span class="hljs-number">30</span>);<br>System.out.println(<span class="hljs-string">&quot;30的下标是：&quot;</span> + index); <span class="hljs-comment">// 输出: 2</span><br><br><span class="hljs-type">int</span> <span class="hljs-variable">errorIndex</span> <span class="hljs-operator">=</span> Arrays.binarySearch(nums, <span class="hljs-number">25</span>);<br>System.out.println(<span class="hljs-string">&quot;找不存在的数：&quot;</span> + errorIndex); <span class="hljs-comment">// 输出负数 (例如 -3)</span><br></code></pre></td></tr></table></figure>
+</li>
 </ul>
 <h3 id="4-👯-比较：equals"><a href="#4-👯-比较：equals" class="headerlink" title="4. 👯 比较：equals()"></a>4. 👯 比较：<code>equals()</code></h3><p>判断两个数组的<strong>内容</strong>是否完全一致（长度相同，且对应位置元素相同）。</p>
 <ul>
 <li><p><strong>注意</strong>：直接用 <code>==</code> 比较的是两个数组的内存地址，通常都是 <code>false</code>。</p>
 </li>
 <li><p><strong>代码示例</strong>：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] arr1 = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125;;<br><span class="hljs-type">int</span>[] arr2 = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125;;<br><br>System.out.println(arr1 == arr2);       <span class="hljs-comment">// false (它是两个不同的对象)</span><br>System.out.println(Arrays.equals(arr1, arr2)); <span class="hljs-comment">// true (内容一样)</span><br></code></pre></td></tr></table></figure></li>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] arr1 = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125;;<br><span class="hljs-type">int</span>[] arr2 = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125;;<br><br>System.out.println(arr1 == arr2);       <span class="hljs-comment">// false (它是两个不同的对象)</span><br>System.out.println(Arrays.equals(arr1, arr2)); <span class="hljs-comment">// true (内容一样)</span><br></code></pre></td></tr></table></figure>
+</li>
 </ul>
 <h3 id="5-🛠-填充：fill"><a href="#5-🛠-填充：fill" class="headerlink" title="5. 🛠 填充：fill()"></a>5. 🛠 填充：<code>fill()</code></h3><p>快速把数组的所有位置（或指定范围）都填成同一个值。</p>
 <ul>
 <li><strong>场景</strong>：初始化游戏地图、重置数据。</li>
-<li><strong>代码示例</strong>：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] box = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[<span class="hljs-number">5</span>];<br>Arrays.fill(box, <span class="hljs-number">666</span>); <span class="hljs-comment">// 把整个数组都填满 666</span><br><span class="hljs-comment">// 输出: [666, 666, 666, 666, 666]</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-<h3 id="6-📋-复制与截取：copyOf-copyOfRange"><a href="#6-📋-复制与截取：copyOf-copyOfRange" class="headerlink" title="6. 📋 复制与截取：copyOf() &amp; copyOfRange()"></a>6. 📋 复制与截取：<code>copyOf()</code> &amp; <code>copyOfRange()</code></h3><ul>
-<li><p><code>copyOf(原数组, 新长度)</code>：从头开始复制，可用于扩容或截断。</p>
+<li><strong>代码示例</strong>：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] box = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[<span class="hljs-number">5</span>];<br>Arrays.fill(box, <span class="hljs-number">666</span>); <span class="hljs-comment">// 把整个数组都填满 666</span><br><span class="hljs-comment">// 输出: [666, 666, 666, 666, 666]</span><br></code></pre></td></tr></table></figure>
 </li>
+</ul>
+<h3 id="6-📋-复制与截取：copyOf-amp-copyOfRange"><a href="#6-📋-复制与截取：copyOf-amp-copyOfRange" class="headerlink" title="6. 📋 复制与截取：copyOf() &amp; copyOfRange()"></a>6. 📋 复制与截取：<code>copyOf()</code> &amp; <code>copyOfRange()</code></h3><ul>
+<li><code>copyOf(原数组, 新长度)</code>：从头开始复制，可用于扩容或截断。</li>
 <li><p><code>copyOfRange(原数组, start, end)</code>：复制中间某一段（含头不含尾）。</p>
 </li>
 <li><p><strong>代码示例</strong>：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] src = &#123;<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>&#125;;<br><br><span class="hljs-comment">// 复制前3个</span><br><span class="hljs-type">int</span>[] newArr = Arrays.copyOf(src, <span class="hljs-number">3</span>); <br><span class="hljs-comment">// 结果: [10, 20, 30]</span><br><br><span class="hljs-comment">// 扩容复制 (后面补默认值)</span><br><span class="hljs-type">int</span>[] bigArr = Arrays.copyOf(src, <span class="hljs-number">7</span>);<br><span class="hljs-comment">// 结果: [10, 20, 30, 40, 50, 0, 0]</span><br></code></pre></td></tr></table></figure></li>
+  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] src = &#123;<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>&#125;;<br><br><span class="hljs-comment">// 复制前3个</span><br><span class="hljs-type">int</span>[] newArr = Arrays.copyOf(src, <span class="hljs-number">3</span>); <br><span class="hljs-comment">// 结果: [10, 20, 30]</span><br><br><span class="hljs-comment">// 扩容复制 (后面补默认值)</span><br><span class="hljs-type">int</span>[] bigArr = Arrays.copyOf(src, <span class="hljs-number">7</span>);<br><span class="hljs-comment">// 结果: [10, 20, 30, 40, 50, 0, 0]</span><br></code></pre></td></tr></table></figure>
+</li>
 </ul>
 <hr>
 <h2 id="⚡-补充：一个高效的底层-API"><a href="#⚡-补充：一个高效的底层-API" class="headerlink" title="⚡ 补充：一个高效的底层 API"></a>⚡ 补充：一个高效的底层 API</h2><p>在阅读 Java 源码时，你会经常看到 <code>System.arraycopy</code>。它是最底层的数组复制方法，性能极高（直接操作内存），但参数比较多，容易写错。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 语法：</span><br><span class="hljs-comment">// System.arraycopy(原数组, 原数组起始位置, 目标数组, 目标数组起始位置, 复制多少个);</span><br><br><span class="hljs-type">int</span>[] src = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;;<br><span class="hljs-type">int</span>[] dest = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[<span class="hljs-number">4</span>];<br><br><span class="hljs-comment">// 把 src 的后两个元素 (3,4) 复制到 dest 的开头</span><br>System.arraycopy(src, <span class="hljs-number">2</span>, dest, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>);<br><br>System.out.println(Arrays.toString(dest)); <br><span class="hljs-comment">// 输出: [3, 4, 0, 0]</span><br></code></pre></td></tr></table></figure>
-
 <hr>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
 <li><strong>日常开发</strong>：首选 <code>java.util.Arrays</code> 类，代码简洁，可读性高。</li>
-<li><strong>性能敏感&#x2F;底层开发</strong>：使用 <code>System.arraycopy</code>。</li>
+<li><strong>性能敏感/底层开发</strong>：使用 <code>System.arraycopy</code>。</li>
 </ol>
 
                 
@@ -493,6 +496,12 @@
 
 
   
+
+
+  
+  
+
+
 
 
 
@@ -685,6 +694,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 
