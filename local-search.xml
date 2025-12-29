@@ -4,6 +4,35 @@
   
   
   <entry>
+    <title>IDEA快捷键</title>
+    <link href="/2025/12/29/IDEA%E5%BF%AB%E6%8D%B7%E9%94%AE/"/>
+    <url>/2025/12/29/IDEA%E5%BF%AB%E6%8D%B7%E9%94%AE/</url>
+    
+    <content type="html"><![CDATA[<p><img src="../img/IDEA快捷键/2025-12-29-09-49-32.png" alt=""></p><h2 id="一、-精准检索：在代码海洋中定位"><a href="#一、-精准检索：在代码海洋中定位" class="headerlink" title="一、 精准检索：在代码海洋中定位"></a>一、 精准检索：在代码海洋中定位</h2><h3 id="1-内容搜索"><a href="#1-内容搜索" class="headerlink" title="1. 内容搜索"></a>1. 内容搜索</h3><ul><li><strong>当前文件查找 (<code>Ctrl + F</code>)</strong>：在当前打开的文件中搜索关键字。</li><li><strong>全局内容查找 (<code>Ctrl + Shift + F</code>)</strong>：在整个项目中搜索特定字符串，支持路径过滤。</li><li><strong>当前文件替换 (<code>Ctrl + R</code>)</strong>：快速替换当前类中的特定字符。</li><li><strong>全局内容替换 (<code>Ctrl + Shift + R</code>)</strong>：批量修改整个项目的字符串或配置。</li></ul><h3 id="2-对象搜索-最常用"><a href="#2-对象搜索-最常用" class="headerlink" title="2. 对象搜索 (最常用)"></a>2. 对象搜索 (最常用)</h3><ul><li><strong>查找类名 (<code>Ctrl + N</code>)</strong>：输入类名快速打开 Java 文件，支持模糊匹配。</li><li><strong>查找文件名 (<code>Ctrl + Shift + N</code>)</strong>：不仅是 Java 类，还可以快速找 XML、Properties、JSON 等配置文件。</li><li><strong>跳转指定行 (<code>Ctrl + G</code>)</strong>：当报错堆栈提示行号时，这是最快的定位方式。</li></ul><hr><h2 id="二、-优雅导航：在逻辑森林中穿行"><a href="#二、-优雅导航：在逻辑森林中穿行" class="headerlink" title="二、 优雅导航：在逻辑森林中穿行"></a>二、 优雅导航：在逻辑森林中穿行</h2><h3 id="1-结构与跳转"><a href="#1-结构与跳转" class="headerlink" title="1. 结构与跳转"></a>1. 结构与跳转</h3><ul><li><strong>最近打开文件 (<code>Ctrl + E</code>)</strong>：展示最近编辑过的文件列表，是文件切换的“第一核心键”。</li><li><strong>跳转到前/后方法 (<code>Alt + Up/Down</code>)</strong>：在类的方法之间快速跳跃，无需滚动滑轮。</li><li><strong>查看类结构 (<code>Ctrl + F12</code>)</strong>：弹窗展示当前类的所有方法和成员变量，支持直接输入搜索。</li></ul><h3 id="2-深度溯源"><a href="#2-深度溯源" class="headerlink" title="2. 深度溯源"></a>2. 深度溯源</h3><ul><li><strong>跳转到定义 (<code>Ctrl + B</code> 或 <code>Ctrl + Click</code>)</strong>：查看变量、类或方法的源代码。</li><li><strong>跳转到实现类 (<code>Ctrl + Alt + B</code>)</strong>：<strong>超级好用！</strong> 面对接口时，直接跳过接口定义，进到具体的业务实现类中。</li><li><strong>回退/前进浏览记录 (<code>Ctrl + Alt + Left/Right</code>)</strong>：就像浏览器的前进后退，快速回到刚才看代码的地方。</li></ul><hr><h2 id="三、-智能辅助：让-IDEA-为你“代工”"><a href="#三、-智能辅助：让-IDEA-为你“代工”" class="headerlink" title="三、 智能辅助：让 IDEA 为你“代工”"></a>三、 智能辅助：让 IDEA 为你“代工”</h2><h3 id="1-自动生成"><a href="#1-自动生成" class="headerlink" title="1. 自动生成"></a>1. 自动生成</h3><ul><li><strong>万能意图键 (<code>Alt + Enter</code>)</strong>：代码报错了？想导包？想创建实现类？按它就对了。</li><li><strong>代码格式化 (<code>Ctrl + Alt + L</code>)</strong>：保持代码整洁的最高效手段，建议每次写完方法都按一下。</li><li><strong>智能代码补全 (<code>Ctrl + Shift + Space</code>)</strong>：比普通补全更聪明，会根据类型推断你最可能需要的变量或方法。</li><li><strong>语句自动完成 (<code>Ctrl + Shift + Enter</code>)</strong>：自动补齐括号、大括号并在行末加分号。</li></ul><h3 id="2-编码细节"><a href="#2-编码细节" class="headerlink" title="2. 编码细节"></a>2. 编码细节</h3><ul><li><strong>参数信息提示 (<code>Ctrl + P</code>)</strong>：在调用方法时，忘记要传什么参数？按一下即刻显示参数列表。</li><li><strong>快速注释</strong>：<ul><li><code>Ctrl + /</code>：行注释。</li><li><code>Ctrl + Shift + /</code>：块注释。</li></ul></li><li><strong>包裹代码 (<code>Ctrl + Alt + T</code>)</strong>：快速把一段逻辑包进 <code>if</code>、<code>try-catch</code> 或 <code>synchronized</code> 块中。</li></ul><hr><h2 id="四、-代码重构：像外科医生一样精准"><a href="#四、-代码重构：像外科医生一样精准" class="headerlink" title="四、 代码重构：像外科医生一样精准"></a>四、 代码重构：像外科医生一样精准</h2><h3 id="1-元素重命名"><a href="#1-元素重命名" class="headerlink" title="1. 元素重命名"></a>1. 元素重命名</h3><ul><li><strong>重命名 (<code>Shift + F6</code>)</strong>：修改变量、方法或类名，它会自动帮你把项目中所有引用的地方同步更新。</li></ul><h3 id="2-提取神器-大幅提升代码可读性"><a href="#2-提取神器-大幅提升代码可读性" class="headerlink" title="2. 提取神器 (大幅提升代码可读性)"></a>2. 提取神器 (大幅提升代码可读性)</h3><ul><li><strong>提取变量 (<code>Ctrl + Alt + V</code>)</strong>：将冗长的表达式结果自动声明为局部变量。</li><li><strong>提取方法 (<code>Ctrl + Alt + M</code>)</strong>：选中一段复杂的逻辑，将其“抽离”成一个独立的方法。</li><li><strong>提取常量 (<code>Ctrl + Alt + C</code>)</strong>：将魔法值（如硬编码的字符串）提取为类常量。</li><li><strong>提取参数 (<code>Ctrl + Alt + P</code>)</strong>：将局部变量转变为方法参数，方便逻辑复用。</li></ul><hr><h2 id="五、-编辑小技巧"><a href="#五、-编辑小技巧" class="headerlink" title="五、 编辑小技巧"></a>五、 编辑小技巧</h2><ul><li><strong>复制当前行 (<code>Ctrl + D</code>)</strong>：将光标所在行直接复制到下一行。</li><li><strong>删除当前行 (<code>Ctrl + Y</code> 或 <code>Ctrl + X</code>)</strong>：快速清理无用代码。</li><li><strong>代码行交换顺序 (<code>Ctrl + Shift + Up/Down</code>)</strong>：无需剪切粘贴，直接上下平移代码行。</li><li><strong>扩大/回退选择 (<code>Ctrl + W</code> / <code>Ctrl + Shift + W</code>)</strong>：以词/块为单位逐步扩大选中范围，配合重构功能堪称绝配。</li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>JavaSE</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>IDEA</tag>
+      
+      <tag>快捷键</tag>
+      
+      <tag>Java</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>CS50AI note1</title>
     <link href="/2025/12/26/CS50%20AI%20note1/"/>
     <url>/2025/12/26/CS50%20AI%20note1/</url>
@@ -76,9 +105,9 @@
     
     <tags>
       
-      <tag>JavaSE</tag>
-      
       <tag>Java</tag>
+      
+      <tag>JavaSE</tag>
       
       <tag>语法知识</tag>
       
@@ -105,9 +134,9 @@
     
     <tags>
       
-      <tag>JavaSE</tag>
-      
       <tag>Java</tag>
+      
+      <tag>JavaSE</tag>
       
       <tag>语法知识</tag>
       
