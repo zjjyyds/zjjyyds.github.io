@@ -19,26 +19,25 @@
   <meta name="author" content="Jay">
   <meta name="keywords" content="">
   
-    <meta name="description" content="🚀 Java 进阶：数组常用 API 与经典操作实战 导读：这一节我们将解锁 Java 数组的“瑞士军刀”——java.util.Arrays 类，它可以让你一行代码搞定排序、查找和打印。同时，我们也会深入底层，手写几个经典的数组算法（如反转、扩容），这是理解数据结构逻辑的关键。   第一部分：Java 数组的“瑞士军刀” (常用 API)Java 官方为了不让我们重复造轮子，提供了一个强大的工">
+    <meta name="description" content="CS50中check作业和提交作业的check50和submit50需要在Linux环境下运行，因此配置下WLS。 1. WSL2 架构与磁盘管理1.1 核心安装与升级 一键安装：wsl --install（默认安装 Ubuntu）。 查看版本：wsl -l -v。确保版本号显示为 2。  1.2 F 盘迁移与权限“避坑”指南为了保护 C 盘空间，我们将 Ubuntu 移动到了 F:\WSL\Ub">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java数组常用API">
-<meta property="og:url" content="https://zjjyyds.github.io/2025/12/24/Java%E6%95%B0%E7%BB%84%E5%B8%B8%E7%94%A8API/index.html">
+<meta property="og:title" content="WLS2和Python配置">
+<meta property="og:url" content="https://zjjyyds.github.io/2025/12/31/WSL2%E9%85%8D%E7%BD%AE/index.html">
 <meta property="og:site_name" content="大雪深埋">
-<meta property="og:description" content="🚀 Java 进阶：数组常用 API 与经典操作实战 导读：这一节我们将解锁 Java 数组的“瑞士军刀”——java.util.Arrays 类，它可以让你一行代码搞定排序、查找和打印。同时，我们也会深入底层，手写几个经典的数组算法（如反转、扩容），这是理解数据结构逻辑的关键。   第一部分：Java 数组的“瑞士军刀” (常用 API)Java 官方为了不让我们重复造轮子，提供了一个强大的工">
+<meta property="og:description" content="CS50中check作业和提交作业的check50和submit50需要在Linux环境下运行，因此配置下WLS。 1. WSL2 架构与磁盘管理1.1 核心安装与升级 一键安装：wsl --install（默认安装 Ubuntu）。 查看版本：wsl -l -v。确保版本号显示为 2。  1.2 F 盘迁移与权限“避坑”指南为了保护 C 盘空间，我们将 Ubuntu 移动到了 F:\WSL\Ub">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-24T12:10:00.000Z">
-<meta property="article:modified_time" content="2025-12-24T12:29:18.981Z">
+<meta property="article:published_time" content="2025-12-31T11:01:00.000Z">
+<meta property="article:modified_time" content="2025-12-31T11:10:44.306Z">
 <meta property="article:author" content="Jay">
-<meta property="article:tag" content="Java">
-<meta property="article:tag" content="JavaSE">
-<meta property="article:tag" content="语法知识">
+<meta property="article:tag" content="WLS2">
+<meta property="article:tag" content="CS50">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Java数组常用API - 大雪深埋</title>
+  <title>WLS2和Python配置 - 大雪深埋</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -204,7 +203,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Java数组常用API"></span>
+            <span id="subtitle" data-typed-text="WLS2和Python配置"></span>
           
         </div>
 
@@ -215,8 +214,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-12-24 20:10" pubdate>
-          2025年12月24日 晚上
+        <time datetime="2025-12-31 19:01" pubdate>
+          2025年12月31日 晚上
         </time>
       </span>
     
@@ -227,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          916 字
+          736 字
         
       </span>
     
@@ -238,7 +237,7 @@
         
         
         
-          8 分钟
+          7 分钟
         
       </span>
     
@@ -284,67 +283,110 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Java数组常用API</h1>
+            <h1 id="seo-header">WLS2和Python配置</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="🚀-Java-进阶：数组常用-API-与经典操作实战"><a href="#🚀-Java-进阶：数组常用-API-与经典操作实战" class="headerlink" title="🚀 Java 进阶：数组常用 API 与经典操作实战"></a>🚀 Java 进阶：数组常用 API 与经典操作实战</h1><blockquote>
-<p><strong>导读</strong>：<br>这一节我们将解锁 Java 数组的“瑞士军刀”——<code>java.util.Arrays</code> 类，它可以让你一行代码搞定排序、查找和打印。<br>同时，我们也会深入底层，手写几个经典的数组算法（如反转、扩容），这是理解数据结构逻辑的关键。</p>
-</blockquote>
-<hr>
-<h2 id="第一部分：Java-数组的“瑞士军刀”-常用-API"><a href="#第一部分：Java-数组的“瑞士军刀”-常用-API" class="headerlink" title="第一部分：Java 数组的“瑞士军刀” (常用 API)"></a>第一部分：Java 数组的“瑞士军刀” (常用 API)</h2><p>Java 官方为了不让我们重复造轮子，提供了一个强大的工具类 <code>java.util.Arrays</code>。使用前请记得 <code>import java.util.Arrays;</code>。</p>
-<h3 id="1-🔍-查看与打印：toString-amp-deepToString"><a href="#1-🔍-查看与打印：toString-amp-deepToString" class="headerlink" title="1. 🔍 查看与打印：toString() &amp; deepToString()"></a>1. 🔍 查看与打印：<code>toString()</code> &amp; <code>deepToString()</code></h3><p>直接打印数组变量只能看到内存地址，必须用这个方法才能看到“真面目”。</p>
+                <p>CS50中check作业和提交作业的check50和submit50需要在Linux环境下运行，因此配置下WLS。</p>
+<h2 id="1-WSL2-架构与磁盘管理"><a href="#1-WSL2-架构与磁盘管理" class="headerlink" title="1. WSL2 架构与磁盘管理"></a>1. WSL2 架构与磁盘管理</h2><h3 id="1-1-核心安装与升级"><a href="#1-1-核心安装与升级" class="headerlink" title="1.1 核心安装与升级"></a>1.1 核心安装与升级</h3><ul>
+<li><strong>一键安装</strong>：<code>wsl --install</code>（默认安装 Ubuntu）。</li>
+<li><strong>查看版本</strong>：<code>wsl -l -v</code>。确保版本号显示为 <code>2</code>。</li>
+</ul>
+<h3 id="1-2-F-盘迁移与权限“避坑”指南"><a href="#1-2-F-盘迁移与权限“避坑”指南" class="headerlink" title="1.2 F 盘迁移与权限“避坑”指南"></a>1.2 F 盘迁移与权限“避坑”指南</h3><p>为了保护 C 盘空间，我们将 Ubuntu 移动到了 <code>F:\WSL\Ubuntu</code>。</p>
 <ul>
-<li><strong>场景</strong>：调试代码，查看数组里的内容。</li>
-<li><strong>代码示例</strong>：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] arr = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125;;<br>System.out.println(Arrays.toString(arr)); <br><span class="hljs-comment">// 输出: [1, 2, 3]</span><br><br><span class="hljs-type">int</span>[][] matrix = &#123;&#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>&#125;, &#123;<span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;&#125;;<br><span class="hljs-comment">// 注意：多维数组要用 deepToString，否则里面的数组还是显示地址</span><br>System.out.println(Arrays.deepToString(matrix)); <br><span class="hljs-comment">// 输出: [[1, 2], [3, 4]]</span><br></code></pre></td></tr></table></figure>
-</li>
+<li><strong>错误复现</strong>：报错 <code>E_ACCESSDENIED</code> (拒绝访问)。</li>
+<li><strong>深度排查</strong>：WSL2 的 <code>.vhdx</code> 虚拟磁盘文件本质上是一个实时挂载的磁盘。</li>
+<li><strong>解决方案</strong>：<br>由于你将系统文件放在了非系统盘，有时权限没有正确继承，导致 WSL 服务（以特定系统账户运行）无法读取。</li>
 </ul>
-<h3 id="2-🔢-排序：sort"><a href="#2-🔢-排序：sort" class="headerlink" title="2. 🔢 排序：sort()"></a>2. 🔢 排序：<code>sort()</code></h3><p>将数组元素按照从小到大（升序）排列。底层使用了双轴快速排序等高效算法。</p>
-<ul>
-<li><strong>场景</strong>：排行榜、数据整理。</li>
-<li><strong>代码示例</strong>：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] scores = &#123;<span class="hljs-number">88</span>, <span class="hljs-number">50</span>, <span class="hljs-number">99</span>, <span class="hljs-number">70</span>&#125;;<br>Arrays.sort(scores);<br>System.out.println(Arrays.toString(scores)); <br><span class="hljs-comment">// 输出: [50, 70, 88, 99] (自动变成有序了)</span><br></code></pre></td></tr></table></figure>
+<ol>
+<li><p>右键点击 <code>F:\WSL</code>（或 <code>Ubuntu</code> 文件夹），选择 <strong>属性</strong>。</p>
 </li>
-</ul>
-<h3 id="3-🔎-查找：binarySearch-二分查找"><a href="#3-🔎-查找：binarySearch-二分查找" class="headerlink" title="3. 🔎 查找：binarySearch() (二分查找)"></a>3. 🔎 查找：<code>binarySearch()</code> (二分查找)</h3><p>在一个<strong>有序</strong>的数组中快速查找某个元素的位置。</p>
-<ul>
-<li><strong>⚠️ 注意</strong>：使用此方法前，<strong>必须先排序</strong>！如果数组是乱序的，结果不可预测。</li>
-<li><p><strong>返回值</strong>：如果找到，返回索引；如果找不到，返回负数。</p>
+<li><p>切换到 <strong>安全</strong> 选项卡。</p>
 </li>
-<li><p><strong>代码示例</strong>：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] nums = &#123;<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>&#125;; <span class="hljs-comment">// 必须是有序的</span><br><span class="hljs-type">int</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> Arrays.binarySearch(nums, <span class="hljs-number">30</span>);<br>System.out.println(<span class="hljs-string">&quot;30的下标是：&quot;</span> + index); <span class="hljs-comment">// 输出: 2</span><br><br><span class="hljs-type">int</span> <span class="hljs-variable">errorIndex</span> <span class="hljs-operator">=</span> Arrays.binarySearch(nums, <span class="hljs-number">25</span>);<br>System.out.println(<span class="hljs-string">&quot;找不存在的数：&quot;</span> + errorIndex); <span class="hljs-comment">// 输出负数 (例如 -3)</span><br></code></pre></td></tr></table></figure>
+<li><p>点击 <strong>编辑</strong> -&gt; <strong>添加</strong>。</p>
 </li>
-</ul>
-<h3 id="4-👯-比较：equals"><a href="#4-👯-比较：equals" class="headerlink" title="4. 👯 比较：equals()"></a>4. 👯 比较：<code>equals()</code></h3><p>判断两个数组的<strong>内容</strong>是否完全一致（长度相同，且对应位置元素相同）。</p>
-<ul>
-<li><p><strong>注意</strong>：直接用 <code>==</code> 比较的是两个数组的内存地址，通常都是 <code>false</code>。</p>
+<li><p>在对象名称框中输入 <code>Everyone</code>（或者你的电脑用户名），点击确定。</p>
 </li>
-<li><p><strong>代码示例</strong>：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] arr1 = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125;;<br><span class="hljs-type">int</span>[] arr2 = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>&#125;;<br><br>System.out.println(arr1 == arr2);       <span class="hljs-comment">// false (它是两个不同的对象)</span><br>System.out.println(Arrays.equals(arr1, arr2)); <span class="hljs-comment">// true (内容一样)</span><br></code></pre></td></tr></table></figure>
+<li><p>在权限列表中，勾选 <strong>完全控制</strong>。</p>
 </li>
-</ul>
-<h3 id="5-🛠-填充：fill"><a href="#5-🛠-填充：fill" class="headerlink" title="5. 🛠 填充：fill()"></a>5. 🛠 填充：<code>fill()</code></h3><p>快速把数组的所有位置（或指定范围）都填成同一个值。</p>
-<ul>
-<li><strong>场景</strong>：初始化游戏地图、重置数据。</li>
-<li><strong>代码示例</strong>：  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] box = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[<span class="hljs-number">5</span>];<br>Arrays.fill(box, <span class="hljs-number">666</span>); <span class="hljs-comment">// 把整个数组都填满 666</span><br><span class="hljs-comment">// 输出: [666, 666, 666, 666, 666]</span><br></code></pre></td></tr></table></figure>
+<li><p>点击确定应用。</p>
 </li>
-</ul>
-<h3 id="6-📋-复制与截取：copyOf-amp-copyOfRange"><a href="#6-📋-复制与截取：copyOf-amp-copyOfRange" class="headerlink" title="6. 📋 复制与截取：copyOf() &amp; copyOfRange()"></a>6. 📋 复制与截取：<code>copyOf()</code> &amp; <code>copyOfRange()</code></h3><ul>
-<li><code>copyOf(原数组, 新长度)</code>：从头开始复制，可用于扩容或截断。</li>
-<li><p><code>copyOfRange(原数组, start, end)</code>：复制中间某一段（含头不含尾）。</p>
-</li>
-<li><p><strong>代码示例</strong>：</p>
-  <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">int</span>[] src = &#123;<span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">30</span>, <span class="hljs-number">40</span>, <span class="hljs-number">50</span>&#125;;<br><br><span class="hljs-comment">// 复制前3个</span><br><span class="hljs-type">int</span>[] newArr = Arrays.copyOf(src, <span class="hljs-number">3</span>); <br><span class="hljs-comment">// 结果: [10, 20, 30]</span><br><br><span class="hljs-comment">// 扩容复制 (后面补默认值)</span><br><span class="hljs-type">int</span>[] bigArr = Arrays.copyOf(src, <span class="hljs-number">7</span>);<br><span class="hljs-comment">// 结果: [10, 20, 30, 40, 50, 0, 0]</span><br></code></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="⚡-补充：一个高效的底层-API"><a href="#⚡-补充：一个高效的底层-API" class="headerlink" title="⚡ 补充：一个高效的底层 API"></a>⚡ 补充：一个高效的底层 API</h2><p>在阅读 Java 源码时，你会经常看到 <code>System.arraycopy</code>。它是最底层的数组复制方法，性能极高（直接操作内存），但参数比较多，容易写错。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 语法：</span><br><span class="hljs-comment">// System.arraycopy(原数组, 原数组起始位置, 目标数组, 目标数组起始位置, 复制多少个);</span><br><br><span class="hljs-type">int</span>[] src = &#123;<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>&#125;;<br><span class="hljs-type">int</span>[] dest = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[<span class="hljs-number">4</span>];<br><br><span class="hljs-comment">// 把 src 的后两个元素 (3,4) 复制到 dest 的开头</span><br>System.arraycopy(src, <span class="hljs-number">2</span>, dest, <span class="hljs-number">0</span>, <span class="hljs-number">2</span>);<br><br>System.out.println(Arrays.toString(dest)); <br><span class="hljs-comment">// 输出: [3, 4, 0, 0]</span><br></code></pre></td></tr></table></figure>
-<hr>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
-<li><strong>日常开发</strong>：首选 <code>java.util.Arrays</code> 类，代码简洁，可读性高。</li>
-<li><strong>性能敏感/底层开发</strong>：使用 <code>System.arraycopy</code>。</li>
 </ol>
+<hr>
+<h2 id="2-Linux-系统配置与优化"><a href="#2-Linux-系统配置与优化" class="headerlink" title="2. Linux 系统配置与优化"></a>2. Linux 系统配置与优化</h2><h3 id="2-1-软件源刷新-解决“找不到包”报错"><a href="#2-1-软件源刷新-解决“找不到包”报错" class="headerlink" title="2.1 软件源刷新 (解决“找不到包”报错)"></a>2.1 软件源刷新 (解决“找不到包”报错)</h3><ul>
+<li><strong>现象</strong>：执行 <code>sudo apt install python3-venv</code> 提示 <code>no installation candidate</code>。</li>
+<li><strong>原理</strong>：Ubuntu 刚装好时，本地的软件包索引是空的，它不知道去哪里下载。</li>
+<li><strong>操作</strong>：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt update<br></code></pre></td></tr></table></figure>
+  <em>这步操作会从服务器拉取最新的软件清单。</em></li>
+</ul>
+<h3 id="2-2-彻底静音处理"><a href="#2-2-彻底静音处理" class="headerlink" title="2.2 彻底静音处理"></a>2.2 彻底静音处理</h3><ul>
+<li><strong>痛点</strong>：按 Tab 或 Backspace 时，系统发出刺耳的蜂鸣音。<h3 id="3-关闭-Windows-Terminal-的全局提示音"><a href="#3-关闭-Windows-Terminal-的全局提示音" class="headerlink" title="3. 关闭 Windows Terminal 的全局提示音"></a>3. 关闭 Windows Terminal 的全局提示音</h3></li>
+</ul>
+<p>如果你使用的是 <strong>Windows Terminal</strong>（就是你截图里那个带有标签页的黑色窗口），它本身也有一个设置：</p>
+<ol>
+<li><p>点击窗口顶部的 <strong>向下小箭头</strong>，选择 <strong>设置 (Settings)</strong>。</p>
+</li>
+<li><p>在左侧菜单点击 <strong>默认值 (Defaults)</strong>。</p>
+</li>
+<li><p>在右侧找到 <strong>高级 (Advanced)</strong>。</p>
+</li>
+<li><p>找到 <strong>钟声通知样式 (Bell notification style)</strong>，将其设置为 <strong>无 (None)</strong>。</p>
+</li>
+<li><p>点击右下角的 <strong>保存</strong>。</p>
+</li>
+</ol>
+<hr>
+<h2 id="3-Python-虚拟环境-Virtual-Environment-深度实战"><a href="#3-Python-虚拟环境-Virtual-Environment-深度实战" class="headerlink" title="3. Python 虚拟环境 (Virtual Environment) 深度实战"></a>3. Python 虚拟环境 (Virtual Environment) 深度实战</h2><p>对于 CS50 AI 的 <code>degrees</code> 项目，必须使用 <code>venv</code> 来隔离环境。</p>
+<h3 id="3-1-环境安装"><a href="#3-1-环境安装" class="headerlink" title="3.1 环境安装"></a>3.1 环境安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 1. 安装 pip 包管理器和 venv 模块</span><br><span class="hljs-built_in">sudo</span> apt install python3-pip python3-venv -y<br></code></pre></td></tr></table></figure>
+<h3 id="3-2-虚拟环境“三部曲”"><a href="#3-2-虚拟环境“三部曲”" class="headerlink" title="3.2 虚拟环境“三部曲”"></a>3.2 虚拟环境“三部曲”</h3><ol>
+<li><strong>创建环境</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 在项目目录下创建一个名为 venv 的“小房间”</span><br>python3 -m venv venv<br></code></pre></td></tr></table></figure></li>
+<li><strong>激活环境</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 这一步会修改当前终端的 PATH 变量</span><br><span class="hljs-built_in">source</span> venv/bin/activate<br></code></pre></td></tr></table></figure>
+<em>激活后，命令行首部会出现 <code>(venv)</code> 标识。</em></li>
+<li><p><strong>隔离原理对比</strong>：</p>
+<ul>
+<li><strong>未激活</strong>：系统默认调用 <code>/usr/bin/python3</code>。</li>
+<li><strong>激活后</strong>：终端会拦截指令，优先使用 <code>~/cs50ai/project0/degrees/venv/bin/python3</code>。</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-3-运行-CS50-AI-项目"><a href="#3-3-运行-CS50-AI-项目" class="headerlink" title="3.3 运行 CS50 AI 项目"></a>3.3 运行 CS50 AI 项目</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 进入作业目录</span><br><span class="hljs-built_in">cd</span> ~/cs50ai/project0/degrees<br><br><span class="hljs-comment"># 运行程序并带上 large 数据集参数</span><br>python3 degrees.py large<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="4-后端开发常用“互通”命令"><a href="#4-后端开发常用“互通”命令" class="headerlink" title="4. 后端开发常用“互通”命令"></a>4. 后端开发常用“互通”命令</h2><p>作为准 Java 后端开发，你会频繁用到这些跨界操作：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">场景</th>
+<th style="text-align:left">命令</th>
+<th style="text-align:left">效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>文件管理</strong></td>
+<td style="text-align:left"><code>explorer.exe .</code></td>
+<td style="text-align:left">弹窗 Windows 文件夹显示 Linux 当前路径</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>代码编辑</strong></td>
+<td style="text-align:left"><code>code .</code></td>
+<td style="text-align:left">启动 VS Code 并利用 WSL 插件进行开发</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>系统监控</strong></td>
+<td style="text-align:left"><code>htop</code></td>
+<td style="text-align:left">Linux 风格的动态资源监视器</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>解压作业</strong></td>
+<td style="text-align:left"><code>unzip degrees.zip</code></td>
+<td style="text-align:left">需先安装 <code>sudo apt install unzip</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
 
                 
               </div>
@@ -363,7 +405,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/JavaSE/" class="category-chain-item">JavaSE</a>
+  <a href="/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="category-chain-item">环境配置</a>
   
   
 
@@ -378,11 +420,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Java/" class="print-no-link">#Java</a>
+        <a href="/tags/WLS2/" class="print-no-link">#WLS2</a>
       
-        <a href="/tags/JavaSE/" class="print-no-link">#JavaSE</a>
-      
-        <a href="/tags/%E8%AF%AD%E6%B3%95%E7%9F%A5%E8%AF%86/" class="print-no-link">#语法知识</a>
+        <a href="/tags/CS50/" class="print-no-link">#CS50</a>
       
     </div>
   
@@ -394,8 +434,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Java数组常用API</div>
-      <div>https://zjjyyds.github.io/2025/12/24/Java数组常用API/</div>
+      <div>WLS2和Python配置</div>
+      <div>https://zjjyyds.github.io/2025/12/31/WSL2配置/</div>
     </div>
     <div class="license-meta">
       
@@ -407,7 +447,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年12月24日</div>
+          <div>2025年12月31日</div>
         </div>
       
       
@@ -439,18 +479,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/12/25/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" title="归并排序算法">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">归并排序算法</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/12/24/Java%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/" title="Java生成随机数">
-                        <span class="hidden-mobile">Java生成随机数</span>
+                      <a href="/2025/12/29/IDEA%E5%BF%AB%E6%8D%B7%E9%94%AE/" title="IDEA快捷键">
+                        <span class="hidden-mobile">IDEA快捷键</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

@@ -4,6 +4,33 @@
   
   
   <entry>
+    <title>WLS2和Python配置</title>
+    <link href="/2025/12/31/WSL2%E9%85%8D%E7%BD%AE/"/>
+    <url>/2025/12/31/WSL2%E9%85%8D%E7%BD%AE/</url>
+    
+    <content type="html"><![CDATA[<p>CS50中check作业和提交作业的check50和submit50需要在Linux环境下运行，因此配置下WLS。</p><h2 id="1-WSL2-架构与磁盘管理"><a href="#1-WSL2-架构与磁盘管理" class="headerlink" title="1. WSL2 架构与磁盘管理"></a>1. WSL2 架构与磁盘管理</h2><h3 id="1-1-核心安装与升级"><a href="#1-1-核心安装与升级" class="headerlink" title="1.1 核心安装与升级"></a>1.1 核心安装与升级</h3><ul><li><strong>一键安装</strong>：<code>wsl --install</code>（默认安装 Ubuntu）。</li><li><strong>查看版本</strong>：<code>wsl -l -v</code>。确保版本号显示为 <code>2</code>。</li></ul><h3 id="1-2-F-盘迁移与权限“避坑”指南"><a href="#1-2-F-盘迁移与权限“避坑”指南" class="headerlink" title="1.2 F 盘迁移与权限“避坑”指南"></a>1.2 F 盘迁移与权限“避坑”指南</h3><p>为了保护 C 盘空间，我们将 Ubuntu 移动到了 <code>F:\WSL\Ubuntu</code>。</p><ul><li><strong>错误复现</strong>：报错 <code>E_ACCESSDENIED</code> (拒绝访问)。</li><li><strong>深度排查</strong>：WSL2 的 <code>.vhdx</code> 虚拟磁盘文件本质上是一个实时挂载的磁盘。</li><li><strong>解决方案</strong>：<br>由于你将系统文件放在了非系统盘，有时权限没有正确继承，导致 WSL 服务（以特定系统账户运行）无法读取。</li></ul><ol><li><p>右键点击 <code>F:\WSL</code>（或 <code>Ubuntu</code> 文件夹），选择 <strong>属性</strong>。</p></li><li><p>切换到 <strong>安全</strong> 选项卡。</p></li><li><p>点击 <strong>编辑</strong> -&gt; <strong>添加</strong>。</p></li><li><p>在对象名称框中输入 <code>Everyone</code>（或者你的电脑用户名），点击确定。</p></li><li><p>在权限列表中，勾选 <strong>完全控制</strong>。</p></li><li><p>点击确定应用。</p></li></ol><hr><h2 id="2-Linux-系统配置与优化"><a href="#2-Linux-系统配置与优化" class="headerlink" title="2. Linux 系统配置与优化"></a>2. Linux 系统配置与优化</h2><h3 id="2-1-软件源刷新-解决“找不到包”报错"><a href="#2-1-软件源刷新-解决“找不到包”报错" class="headerlink" title="2.1 软件源刷新 (解决“找不到包”报错)"></a>2.1 软件源刷新 (解决“找不到包”报错)</h3><ul><li><strong>现象</strong>：执行 <code>sudo apt install python3-venv</code> 提示 <code>no installation candidate</code>。</li><li><strong>原理</strong>：Ubuntu 刚装好时，本地的软件包索引是空的，它不知道去哪里下载。</li><li><strong>操作</strong>：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt update<br></code></pre></td></tr></table></figure>  <em>这步操作会从服务器拉取最新的软件清单。</em></li></ul><h3 id="2-2-彻底静音处理"><a href="#2-2-彻底静音处理" class="headerlink" title="2.2 彻底静音处理"></a>2.2 彻底静音处理</h3><ul><li><strong>痛点</strong>：按 Tab 或 Backspace 时，系统发出刺耳的蜂鸣音。<h3 id="3-关闭-Windows-Terminal-的全局提示音"><a href="#3-关闭-Windows-Terminal-的全局提示音" class="headerlink" title="3. 关闭 Windows Terminal 的全局提示音"></a>3. 关闭 Windows Terminal 的全局提示音</h3></li></ul><p>如果你使用的是 <strong>Windows Terminal</strong>（就是你截图里那个带有标签页的黑色窗口），它本身也有一个设置：</p><ol><li><p>点击窗口顶部的 <strong>向下小箭头</strong>，选择 <strong>设置 (Settings)</strong>。</p></li><li><p>在左侧菜单点击 <strong>默认值 (Defaults)</strong>。</p></li><li><p>在右侧找到 <strong>高级 (Advanced)</strong>。</p></li><li><p>找到 <strong>钟声通知样式 (Bell notification style)</strong>，将其设置为 <strong>无 (None)</strong>。</p></li><li><p>点击右下角的 <strong>保存</strong>。</p></li></ol><hr><h2 id="3-Python-虚拟环境-Virtual-Environment-深度实战"><a href="#3-Python-虚拟环境-Virtual-Environment-深度实战" class="headerlink" title="3. Python 虚拟环境 (Virtual Environment) 深度实战"></a>3. Python 虚拟环境 (Virtual Environment) 深度实战</h2><p>对于 CS50 AI 的 <code>degrees</code> 项目，必须使用 <code>venv</code> 来隔离环境。</p><h3 id="3-1-环境安装"><a href="#3-1-环境安装" class="headerlink" title="3.1 环境安装"></a>3.1 环境安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 1. 安装 pip 包管理器和 venv 模块</span><br><span class="hljs-built_in">sudo</span> apt install python3-pip python3-venv -y<br></code></pre></td></tr></table></figure><h3 id="3-2-虚拟环境“三部曲”"><a href="#3-2-虚拟环境“三部曲”" class="headerlink" title="3.2 虚拟环境“三部曲”"></a>3.2 虚拟环境“三部曲”</h3><ol><li><strong>创建环境</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 在项目目录下创建一个名为 venv 的“小房间”</span><br>python3 -m venv venv<br></code></pre></td></tr></table></figure></li><li><strong>激活环境</strong>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 这一步会修改当前终端的 PATH 变量</span><br><span class="hljs-built_in">source</span> venv/bin/activate<br></code></pre></td></tr></table></figure><em>激活后，命令行首部会出现 <code>(venv)</code> 标识。</em></li><li><p><strong>隔离原理对比</strong>：</p><ul><li><strong>未激活</strong>：系统默认调用 <code>/usr/bin/python3</code>。</li><li><strong>激活后</strong>：终端会拦截指令，优先使用 <code>~/cs50ai/project0/degrees/venv/bin/python3</code>。</li></ul></li></ol><h3 id="3-3-运行-CS50-AI-项目"><a href="#3-3-运行-CS50-AI-项目" class="headerlink" title="3.3 运行 CS50 AI 项目"></a>3.3 运行 CS50 AI 项目</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 进入作业目录</span><br><span class="hljs-built_in">cd</span> ~/cs50ai/project0/degrees<br><br><span class="hljs-comment"># 运行程序并带上 large 数据集参数</span><br>python3 degrees.py large<br></code></pre></td></tr></table></figure><hr><h2 id="4-后端开发常用“互通”命令"><a href="#4-后端开发常用“互通”命令" class="headerlink" title="4. 后端开发常用“互通”命令"></a>4. 后端开发常用“互通”命令</h2><p>作为准 Java 后端开发，你会频繁用到这些跨界操作：</p><div class="table-container"><table><thead><tr><th style="text-align:left">场景</th><th style="text-align:left">命令</th><th style="text-align:left">效果</th></tr></thead><tbody><tr><td style="text-align:left"><strong>文件管理</strong></td><td style="text-align:left"><code>explorer.exe .</code></td><td style="text-align:left">弹窗 Windows 文件夹显示 Linux 当前路径</td></tr><tr><td style="text-align:left"><strong>代码编辑</strong></td><td style="text-align:left"><code>code .</code></td><td style="text-align:left">启动 VS Code 并利用 WSL 插件进行开发</td></tr><tr><td style="text-align:left"><strong>系统监控</strong></td><td style="text-align:left"><code>htop</code></td><td style="text-align:left">Linux 风格的动态资源监视器</td></tr><tr><td style="text-align:left"><strong>解压作业</strong></td><td style="text-align:left"><code>unzip degrees.zip</code></td><td style="text-align:left">需先安装 <code>sudo apt install unzip</code></td></tr></tbody></table></div><hr>]]></content>
+    
+    
+    <categories>
+      
+      <category>环境配置</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>WLS2</tag>
+      
+      <tag>CS50</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>IDEA快捷键</title>
     <link href="/2025/12/29/IDEA%E5%BF%AB%E6%8D%B7%E9%94%AE/"/>
     <url>/2025/12/29/IDEA%E5%BF%AB%E6%8D%B7%E9%94%AE/</url>
@@ -20,11 +47,11 @@
     
     <tags>
       
-      <tag>Java</tag>
-      
       <tag>IDEA</tag>
       
       <tag>快捷键</tag>
+      
+      <tag>Java</tag>
       
     </tags>
     
@@ -107,9 +134,9 @@
       
       <tag>Java</tag>
       
-      <tag>语法知识</tag>
-      
       <tag>JavaSE</tag>
+      
+      <tag>语法知识</tag>
       
     </tags>
     
@@ -136,9 +163,9 @@
       
       <tag>Java</tag>
       
-      <tag>语法知识</tag>
-      
       <tag>JavaSE</tag>
+      
+      <tag>语法知识</tag>
       
     </tags>
     
