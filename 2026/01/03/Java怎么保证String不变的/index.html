@@ -19,25 +19,25 @@
   <meta name="author" content="Jay">
   <meta name="keywords" content="">
   
-    <meta name="description" content="项目 0: Degrees (六度分隔)编写一个程序，通过选择连接演员的电影序列，确定两个演员之间有多少“层”关系（即六度分隔理论）。 123456789$ python degrees.py largeLoading data...Data loaded.Name: Emma WatsonName: Jennifer Lawrence3 degrees of separation.1: Emma">
+    <meta name="description" content="这是一个问到 Java 设计“核心骨架”的问题。我先给你一句结论级答案，然后我们像拆发动机一样，把每一层都拆开。  String 的不可变性不是靠一句 final，而是靠一整套“多层封锁 + JVM 协同”的设计体系共同保证的。  下面我们分 5 道防线 来看。  第一层防线：String 类本身是 final1public final class String &#123; ... &#125;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CS50X project0 Degrees">
-<meta property="og:url" content="https://zjjyyds.github.io/2026/01/01/CS50X%20project0%20Degrees/index.html">
+<meta property="og:title" content="Java怎么实现Stirng不变的">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/01/03/Java%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81String%E4%B8%8D%E5%8F%98%E7%9A%84/index.html">
 <meta property="og:site_name" content="大雪深埋">
-<meta property="og:description" content="项目 0: Degrees (六度分隔)编写一个程序，通过选择连接演员的电影序列，确定两个演员之间有多少“层”关系（即六度分隔理论）。 123456789$ python degrees.py largeLoading data...Data loaded.Name: Emma WatsonName: Jennifer Lawrence3 degrees of separation.1: Emma">
+<meta property="og:description" content="这是一个问到 Java 设计“核心骨架”的问题。我先给你一句结论级答案，然后我们像拆发动机一样，把每一层都拆开。  String 的不可变性不是靠一句 final，而是靠一整套“多层封锁 + JVM 协同”的设计体系共同保证的。  下面我们分 5 道防线 来看。  第一层防线：String 类本身是 final1public final class String &#123; ... &#125;">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-01-01T14:09:00.000Z">
-<meta property="article:modified_time" content="2026-01-01T14:11:01.350Z">
+<meta property="article:published_time" content="2026-01-03T06:01:00.000Z">
+<meta property="article:modified_time" content="2026-01-03T06:09:41.135Z">
 <meta property="article:author" content="Jay">
-<meta property="article:tag" content="CS50X">
-<meta property="article:tag" content="project">
+<meta property="article:tag" content="JavaSE">
+<meta property="article:tag" content="思考">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>CS50X project0 Degrees - 大雪深埋</title>
+  <title>Java怎么实现Stirng不变的 - 大雪深埋</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -203,7 +203,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="CS50X project0 Degrees"></span>
+            <span id="subtitle" data-typed-text="Java怎么实现Stirng不变的"></span>
           
         </div>
 
@@ -214,8 +214,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2026-01-01 22:09" pubdate>
-          2026年1月1日 晚上
+        <time datetime="2026-01-03 14:01" pubdate>
+          2026年1月3日 下午
         </time>
       </span>
     
@@ -226,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          993 字
+          815 字
         
       </span>
     
@@ -237,7 +237,7 @@
         
         
         
-          9 分钟
+          7 分钟
         
       </span>
     
@@ -283,73 +283,183 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">CS50X project0 Degrees</h1>
+            <h1 id="seo-header">Java怎么实现Stirng不变的</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="项目-0-Degrees-六度分隔"><a href="#项目-0-Degrees-六度分隔" class="headerlink" title="项目 0: Degrees (六度分隔)"></a>项目 0: Degrees (六度分隔)</h1><p>编写一个程序，通过选择连接演员的电影序列，确定两个演员之间有多少“层”关系（即六度分隔理论）。</p>
-<figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs makefile">$ python degrees.py large<br>Loading data...<br>Data loaded.<br><span class="hljs-section">Name: Emma Watson</span><br><span class="hljs-section">Name: Jennifer Lawrence</span><br>3 degrees of separation.<br><span class="hljs-section">1: Emma Watson and Brendan Gleeson starred in Harry Potter and the Order of the Phoenix</span><br><span class="hljs-section">2: Brendan Gleeson and Michael Fassbender starred in Trespass Against Us</span><br><span class="hljs-section">3: Michael Fassbender and Jennifer Lawrence starred in X-Men: First Class</span><br></code></pre></td></tr></table></figure>
-<h2 id="截止时间"><a href="#截止时间" class="headerlink" title="[截止时间]"></a>[截止时间]</h2><p><a target="_blank" rel="noopener" href="https://time.cs50.io/20260630T235900Z">2026 年 7 月 1 日，星期三，北京时间 07:59</a></p>
-<h2 id="如何寻求帮助"><a href="#如何寻求帮助" class="headerlink" title="[如何寻求帮助]"></a>[如何寻求帮助]</h2><ol>
-<li>通过 <a target="_blank" rel="noopener" href="https://cs50.edx.org/ed">Ed</a> 平台提问。</li>
-<li>在 CS50 的任何<a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/communities/">社区</a>中交流。</li>
-</ol>
-<hr>
-<h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="[背景介绍]"></a>[背景介绍]</h2><p>根据“<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Six_Degrees_of_Kevin_Bacon">凯文·贝肯的六度分隔</a>”游戏，好莱坞电影业中的任何人都可以通过最多六个步骤连接到凯文·贝肯，其中每一步都由两位演员共同出演的一部电影组成。</p>
-<p>在这个问题中，我们的目标是找到任意两个演员之间的<strong>最短路径</strong>。</p>
-<p>通过使用<strong>广度优先搜索 (BFS)</strong>，我们可以找到从一个演员到另一个演员的最短路径：</p>
-<ul>
-<li><strong>状态 (States)</strong>：人（演员）。</li>
-<li><strong>动作 (Actions)</strong>：电影（将我们从一个演员带到另一个演员）。</li>
-<li><strong>初始状态与目标状态</strong>：我们要连接的两位演员。</li>
-</ul>
-<hr>
-<h2 id="入门指南"><a href="#入门指南" class="headerlink" title="[入门指南]"></a>[入门指南]</h2><ul>
-<li>从 <a target="_blank" rel="noopener" href="https://cdn.cs50.net/ai/2023/x/projects/0/degrees.zip">此处</a> 下载分发代码并解压。</li>
-</ul>
-<hr>
-<h2 id="理解代码"><a href="#理解代码" class="headerlink" title="[理解代码]"></a>[理解代码]</h2><p>分发代码包含两组 CSV 数据文件：<code>large</code>（大型）和 <code>small</code>（小型）。</p>
-<h3 id="数据文件"><a href="#数据文件" class="headerlink" title="数据文件"></a>数据文件</h3><ul>
-<li><code>people.csv</code>：包含 <code>id</code>、<code>name</code> 和 <code>birth</code>（出生年份）。</li>
-<li><code>movies.csv</code>：包含 <code>id</code>、<code>title</code> 和 <code>year</code>。</li>
-<li><code>stars.csv</code>：关联演员和电影（<code>person_id</code> 与 <code>movie_id</code> 的对应关系）。</li>
-</ul>
-<h3 id="degrees-py"><a href="#degrees-py" class="headerlink" title="degrees.py"></a><code>degrees.py</code></h3><ul>
-<li><code>names</code> 字典：将姓名映射到 <code>id</code> 集合（处理重名）。</li>
-<li><code>people</code> 字典：映射 <code>id</code> 到演员详细信息。</li>
-<li><code>movies</code> 字典：映射 <code>id</code> 到电影详细信息。</li>
-<li><code>main</code> 函数：加载数据并调用 <code>shortest_path</code>。</li>
-</ul>
-<hr>
-<h2 id="任务要求-Specification"><a href="#任务要求-Specification" class="headerlink" title="[任务要求 (Specification)]"></a>[任务要求 (Specification)]</h2><p>你需要实现 <code>shortest_path</code> 函数，使其返回从 <code>source</code> ID 到 <code>target</code> ID 的最短路径。</p>
-<ul>
-<li><strong>返回值</strong>：函数应返回一个列表，其中每个元素是一个 <code>(movie_id, person_id)</code> 元组。<ul>
-<li>例如：<code>[(1, 2), (3, 4)]</code> 表示源演员通过电影 1 与演员 2 合作，演员 2 通过电影 3 与目标演员 4 合作。</li>
-</ul>
-</li>
-<li><strong>多路径</strong>：如果存在多个等长的最短路径，返回其中任何一个即可。</li>
-<li><strong>无路径</strong>：如果两人之间不连通，返回 <code>None</code>。</li>
-<li><strong>辅助函数</strong>：你可以调用 <code>neighbors_for_person(person_id)</code>，它返回与该演员合作过的所有 <code>(movie_id, person_id)</code> 对。</li>
-</ul>
-<hr>
-<h2 id="提示-Hints"><a href="#提示-Hints" class="headerlink" title="[提示 (Hints)]"></a>[提示 (Hints)]</h2><ul>
-<li><strong>性能优化</strong>：在标准搜索中，算法在节点弹出边缘（Frontier）时检查目标。为了提高效率，你可以在<strong>节点加入边缘时</strong>就检查是否到达目标。</li>
-<li><strong>借鉴代码</strong>：参考并修改课堂示例。<code>util.py</code> 中提供了 <code>Node</code>、<code>StackFrontier</code> 和 <code>QueueFrontier</code> 的实现。</li>
-</ul>
-<hr>
-<h2 id="测试与提交"><a href="#测试与提交" class="headerlink" title="[测试与提交]"></a>[测试与提交]</h2><p>使用 <code>check50</code> 检查正确性：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">check50 ai50/projects/2024/x/degrees<br></code></pre></td></tr></table></figure></p>
-<h3 id="提交方式"><a href="#提交方式" class="headerlink" title="提交方式"></a>提交方式</h3><ol>
-<li>在 <a target="_blank" rel="noopener" href="https://submit.cs50.io/invites/d03c31aef1984c29b5e7b268c3a87b7b">submit.cs50.io</a> 授权并加入课程。</li>
-<li>使用 <code>submit50</code>：<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">submit50 ai50/projects/2024/x/degrees<br></code></pre></td></tr></table></figure>
-</li>
-</ol>
-<hr>
-<p><strong>数据来源</strong>：信息由 <a target="_blank" rel="noopener" href="https://www.imdb.com/">IMDb</a> 提供，经许可使用。</p>
-<h1 id="solution"><a href="#solution" class="headerlink" title="solution"></a>solution</h1><p>用队列使用BFS，第一次遇到target时，返回路径。</p>
+                <p>这是一个<strong>问到 Java 设计“核心骨架”的问题</strong>。<br>我先给你一句<strong>结论级答案</strong>，然后我们像拆发动机一样，把每一层都拆开。</p>
 <blockquote>
-<p>值得注意的是，Node使用的parent记录上一个结点的值，和一般的图的BFS使用一个path数组边走边记录路径不同。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">shortest_path</span>(<span class="hljs-params">source, target</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    Returns the shortest list of (movie_id, person_id) pairs</span><br><span class="hljs-string">    that connect the source to the target.</span><br><span class="hljs-string"></span><br><span class="hljs-string">    If no possible path, returns None.</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br><br>    <span class="hljs-comment"># 使用广度优先搜索（BFS）和 QueueFrontier，保证按边数返回最短路径。</span><br><br>    <span class="hljs-comment"># 特殊情况：起点等于终点，返回空路径（没有边）。</span><br>    <span class="hljs-keyword">if</span> source == target:<br>        <span class="hljs-keyword">return</span> []<br><br>    <span class="hljs-comment"># 初始化 frontier，将起始节点加入队列</span><br>    start = Node(state=source, parent=<span class="hljs-literal">None</span>, action=<span class="hljs-literal">None</span>)<br>    frontier = QueueFrontier()<br>    frontier.add(start)<br><br>    <span class="hljs-comment"># explored 用于记录已访问的 person_id，避免重复扩展</span><br>    explored = <span class="hljs-built_in">set</span>()<br><br>    <span class="hljs-comment"># 主循环：直到 frontier 为空</span><br>    <span class="hljs-keyword">while</span> <span class="hljs-keyword">not</span> frontier.empty():<br>        node = frontier.remove()<br><br>        <span class="hljs-comment"># 如果当前节点是目标节点，则回溯构造路径并返回</span><br>        <span class="hljs-keyword">if</span> node.state == target:<br>            path = []<br>            <span class="hljs-comment"># 从目标回溯到起点，收集 (movie_id, person_id)</span><br>            <span class="hljs-keyword">while</span> node.parent <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> <span class="hljs-literal">None</span>:<br>                path.append((node.action, node.state))<br>                node = node.parent<br>            path.reverse()<br>            <span class="hljs-keyword">return</span> path<br><br>        <span class="hljs-comment"># 标记当前节点为已探索</span><br>        explored.add(node.state)<br><br>        <span class="hljs-comment"># 展开邻居：neighbors_for_person 返回 (movie_id, person_id)</span><br>        <span class="hljs-keyword">for</span> movie_id, person_id <span class="hljs-keyword">in</span> neighbors_for_person(node.state):<br>            <span class="hljs-comment"># 如果该人未被探索且不在 frontier 中，则创建子节点并加入 frontier</span><br>            <span class="hljs-keyword">if</span> person_id <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> explored <span class="hljs-keyword">and</span> <span class="hljs-keyword">not</span> frontier.contains_state(person_id):<br>                child = Node(state=person_id, parent=node, action=movie_id)<br>                frontier.add(child)<br><br>    <span class="hljs-comment"># 遍历完仍未找到路径，返回 None 表示不连通</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br></code></pre></td></tr></table></figure></p>
+<p><strong><code>String</code> 的不可变性不是靠一句 <code>final</code>，<br>而是靠一整套“多层封锁 + JVM 协同”的设计体系共同保证的。</strong></p>
 </blockquote>
+<p>下面我们分 <strong>5 道防线</strong> 来看。</p>
+<hr>
+<h2 id="第一层防线：String-类本身是-final"><a href="#第一层防线：String-类本身是-final" class="headerlink" title="第一层防线：String 类本身是 final"></a>第一层防线：<code>String</code> 类本身是 <code>final</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">String</span> &#123; ... &#125;<br></code></pre></td></tr></table></figure>
+<h3 id="这意味着什么？"><a href="#这意味着什么？" class="headerlink" title="这意味着什么？"></a>这意味着什么？</h3><ul>
+<li><p>❌ 不能被继承</p>
+</li>
+<li><p>❌ 不能通过子类添加“破坏性方法”</p>
+</li>
+<li><p>❌ 不能 override 任何行为</p>
+</li>
+</ul>
+<h3 id="为什么这是第一道防线？"><a href="#为什么这是第一道防线？" class="headerlink" title="为什么这是第一道防线？"></a>为什么这是第一道防线？</h3><p>假如 <code>String</code> <strong>可以被继承</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">EvilString</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">String</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">hack</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">// 改内部 char[]</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>那么：</p>
+<ul>
+<li><p>JVM</p>
+</li>
+<li><p>HashMap</p>
+</li>
+<li><p>ClassLoader</p>
+</li>
+<li><p>安全管理器</p>
+</li>
+</ul>
+<p>都会被<strong>彻底破坏</strong></p>
+<p>📌 <strong>第一层作用</strong>：<br>👉 <strong>防止通过继承破坏不可变性</strong></p>
+<hr>
+<h2 id="第二层防线：内部状态是-private-final"><a href="#第二层防线：内部状态是-private-final" class="headerlink" title="第二层防线：内部状态是 private final"></a>第二层防线：内部状态是 <code>private final</code></h2><h3 id="早期-JDK（≤8）："><a href="#早期-JDK（≤8）：" class="headerlink" title="早期 JDK（≤8）："></a>早期 JDK（≤8）：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">char</span>[] value;<br></code></pre></td></tr></table></figure>
+<h3 id="JDK-9-（压缩字符串）："><a href="#JDK-9-（压缩字符串）：" class="headerlink" title="JDK 9+（压缩字符串）："></a>JDK 9+（压缩字符串）：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">byte</span>[] value;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">byte</span> coder; <span class="hljs-comment">// LATIN1 / UTF16</span><br></code></pre></td></tr></table></figure>
+<h3 id="这两点非常关键："><a href="#这两点非常关键：" class="headerlink" title="这两点非常关键："></a>这两点非常关键：</h3><ol>
+<li><p><strong><code>final</code></strong></p>
+<ul>
+<li>引用不能被替换</li>
+</ul>
+</li>
+<li><p><strong><code>private</code></strong></p>
+<ul>
+<li>外界完全无法访问</li>
+</ul>
+</li>
+</ol>
+<p>📌 注意：<br><code>final</code> 只保证“引用不变”，<br><strong>真正防修改的是 <code>private</code> + 不暴露引用</strong>。</p>
+<hr>
+<h2 id="第三层防线：没有任何“修改自身”的方法"><a href="#第三层防线：没有任何“修改自身”的方法" class="headerlink" title="第三层防线：没有任何“修改自身”的方法"></a>第三层防线：没有任何“修改自身”的方法</h2><p>你仔细想一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="String-提供的方法是什么？"><a href="#String-提供的方法是什么？" class="headerlink" title="String 提供的方法是什么？"></a>String 提供的方法是什么？</h3><ul>
+<li><p><code>substring</code></p>
+</li>
+<li><p><code>replace</code></p>
+</li>
+<li><p><code>toUpperCase</code></p>
+</li>
+<li><p><code>concat</code></p>
+</li>
+</ul>
+<p><strong>它们全部：</strong></p>
+<blockquote>
+<p>❌ 不修改原对象<br>✅ 返回一个新 <code>String</code></p>
+</blockquote>
+<p>例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">s.toUpperCase();<br></code></pre></td></tr></table></figure>
+<p>实际等价于：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">newStr</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(...);<br></code></pre></td></tr></table></figure>
+<p>📌 <strong>这是不可变设计的“行为层保证”</strong>。</p>
+<hr>
+<h2 id="第四层防线：构造阶段的“防御性拷贝”"><a href="#第四层防线：构造阶段的“防御性拷贝”" class="headerlink" title="第四层防线：构造阶段的“防御性拷贝”"></a>第四层防线：构造阶段的“防御性拷贝”</h2><h3 id="你以为这样能破坏-String？"><a href="#你以为这样能破坏-String？" class="headerlink" title="你以为这样能破坏 String？"></a>你以为这样能破坏 String？</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">char</span>[] arr = &#123;<span class="hljs-string">&#x27;a&#x27;</span>,<span class="hljs-string">&#x27;b&#x27;</span>,<span class="hljs-string">&#x27;c&#x27;</span>&#125;;<br><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(arr);<br>arr[<span class="hljs-number">0</span>] = <span class="hljs-string">&#x27;x&#x27;</span>;<br>System.out.println(s);<br></code></pre></td></tr></table></figure>
+<h3 id="实际输出："><a href="#实际输出：" class="headerlink" title="实际输出："></a>实际输出：</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">abc</span><br></code></pre></td></tr></table></figure>
+<h3 id="为什么？"><a href="#为什么？" class="headerlink" title="为什么？"></a>为什么？</h3><p>因为 <code>String</code> 构造器里做了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-built_in">this</span>.value = Arrays.copyOf(arr, arr.length);<br></code></pre></td></tr></table></figure>
+<p>📌 <strong>String 永远不信任外部传入的数据</strong></p>
+<blockquote>
+<p>这是“不可变类”的黄金法则之一。</p>
+</blockquote>
+<hr>
+<h2 id="第五层防线（终极）：JVM-amp-语言层级的“特权协作”"><a href="#第五层防线（终极）：JVM-amp-语言层级的“特权协作”" class="headerlink" title="第五层防线（终极）：JVM &amp; 语言层级的“特权协作”"></a>第五层防线（终极）：JVM &amp; 语言层级的“特权协作”</h2><p>这是很多人<strong>不知道但最关键的一层</strong>。</p>
+<hr>
+<h3 id="1️⃣-字符串常量池（String-Pool）"><a href="#1️⃣-字符串常量池（String-Pool）" class="headerlink" title="1️⃣ 字符串常量池（String Pool）"></a>1️⃣ 字符串常量池（String Pool）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">a</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br><span class="hljs-type">String</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p><code>a</code> 和 <code>b</code> 指向 <strong>同一个对象</strong></p>
+</li>
+<li><p>如果 String 可变：</p>
+<ul>
+<li>改一个，全世界跟着改</li>
+</ul>
+</li>
+</ul>
+<p>👉 所以 <strong>String 必须不可变</strong></p>
+<hr>
+<h3 id="2️⃣-hashCode-缓存"><a href="#2️⃣-hashCode-缓存" class="headerlink" title="2️⃣ hashCode 缓存"></a>2️⃣ <code>hashCode</code> 缓存</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-type">int</span> hash;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p><code>hashCode()</code> 只算一次</p>
+</li>
+<li><p>之后直接缓存</p>
+</li>
+</ul>
+<p>如果 String 可变：</p>
+<ul>
+<li><p>hash 失效</p>
+</li>
+<li><p>HashMap 直接崩溃</p>
+</li>
+</ul>
+<hr>
+<h3 id="3️⃣-ClassLoader-安全模型依赖-String"><a href="#3️⃣-ClassLoader-安全模型依赖-String" class="headerlink" title="3️⃣ ClassLoader / 安全模型依赖 String"></a>3️⃣ ClassLoader / 安全模型依赖 String</h3><ul>
+<li><p>类名</p>
+</li>
+<li><p>方法名</p>
+</li>
+<li><p>权限名</p>
+</li>
+<li><p>文件路径</p>
+</li>
+</ul>
+<p>📌 <strong>如果 String 可变，Java 的安全模型不成立</strong></p>
+<hr>
+<h2 id="一句话拆穿所有误解（非常重要）"><a href="#一句话拆穿所有误解（非常重要）" class="headerlink" title="一句话拆穿所有误解（非常重要）"></a>一句话拆穿所有误解（非常重要）</h2><blockquote>
+<p><strong>String 的不可变性不是“防你”，<br>而是“防整个 Java 世界被你不小心炸掉”。</strong></p>
+</blockquote>
+<hr>
+<h2 id="用一个“完整类比”帮你彻底定型"><a href="#用一个“完整类比”帮你彻底定型" class="headerlink" title="用一个“完整类比”帮你彻底定型"></a>用一个“完整类比”帮你彻底定型</h2><p>把 <code>String</code> 想成：</p>
+<blockquote>
+<p><strong>法律里的“身份证号码”</strong></p>
+</blockquote>
+<ul>
+<li><p>不能改</p>
+</li>
+<li><p>可以复制</p>
+</li>
+<li><p>可以传递</p>
+</li>
+<li><p>可以比较</p>
+</li>
+<li><p>但绝不允许“修改原值”</p>
+</li>
+</ul>
+<p>而：</p>
+<ul>
+<li><p><code>StringBuilder</code> = 草稿纸</p>
+</li>
+<li><p><code>char[]</code> = 可随意涂改的纸</p>
+</li>
+</ul>
+<hr>
+<h2 id="最容易被忽略的一点（高手标志）"><a href="#最容易被忽略的一点（高手标志）" class="headerlink" title="最容易被忽略的一点（高手标志）"></a>最容易被忽略的一点（高手标志）</h2><h3 id="为什么-String-的-value-数组不是暴露的？"><a href="#为什么-String-的-value-数组不是暴露的？" class="headerlink" title="为什么 String 的 value 数组不是暴露的？"></a>为什么 <code>String</code> 的 <code>value</code> 数组不是暴露的？</h3><p>如果有：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">char</span>[] getValue();<br></code></pre></td></tr></table></figure>
+<p>哪怕是 <code>final</code>，<strong>整个设计立刻崩塌</strong>。</p>
+<p>📌 所以不可变性的真正核心是：</p>
+<blockquote>
+<p><strong>不暴露任何可变内部状态的引用</strong></p>
+</blockquote>
+<hr>
+<h2 id="终极总结（请记住）"><a href="#终极总结（请记住）" class="headerlink" title="终极总结（请记住）"></a>终极总结（请记住）</h2><p><code>String</code> 的不可变性 =</p>
+<ol>
+<li><p>类是 <code>final</code></p>
+</li>
+<li><p>内部状态 <code>private final</code></p>
+</li>
+<li><p>不提供修改自身的方法</p>
+</li>
+<li><p>构造期防御性拷贝</p>
+</li>
+<li><p>JVM / 常量池 / hash / 安全模型共同依赖</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>它是 Java 中“不可变设计”的教科书级范例。</strong></p>
+</blockquote>
+<hr>
 
                 
               </div>
@@ -368,7 +478,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
+  <a href="/categories/JavaSE/" class="category-chain-item">JavaSE</a>
   
   
 
@@ -383,9 +493,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/CS50X/" class="print-no-link">#CS50X</a>
+        <a href="/tags/JavaSE/" class="print-no-link">#JavaSE</a>
       
-        <a href="/tags/project/" class="print-no-link">#project</a>
+        <a href="/tags/%E6%80%9D%E8%80%83/" class="print-no-link">#思考</a>
       
     </div>
   
@@ -397,8 +507,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>CS50X project0 Degrees</div>
-      <div>https://zjjyyds.github.io/2026/01/01/CS50X project0 Degrees/</div>
+      <div>Java怎么实现Stirng不变的</div>
+      <div>https://zjjyyds.github.io/2026/01/03/Java怎么保证String不变的/</div>
     </div>
     <div class="license-meta">
       
@@ -410,7 +520,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2026年1月1日</div>
+          <div>2026年1月3日</div>
         </div>
       
       
@@ -442,18 +552,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/01/03/Java%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81String%E4%B8%8D%E5%8F%98%E7%9A%84/" title="Java怎么实现Stirng不变的">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Java怎么实现Stirng不变的</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/01/01/CS50X%20project0%20TicTacToc/" title="CS50X project0 Tic-Tac-Toe">
-                        <span class="hidden-mobile">CS50X project0 Tic-Tac-Toe</span>
+                      <a href="/2026/01/01/CS50X%20project0%20Degrees/" title="CS50X project0 Degrees">
+                        <span class="hidden-mobile">CS50X project0 Degrees</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
