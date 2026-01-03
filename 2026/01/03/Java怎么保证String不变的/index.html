@@ -27,7 +27,7 @@
 <meta property="og:description" content="这是一个问到 Java 设计“核心骨架”的问题。我先给你一句结论级答案，然后我们像拆发动机一样，把每一层都拆开。  String 的不可变性不是靠一句 final，而是靠一整套“多层封锁 + JVM 协同”的设计体系共同保证的。  下面我们分 5 道防线 来看。  第一层防线：String 类本身是 final1public final class String &#123; ... &#125;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-01-03T06:01:00.000Z">
-<meta property="article:modified_time" content="2026-01-03T06:09:41.135Z">
+<meta property="article:modified_time" content="2026-01-03T06:17:42.055Z">
 <meta property="article:author" content="Jay">
 <meta property="article:tag" content="JavaSE">
 <meta property="article:tag" content="思考">
@@ -296,25 +296,18 @@
 <hr>
 <h2 id="第一层防线：String-类本身是-final"><a href="#第一层防线：String-类本身是-final" class="headerlink" title="第一层防线：String 类本身是 final"></a>第一层防线：<code>String</code> 类本身是 <code>final</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">String</span> &#123; ... &#125;<br></code></pre></td></tr></table></figure>
 <h3 id="这意味着什么？"><a href="#这意味着什么？" class="headerlink" title="这意味着什么？"></a>这意味着什么？</h3><ul>
-<li><p>❌ 不能被继承</p>
-</li>
-<li><p>❌ 不能通过子类添加“破坏性方法”</p>
-</li>
-<li><p>❌ 不能 override 任何行为</p>
-</li>
+<li>❌ 不能被继承</li>
+<li>❌ 不能通过子类添加“破坏性方法”</li>
+<li>❌ 不能 override 任何行为</li>
 </ul>
 <h3 id="为什么这是第一道防线？"><a href="#为什么这是第一道防线？" class="headerlink" title="为什么这是第一道防线？"></a>为什么这是第一道防线？</h3><p>假如 <code>String</code> <strong>可以被继承</strong>：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">EvilString</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">String</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">hack</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">// 改内部 char[]</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>那么：</p>
 <ul>
-<li><p>JVM</p>
-</li>
-<li><p>HashMap</p>
-</li>
-<li><p>ClassLoader</p>
-</li>
-<li><p>安全管理器</p>
-</li>
+<li>JVM</li>
+<li>HashMap</li>
+<li>ClassLoader</li>
+<li>安全管理器</li>
 </ul>
 <p>都会被<strong>彻底破坏</strong></p>
 <p>📌 <strong>第一层作用</strong>：<br>👉 <strong>防止通过继承破坏不可变性</strong></p>
@@ -338,14 +331,10 @@
 <h2 id="第三层防线：没有任何“修改自身”的方法"><a href="#第三层防线：没有任何“修改自身”的方法" class="headerlink" title="第三层防线：没有任何“修改自身”的方法"></a>第三层防线：没有任何“修改自身”的方法</h2><p>你仔细想一下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br></code></pre></td></tr></table></figure>
 <h3 id="String-提供的方法是什么？"><a href="#String-提供的方法是什么？" class="headerlink" title="String 提供的方法是什么？"></a>String 提供的方法是什么？</h3><ul>
-<li><p><code>substring</code></p>
-</li>
-<li><p><code>replace</code></p>
-</li>
-<li><p><code>toUpperCase</code></p>
-</li>
-<li><p><code>concat</code></p>
-</li>
+<li><code>substring</code></li>
+<li><code>replace</code></li>
+<li><code>toUpperCase</code></li>
+<li><code>concat</code></li>
 </ul>
 <p><strong>它们全部：</strong></p>
 <blockquote>
@@ -370,8 +359,7 @@
 <hr>
 <h3 id="1️⃣-字符串常量池（String-Pool）"><a href="#1️⃣-字符串常量池（String-Pool）" class="headerlink" title="1️⃣ 字符串常量池（String Pool）"></a>1️⃣ 字符串常量池（String Pool）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">a</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br><span class="hljs-type">String</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br></code></pre></td></tr></table></figure>
 <ul>
-<li><p><code>a</code> 和 <code>b</code> 指向 <strong>同一个对象</strong></p>
-</li>
+<li><code>a</code> 和 <code>b</code> 指向 <strong>同一个对象</strong></li>
 <li><p>如果 String 可变：</p>
 <ul>
 <li>改一个，全世界跟着改</li>
@@ -382,28 +370,20 @@
 <hr>
 <h3 id="2️⃣-hashCode-缓存"><a href="#2️⃣-hashCode-缓存" class="headerlink" title="2️⃣ hashCode 缓存"></a>2️⃣ <code>hashCode</code> 缓存</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-type">int</span> hash;<br></code></pre></td></tr></table></figure>
 <ul>
-<li><p><code>hashCode()</code> 只算一次</p>
-</li>
-<li><p>之后直接缓存</p>
-</li>
+<li><code>hashCode()</code> 只算一次</li>
+<li>之后直接缓存</li>
 </ul>
 <p>如果 String 可变：</p>
 <ul>
-<li><p>hash 失效</p>
-</li>
-<li><p>HashMap 直接崩溃</p>
-</li>
+<li>hash 失效</li>
+<li>HashMap 直接崩溃</li>
 </ul>
 <hr>
 <h3 id="3️⃣-ClassLoader-安全模型依赖-String"><a href="#3️⃣-ClassLoader-安全模型依赖-String" class="headerlink" title="3️⃣ ClassLoader / 安全模型依赖 String"></a>3️⃣ ClassLoader / 安全模型依赖 String</h3><ul>
-<li><p>类名</p>
-</li>
-<li><p>方法名</p>
-</li>
-<li><p>权限名</p>
-</li>
-<li><p>文件路径</p>
-</li>
+<li>类名</li>
+<li>方法名</li>
+<li>权限名</li>
+<li>文件路径</li>
 </ul>
 <p>📌 <strong>如果 String 可变，Java 的安全模型不成立</strong></p>
 <hr>
@@ -416,23 +396,16 @@
 <p><strong>法律里的“身份证号码”</strong></p>
 </blockquote>
 <ul>
-<li><p>不能改</p>
-</li>
-<li><p>可以复制</p>
-</li>
-<li><p>可以传递</p>
-</li>
-<li><p>可以比较</p>
-</li>
-<li><p>但绝不允许“修改原值”</p>
-</li>
+<li>不能改</li>
+<li>可以复制</li>
+<li>可以传递</li>
+<li>可以比较</li>
+<li>但绝不允许“修改原值”</li>
 </ul>
 <p>而：</p>
 <ul>
-<li><p><code>StringBuilder</code> = 草稿纸</p>
-</li>
-<li><p><code>char[]</code> = 可随意涂改的纸</p>
-</li>
+<li><code>StringBuilder</code> = 草稿纸</li>
+<li><code>char[]</code> = 可随意涂改的纸</li>
 </ul>
 <hr>
 <h2 id="最容易被忽略的一点（高手标志）"><a href="#最容易被忽略的一点（高手标志）" class="headerlink" title="最容易被忽略的一点（高手标志）"></a>最容易被忽略的一点（高手标志）</h2><h3 id="为什么-String-的-value-数组不是暴露的？"><a href="#为什么-String-的-value-数组不是暴露的？" class="headerlink" title="为什么 String 的 value 数组不是暴露的？"></a>为什么 <code>String</code> 的 <code>value</code> 数组不是暴露的？</h3><p>如果有：</p>
@@ -445,16 +418,11 @@
 <hr>
 <h2 id="终极总结（请记住）"><a href="#终极总结（请记住）" class="headerlink" title="终极总结（请记住）"></a>终极总结（请记住）</h2><p><code>String</code> 的不可变性 =</p>
 <ol>
-<li><p>类是 <code>final</code></p>
-</li>
-<li><p>内部状态 <code>private final</code></p>
-</li>
-<li><p>不提供修改自身的方法</p>
-</li>
-<li><p>构造期防御性拷贝</p>
-</li>
-<li><p>JVM / 常量池 / hash / 安全模型共同依赖</p>
-</li>
+<li>类是 <code>final</code></li>
+<li>内部状态 <code>private final</code></li>
+<li>不提供修改自身的方法</li>
+<li>构造期防御性拷贝</li>
+<li>JVM / 常量池 / hash / 安全模型共同依赖</li>
 </ol>
 <blockquote>
 <p><strong>它是 Java 中“不可变设计”的教科书级范例。</strong></p>
@@ -552,12 +520,18 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2026/01/03/%E4%BA%8C%E5%88%86/" title="二分思想不只能查找">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">二分思想不只能查找</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2026/01/01/CS50X%20project0%20Degrees/" title="CS50X project0 Degrees">
-                        <span class="hidden-mobile">CS50X project0 Degrees</span>
+                      <a href="/2026/01/01/CS50X%20project0%20TicTacToc/" title="CS50X project0 Tic-Tac-Toe">
+                        <span class="hidden-mobile">CS50X project0 Tic-Tac-Toe</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
