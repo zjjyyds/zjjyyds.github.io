@@ -1,0 +1,782 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="算法核心笔记：二维前缀和 (2D Prefix Sum) 核心洞察：二维前缀和是“容斥原理”在矩阵计算中的完美应用。它通过预处理，将任意子矩阵的和查询耗时从 $O(N \times M)$ 降低到惊人的 $O(1)$。   一、 什么是二维前缀和？如果说一维前缀和是计算“一段线段”的和，那么二维前缀和就是计算“一个矩形区域”内所有元素的总和。 1. 核心定义我们定义一个二维数组 sum[i+1]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二维前缀和">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/01/03/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="算法核心笔记：二维前缀和 (2D Prefix Sum) 核心洞察：二维前缀和是“容斥原理”在矩阵计算中的完美应用。它通过预处理，将任意子矩阵的和查询耗时从 $O(N \times M)$ 降低到惊人的 $O(1)$。   一、 什么是二维前缀和？如果说一维前缀和是计算“一段线段”的和，那么二维前缀和就是计算“一个矩形区域”内所有元素的总和。 1. 核心定义我们定义一个二维数组 sum[i+1]">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://zjjyyds.github.io/img/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/2026-01-21-21-39-29.png">
+<meta property="article:published_time" content="2026-01-03T12:50:00.000Z">
+<meta property="article:modified_time" content="2026-01-21T13:39:54.281Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="DS">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="二维前缀和">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://zjjyyds.github.io/img/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/2026-01-21-21-39-29.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>二维前缀和 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="二维前缀和"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-03 20:50" pubdate>
+          2026年1月3日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          10 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">二维前缀和</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><img src="/img/二维前缀和/2026-01-21-21-39-29.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h1 id="算法核心笔记：二维前缀和-2D-Prefix-Sum"><a href="#算法核心笔记：二维前缀和-2D-Prefix-Sum" class="headerlink" title="算法核心笔记：二维前缀和 (2D Prefix Sum)"></a>算法核心笔记：二维前缀和 (2D Prefix Sum)</h1><blockquote>
+<p><strong>核心洞察</strong>：二维前缀和是“容斥原理”在矩阵计算中的完美应用。它通过预处理，将任意子矩阵的和查询耗时从 $O(N \times M)$ 降低到惊人的 <strong>$O(1)$</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="一、-什么是二维前缀和？"><a href="#一、-什么是二维前缀和？" class="headerlink" title="一、 什么是二维前缀和？"></a>一、 什么是二维前缀和？</h2><p>如果说一维前缀和是计算“一段线段”的和，那么二维前缀和就是计算“一个矩形区域”内所有元素的总和。</p>
+<h3 id="1-核心定义"><a href="#1-核心定义" class="headerlink" title="1. 核心定义"></a>1. 核心定义</h3><p>我们定义一个二维数组 <code>sum[i+1][j+1]</code>，它代表：<br>以原点 <code>a[0][0]</code> 为左上角，到 <code>a[i][j]</code> 为右下角的这个<strong>大矩形</strong>中所有元素的和。</p>
+<ul>
+<li><strong>小技巧</strong>：为了处理边界情况（比如第一行或第一列），我们通常将前缀和数组的下标整体偏移 +1，即 <code>sum[0][0]</code> 默认为 0。</li>
+</ul>
+<hr>
+<h2 id="二、-核心逻辑图解"><a href="#二、-核心逻辑图解" class="headerlink" title="二、 核心逻辑图解"></a>二、 核心逻辑图解</h2><h3 id="1-如何初始化（构建前缀和矩阵）？"><a href="#1-如何初始化（构建前缀和矩阵）？" class="headerlink" title="1. 如何初始化（构建前缀和矩阵）？"></a>1. 如何初始化（构建前缀和矩阵）？</h3><p>要算出 <code>sum[i+1][j+1]</code>，我们不能简单地加减，而是要利用已经算好的“左边”和“上边”的面积。</p>
+<p><strong>公式：</strong></p>
+<script type="math/tex; mode=display">sum[i+1][j+1] = sum[i+1][j] + sum[i][j+1] - sum[i][j] + a[i][j]</script><p><strong>通俗解释：</strong></p>
+<ul>
+<li><strong>加上左边的面积</strong>：<code>sum[i+1][j]</code></li>
+<li><strong>加上上边的面积</strong>：<code>sum[i][j+1]</code></li>
+<li><strong>减去重叠的部分</strong>：由于左边和上边的面积都包含了左上角的 <code>sum[i][j]</code>，它被加了两次，所以要<strong>减去一次</strong>。</li>
+<li><strong>加上当前格子的值</strong>：最后带上当前的 <code>a[i][j]</code>。</li>
+</ul>
+<hr>
+<h3 id="2-如何计算任意子矩阵的元素和？"><a href="#2-如何计算任意子矩阵的元素和？" class="headerlink" title="2. 如何计算任意子矩阵的元素和？"></a>2. 如何计算任意子矩阵的元素和？</h3><p>假设我们要计算左上角为 <code>(r1, c1)</code>，右下角为 <code>(r2, c2)</code> 的子矩阵和。</p>
+<p><strong>公式：</strong></p>
+<script type="math/tex; mode=display">Result = sum[r2+1][c2+1] - sum[r2+1][c1] - sum[r1][c2+1] + sum[r1][c1]</script><p><strong>通俗解释（切蛋糕法）：</strong></p>
+<ol>
+<li>拿走右下角的大蛋糕：<code>sum[r2+1][c2+1]</code></li>
+<li><strong>减去左侧多余的长条</strong>：<code>sum[r2+1][c1]</code></li>
+<li><strong>减去上方多余的长条</strong>：<code>sum[r1][c2+1]</code></li>
+<li><strong>补回多减的角</strong>：在减去左侧和上方长条时，左上角的重叠区域 <code>sum[r1][c1]</code> 被多减了一次，所以要<strong>加回来</strong>。</li>
+</ol>
+<hr>
+<h2 id="三、-代码实现"><a href="#三、-代码实现" class="headerlink" title="三、 代码实现"></a>三、 代码实现</h2><h3 id="1-C-语言实现-接口封装"><a href="#1-C-语言实现-接口封装" class="headerlink" title="1. C 语言实现 (接口封装)"></a>1. C 语言实现 (接口封装)</h3><p>在 LeetCode 的 C 语言模式下，通常使用结构体来模拟类。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">int</span>** preSum;<br>    <span class="hljs-type">int</span> rowSize;<br>    <span class="hljs-type">int</span> colSize;<br>&#125; NumMatrix;<br><br><span class="hljs-comment">/** 构造函数：预处理前缀和矩阵 */</span><br>NumMatrix* <span class="hljs-title function_">numMatrixCreate</span><span class="hljs-params">(<span class="hljs-type">int</span>** matrix, <span class="hljs-type">int</span> matrixSize, <span class="hljs-type">int</span>* matrixColSize)</span> &#123;<br>    <span class="hljs-keyword">if</span> (matrixSize == <span class="hljs-number">0</span> || matrixColSize[<span class="hljs-number">0</span>] == <span class="hljs-number">0</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">NULL</span>;<br>    <br>    NumMatrix* obj = (NumMatrix*)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(NumMatrix));<br>    <span class="hljs-type">int</span> rows = matrixSize;<br>    <span class="hljs-type">int</span> cols = matrixColSize[<span class="hljs-number">0</span>];<br>    obj-&gt;rowSize = rows;<br>    obj-&gt;colSize = cols;<br>    <br>    <span class="hljs-comment">// 分配 preSum 空间 (rows + 1) x (cols + 1)</span><br>    obj-&gt;preSum = (<span class="hljs-type">int</span>**)<span class="hljs-built_in">malloc</span>((rows + <span class="hljs-number">1</span>) * <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>*));<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= rows; i++) &#123;<br>        obj-&gt;preSum[i] = (<span class="hljs-type">int</span>*)<span class="hljs-built_in">calloc</span>((cols + <span class="hljs-number">1</span>), <span class="hljs-keyword">sizeof</span>(<span class="hljs-type">int</span>)); <span class="hljs-comment">// calloc 自动初始化为0</span><br>    &#125;<br>    <br>    <span class="hljs-comment">// 填充前缀和</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= rows; i++) &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= cols; j++) &#123;<br>            obj-&gt;preSum[i][j] = obj-&gt;preSum[i - <span class="hljs-number">1</span>][j] + <br>                                obj-&gt;preSum[i][j - <span class="hljs-number">1</span>] - <br>                                obj-&gt;preSum[i - <span class="hljs-number">1</span>][j - <span class="hljs-number">1</span>] + <br>                                matrix[i - <span class="hljs-number">1</span>][j - <span class="hljs-number">1</span>];<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> obj;<br>&#125;<br><br><span class="hljs-comment">/** 查询函数：O(1) 时间获取子矩阵和 */</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">numMatrixSumRegion</span><span class="hljs-params">(NumMatrix* obj, <span class="hljs-type">int</span> row1, <span class="hljs-type">int</span> col1, <span class="hljs-type">int</span> row2, <span class="hljs-type">int</span> col2)</span> &#123;<br>    <span class="hljs-comment">// 转换到 preSum 的 1-based 下标</span><br>    <span class="hljs-keyword">return</span> obj-&gt;preSum[row2 + <span class="hljs-number">1</span>][col2 + <span class="hljs-number">1</span>] - <br>           obj-&gt;preSum[row1][col2 + <span class="hljs-number">1</span>] - <br>           obj-&gt;preSum[row2 + <span class="hljs-number">1</span>][col1] + <br>           obj-&gt;preSum[row1][col1];<br>&#125;<br><br><span class="hljs-comment">/** 析构函数：释放内存 */</span><br><span class="hljs-type">void</span> <span class="hljs-title function_">numMatrixFree</span><span class="hljs-params">(NumMatrix* obj)</span> &#123;<br>    <span class="hljs-keyword">if</span> (obj == <span class="hljs-literal">NULL</span>) <span class="hljs-keyword">return</span>;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt;= obj-&gt;rowSize; i++) &#123;<br>        <span class="hljs-built_in">free</span>(obj-&gt;preSum[i]);<br>    &#125;<br>    <span class="hljs-built_in">free</span>(obj-&gt;preSum);<br>    <span class="hljs-built_in">free</span>(obj);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="2-Java-实现-经典类封装"><a href="#2-Java-实现-经典类封装" class="headerlink" title="2. Java 实现 (经典类封装)"></a>2. Java 实现 (经典类封装)</h3><p>Java 版更加简洁，利用数组初始值为 0 的特性简化了代码。</p>
+<h2 id=""><a href="#" class="headerlink" title=""></a><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">NumMatrix</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span>[][] preSum;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">NumMatrix</span><span class="hljs-params">(<span class="hljs-type">int</span>[][] matrix)</span> &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">m</span> <span class="hljs-operator">=</span> matrix.length;<br>        <span class="hljs-keyword">if</span> (m &gt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">n</span> <span class="hljs-operator">=</span> matrix[<span class="hljs-number">0</span>].length;<br>            <span class="hljs-comment">// preSum[i][j] 表示从 matrix[0][0] 到 matrix[i-1][j-1] 的总和</span><br>            preSum = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[m + <span class="hljs-number">1</span>][n + <span class="hljs-number">1</span>];<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>; i &lt;= m; i++) &#123;<br>                <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>; j &lt;= n; j++) &#123;<br>                    preSum[i][j] = preSum[i - <span class="hljs-number">1</span>][j] + <br>                                   preSum[i][j - <span class="hljs-number">1</span>] - <br>                                   preSum[i - <span class="hljs-number">1</span>][j - <span class="hljs-number">1</span>] + <br>                                   matrix[i - <span class="hljs-number">1</span>][j - <span class="hljs-number">1</span>];<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">sumRegion</span><span class="hljs-params">(<span class="hljs-type">int</span> row1, <span class="hljs-type">int</span> col1, <span class="hljs-type">int</span> row2, <span class="hljs-type">int</span> col2)</span> &#123;<br>        <span class="hljs-comment">// 利用容斥原理：大矩形 - 上方长条 - 左侧长条 + 重叠角落</span><br>        <span class="hljs-keyword">return</span> preSum[row2 + <span class="hljs-number">1</span>][col2 + <span class="hljs-number">1</span>] - <br>               preSum[row1][col2 + <span class="hljs-number">1</span>] - <br>               preSum[row2 + <span class="hljs-number">1</span>][col1] + <br>               preSum[row1][col1];<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></h2><h2 id="四、-避坑指南"><a href="#四、-避坑指南" class="headerlink" title="四、 避坑指南"></a>四、 避坑指南</h2><ol>
+<li><strong>下标偏移</strong>：强烈建议 <code>sum</code> 数组多开一行一列（即 <code>n+1, m+1</code>），这能避免判断 <code>i-1</code> 是否越界。</li>
+<li><strong>数据溢出</strong>：对于较大的矩阵或元素，<code>sum</code> 数组一定要使用 <code>long long</code> (C++) 或 <code>long</code> (Java)，否则容易发生溢出。</li>
+<li><strong>坐标对应</strong>：计算时要注意题目给出的是“下标”还是“第几个数”，确保 <code>r1, c1</code> 与 <code>sum</code> 数组的对应关系正确。</li>
+</ol>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Leetcode/" class="category-chain-item">Leetcode</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/DS/" class="print-no-link">#DS</a>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/" class="print-no-link">#算法</a>
+      
+        <a href="/tags/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/" class="print-no-link">#二维前缀和</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>二维前缀和</div>
+      <div>https://zjjyyds.github.io/2026/01/03/二维前缀和/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/01/14/CS50%20AI%20note%201/" title="CS50AI note1">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CS50AI note1</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/03/%E4%BA%8C%E5%88%86/" title="二分思想不只能查找">
+                        <span class="hidden-mobile">二分思想不只能查找</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
