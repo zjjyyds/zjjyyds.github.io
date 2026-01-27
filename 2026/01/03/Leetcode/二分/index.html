@@ -1,0 +1,1080 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="二分查找1. 四种需求通用转换公式无论使用开区间还是闭区间写法，核心逻辑都是通过 lowerBound 来实现的。以下公式适用于所有情况：     你的需求 转化为 lowerBound 结果下标处理 解释     找 $\ge x$ 的第一个 lowerBound(nums, x) 无 标准定义   找 $&gt; x$ 的第一个 lowerBound(nums, x + 1) 无 整数性质：$">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二分思想不只能查找">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/01/03/Leetcode/%E4%BA%8C%E5%88%86/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="二分查找1. 四种需求通用转换公式无论使用开区间还是闭区间写法，核心逻辑都是通过 lowerBound 来实现的。以下公式适用于所有情况：     你的需求 转化为 lowerBound 结果下标处理 解释     找 $\ge x$ 的第一个 lowerBound(nums, x) 无 标准定义   找 $&gt; x$ 的第一个 lowerBound(nums, x + 1) 无 整数性质：$">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-03T12:50:00.000Z">
+<meta property="article:modified_time" content="2026-01-03T13:20:45.858Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="DS">
+<meta property="article:tag" content="二分">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>二分思想不只能查找 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="二分思想不只能查找"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-03 20:50" pubdate>
+          2026年1月3日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          34 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">二分思想不只能查找</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="二分查找"><a href="#二分查找" class="headerlink" title="二分查找"></a>二分查找</h2><h3 id="1-四种需求通用转换公式"><a href="#1-四种需求通用转换公式" class="headerlink" title="1. 四种需求通用转换公式"></a>1. 四种需求通用转换公式</h3><p>无论使用开区间还是闭区间写法，核心逻辑都是通过 <code>lowerBound</code> 来实现的。以下公式适用于所有情况：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">你的需求</th>
+<th style="text-align:left">转化为 <code>lowerBound</code></th>
+<th style="text-align:left">结果下标处理</th>
+<th style="text-align:left">解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>找 $\ge x$ 的第一个</strong></td>
+<td style="text-align:left"><code>lowerBound(nums, x)</code></td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">标准定义</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>找 $&gt; x$ 的第一个</strong></td>
+<td style="text-align:left"><code>lowerBound(nums, x + 1)</code></td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">整数性质：$&gt;x \Leftrightarrow \ge x+1$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>找 $&lt; x$ 的最后一个</strong></td>
+<td style="text-align:left"><code>lowerBound(nums, x)</code></td>
+<td style="text-align:left"><code>- 1</code></td>
+<td style="text-align:left">$\ge x$ 的左边就是 $&lt; x$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>找 $\le x$ 的最后一个</strong></td>
+<td style="text-align:left"><code>lowerBound(nums, x + 1)</code></td>
+<td style="text-align:left"><code>- 1</code></td>
+<td style="text-align:left">$&gt; x$ 的左边就是 $\le x$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h3 id="2-开区间写法-Open-Interval"><a href="#2-开区间写法-Open-Interval" class="headerlink" title="2. 开区间写法 (Open Interval)"></a>2. 开区间写法 (Open Interval)</h3><p><strong>特点</strong>：逻辑最统一，无需考虑 <code>+1/-1</code> 细节，不易死循环。<br><strong>区间定义</strong>：<code>(-1, n)</code>。<code>left</code> 始终指向红色（不满足），<code>right</code> 始终指向蓝色（满足）。</p>
+<h4 id="2-1-Java-开区间"><a href="#2-1-Java-开区间" class="headerlink" title="2.1 Java (开区间)"></a>2.1 Java (开区间)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">lowerBound</span><span class="hljs-params">(<span class="hljs-type">int</span>[] nums, <span class="hljs-type">int</span> target)</span> &#123;<br>    <span class="hljs-comment">// 初始化：开区间 (left, right)</span><br>    <span class="hljs-comment">// left = -1 代表红色区域（&lt; target）</span><br>    <span class="hljs-comment">// right = n 代表蓝色区域（&gt;= target）</span><br>    <span class="hljs-type">int</span> <span class="hljs-variable">left</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>, right = nums.length;<br>    <br>    <span class="hljs-comment">// 循环不变量：left + 1 &lt; right (区间不为空)</span><br>    <span class="hljs-keyword">while</span> (left + <span class="hljs-number">1</span> &lt; right) &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">mid</span> <span class="hljs-operator">=</span> left + (right - left) / <span class="hljs-number">2</span>;<br>        <br>        <span class="hljs-comment">// 核心判断：mid 在哪边？</span><br>        <span class="hljs-keyword">if</span> (nums[mid] &gt;= target) &#123;<br>            right = mid; <span class="hljs-comment">// mid 满足条件(蓝色)，可能是答案，向左收缩</span><br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            left = mid;  <span class="hljs-comment">// mid 不满足条件(红色)，答案在右边，向右收缩</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-comment">// 循环结束时 left + 1 == right</span><br>    <span class="hljs-comment">// right 指向第一个满足 &gt;= target 的位置</span><br>    <span class="hljs-keyword">return</span> right;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="2-2-C语言-开区间"><a href="#2-2-C语言-开区间" class="headerlink" title="2.2 C语言 (开区间)"></a>2.2 C语言 (开区间)</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">lowerBound</span><span class="hljs-params">(<span class="hljs-type">int</span>* nums, <span class="hljs-type">int</span> numsSize, <span class="hljs-type">int</span> target)</span> &#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">-1</span>;<br>    <span class="hljs-type">int</span> right = numsSize;<br>    <br>    <span class="hljs-keyword">while</span> (left + <span class="hljs-number">1</span> &lt; right) &#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <br>        <span class="hljs-keyword">if</span> (nums[mid] &gt;= target) &#123;<br>            right = mid; <span class="hljs-comment">// 蓝色区域，更新右边界</span><br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            left = mid;  <span class="hljs-comment">// 红色区域，更新左边界</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> right; <span class="hljs-comment">// 返回蓝色区域的起点</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<hr>
+<h3 id="3-闭区间写法-Closed-Interval-——-教科书经典"><a href="#3-闭区间写法-Closed-Interval-——-教科书经典" class="headerlink" title="3. 闭区间写法 (Closed Interval) —— 教科书经典"></a>3. 闭区间写法 (Closed Interval) —— 教科书经典</h3><p><strong>特点</strong>：最常见，面试中常用。<br><strong>区间定义</strong>：<code>[0, n-1]</code>。每次更新必须排除 <code>mid</code>。</p>
+<h4 id="3-1-Java-闭区间"><a href="#3-1-Java-闭区间" class="headerlink" title="3.1 Java (闭区间)"></a>3.1 Java (闭区间)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">lowerBound</span><span class="hljs-params">(<span class="hljs-type">int</span>[] nums, <span class="hljs-type">int</span> target)</span> &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">left</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>, right = nums.length - <span class="hljs-number">1</span>;<br>    <br>    <span class="hljs-comment">// 循环结束条件：left &gt; right</span><br>    <span class="hljs-keyword">while</span> (left &lt;= right) &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">mid</span> <span class="hljs-operator">=</span> left + (right - left) / <span class="hljs-number">2</span>;<br>        <br>        <span class="hljs-keyword">if</span> (nums[mid] &gt;= target) &#123;<br>            right = mid - <span class="hljs-number">1</span>; <span class="hljs-comment">// 尝试查找更小的下标</span><br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            left = mid + <span class="hljs-number">1</span>;  <span class="hljs-comment">// 必须查找更大的下标</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> left; <span class="hljs-comment">// left 指向第一个 &gt;= target 的位置</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="3-2-C语言-闭区间"><a href="#3-2-C语言-闭区间" class="headerlink" title="3.2 C语言 (闭区间)"></a>3.2 C语言 (闭区间)</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">int</span> <span class="hljs-title function_">lowerBound</span><span class="hljs-params">(<span class="hljs-type">int</span>* nums, <span class="hljs-type">int</span> numsSize, <span class="hljs-type">int</span> target)</span> &#123;<br>    <span class="hljs-type">int</span> left = <span class="hljs-number">0</span>;<br>    <span class="hljs-type">int</span> right = numsSize - <span class="hljs-number">1</span>;<br>    <br>    <span class="hljs-keyword">while</span> (left &lt;= right) &#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <br>        <span class="hljs-keyword">if</span> (nums[mid] &gt;= target) &#123;<br>            right = mid - <span class="hljs-number">1</span>;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            left = mid + <span class="hljs-number">1</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> left;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h3><ul>
+<li><strong>开区间</strong>：初始化 <code>(-1, n)</code>，更新 <code>left=mid</code> / <code>right=mid</code>，返回 <code>right</code>。记忆口诀：<strong>check 成功更新谁，最后就返回谁</strong>（针对 <code>lowerBound</code> 求最小，check 成功更新 right，故返回 right）。</li>
+<li><strong>闭区间</strong>：初始化 <code>[0, n-1]</code>，更新 <code>mid+1</code> / <code>mid-1</code>，返回 <code>left</code>。</li>
+</ul>
+<h3 id="5-找不到时的返回值"><a href="#5-找不到时的返回值" class="headerlink" title="5. 找不到时的返回值"></a>5. 找不到时的返回值</h3><p>无论是<strong>开区间</strong>还是<strong>闭区间</strong>，标准的 <code>lowerBound</code>（寻找第一个 $\ge target$ 的下标）算法在“找不到”时的表现是<strong>一致的</strong>：</p>
+<ol>
+<li><strong>如果数组中所有数都小于 <code>target</code></strong>（即目标值太大，越界）：返回 <strong>数组长度 <code>n</code></strong>。</li>
+<li><strong>如果数组中所有数都大于等于 <code>target</code></strong>（即目标值比谁都小）：返回 <strong><code>0</code></strong>。</li>
+<li><strong>如果目标值在数组范围内但不存在</strong>：返回它<strong>按顺序应该插入的位置</strong>（即第一个大于它的数的下标）。</li>
+</ol>
+<hr>
+<h4 id="5-1-详细对比与解释"><a href="#5-1-详细对比与解释" class="headerlink" title="5.1 详细对比与解释"></a>5.1 详细对比与解释</h4><h5 id="5-1-1-开区间写法-Open-Interval"><a href="#5-1-1-开区间写法-Open-Interval" class="headerlink" title="5.1.1 开区间写法 (Open Interval)"></a>5.1.1 开区间写法 (Open Interval)</h5><ul>
+<li><strong>初始化</strong>：<code>left = -1</code>, <code>right = n</code>。</li>
+<li><strong>循环结束</strong>：<code>left + 1 == right</code>。</li>
+<li><strong>返回值</strong>：<strong><code>right</code></strong>。</li>
+<li><strong>“找不到”的情况</strong>：<ul>
+<li><strong>Target 太大</strong>（所有数都 <code>&lt; target</code>）：<code>check(mid)</code> 永远为 <code>False</code>，<code>right</code> 从未被更新，始终保持初始值 <strong><code>n</code></strong>。</li>
+<li><strong>Target 太小</strong>（所有数都 <code>≥ target</code>）：<code>check(mid)</code> 永远为 <code>True</code>，<code>right</code> 不断向左收缩，最终变为 <strong><code>0</code></strong>（此时 <code>left</code> 仍为 <code>-1</code>）。</li>
+</ul>
+</li>
+</ul>
+<h5 id="5-1-2-闭区间写法-Closed-Interval"><a href="#5-1-2-闭区间写法-Closed-Interval" class="headerlink" title="5.1.2 闭区间写法 (Closed Interval)"></a>5.1.2 闭区间写法 (Closed Interval)</h5><ul>
+<li><strong>初始化</strong>：<code>left = 0</code>, <code>right = n - 1</code>。</li>
+<li><strong>循环结束</strong>：<code>left &gt; right</code>。</li>
+<li><strong>返回值</strong>：<strong><code>left</code></strong>。</li>
+<li><strong>“找不到”的情况</strong>：<ul>
+<li><strong>Target 太大</strong>：<code>nums[mid] &lt; target</code> 始终成立，<code>left</code> 不断右移（<code>mid + 1</code>），直到最后一次循环时 <code>left</code> 变为 <strong><code>n</code></strong>，循环结束。</li>
+<li><strong>Target 太小</strong>：<code>nums[mid] &gt;= target</code> 始终成立，<code>right</code> 不断左移，<code>left</code> 保持初始值 <strong><code>0</code></strong> 不动。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="5-2-特殊变种的“找不到”返回值"><a href="#5-2-特殊变种的“找不到”返回值" class="headerlink" title="5.2 特殊变种的“找不到”返回值"></a>5.2 特殊变种的“找不到”返回值</h4><p>根据资料，基于 <code>lowerBound</code> 衍生出的其他三种查找需求，其“找不到”的返回值如下表所示：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">查找需求</th>
+<th style="text-align:left">转化公式</th>
+<th style="text-align:left"><strong>找不到时的返回值</strong></th>
+<th style="text-align:left">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>$\ge x$ 的第一个</strong></td>
+<td style="text-align:left"><code>lowerBound(nums, x)</code></td>
+<td style="text-align:left"><strong><code>n</code></strong></td>
+<td style="text-align:left">所有数都 $&lt; x$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>$&gt; x$ 的第一个</strong></td>
+<td style="text-align:left"><code>lowerBound(nums, x + 1)</code></td>
+<td style="text-align:left"><strong><code>n</code></strong></td>
+<td style="text-align:left">所有数都 $\le x$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>$&lt; x$ 的最后一个</strong></td>
+<td style="text-align:left"><code>lowerBound(nums, x) - 1</code></td>
+<td style="text-align:left"><strong><code>-1</code></strong></td>
+<td style="text-align:left">所有数都 $\ge x$ (即 <code>lowerBound</code> 返回 0)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>$\le x$ 的最后一个</strong></td>
+<td style="text-align:left"><code>lowerBound(nums, x + 1) - 1</code></td>
+<td style="text-align:left"><strong><code>-1</code></strong></td>
+<td style="text-align:left">所有数都 $&gt; x$ (即 <code>lowerBound</code> 返回 0)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="5-3-如何判断“精确查找（Equal）”失败？"><a href="#5-3-如何判断“精确查找（Equal）”失败？" class="headerlink" title="5.3 如何判断“精确查找（Equal）”失败？"></a>5.3 如何判断“精确查找（Equal）”失败？</h4><p>如果你需要的是“找到返回下标，<strong>找不到返回 -1</strong>”的逻辑（即标准的 <code>indexOf</code>），无论使用开区间还是闭区间，都需要在拿到返回值后增加一步判断：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 假设 idx 是 lowerBound 的返回值 (无论开闭区间)</span><br>idx = lower_bound(nums, target)<br><br><span class="hljs-comment"># 必须同时满足两个条件才算“找到了”：</span><br><span class="hljs-comment"># 1. idx 不越界 (idx &lt; n)</span><br><span class="hljs-comment"># 2. 该位置的值确实等于 target</span><br><span class="hljs-keyword">if</span> idx &lt; <span class="hljs-built_in">len</span>(nums) <span class="hljs-keyword">and</span> nums[idx] == target:<br>    <span class="hljs-keyword">return</span> idx<br><span class="hljs-keyword">else</span>:<br>    <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>  <span class="hljs-comment"># 真正的“找不到”</span><br></code></pre></td></tr></table></figure>
+<h2 id="二分答案"><a href="#二分答案" class="headerlink" title="二分答案"></a>二分答案</h2><h3 id="1-核心概念与思维模型"><a href="#1-核心概念与思维模型" class="headerlink" title="1. 核心概念与思维模型"></a>1. 核心概念与思维模型</h3><ul>
+<li><strong>基本定义</strong>：“花费一个 $\log$ 的时间，增加了一个条件”。我们将求解最优解（求最小/最大）的问题，转化为在一个<strong>虚拟的有序数组</strong> <code>[check(min), ..., check(max)]</code> 中寻找分界点的问题。</li>
+<li><strong>红蓝染色法</strong>：与数组二分一样，我们将解空间分为两部分：<ul>
+<li><strong>红色</strong>：不满足题目要求的区域。</li>
+<li><strong>蓝色</strong>：满足题目要求的区域。</li>
+<li><strong>目标</strong>：寻找红蓝分界线。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-两大核心类型"><a href="#2-两大核心类型" class="headerlink" title="2. 两大核心类型"></a>2. 两大核心类型</h3><p>根据题目要求寻找的是“最小值”还是“最大值”，解题模型分为两类。资料强烈推荐使用<strong>开区间</strong>写法，因为它逻辑最统一。</p>
+<h4 id="2-1-类型一：求最小-Find-Minimum"><a href="#2-1-类型一：求最小-Find-Minimum" class="headerlink" title="2.1 类型一：求最小 (Find Minimum)"></a>2.1 类型一：求最小 (Find Minimum)</h4><ul>
+<li><strong>适用场景</strong>：<ul>
+<li>求满足条件的<strong>最小值</strong>（如：完成任务的最少时间、最小花费）。</li>
+<li><strong>最小化最大值</strong>（如：分割数组的最大值最小是多少）。</li>
+<li><strong>第 K 小</strong>（转化为：求最小的 $x$，使得 $\le x$ 的数至少有 $k$ 个）。</li>
+</ul>
+</li>
+<li><strong>染色模型</strong>：左边 <code>False</code>（红色），<strong>右边 <code>True</code>（蓝色）</strong>。</li>
+<li><strong>核心逻辑</strong>：我们要找<strong>蓝色区域的起点</strong>。</li>
+<li><strong>开区间口诀</strong>：<code>check</code> 成功更新 <code>right</code>，最后返回 <code>right</code>。</li>
+</ul>
+<h4 id="2-2-类型二：求最大-Find-Maximum"><a href="#2-2-类型二：求最大-Find-Maximum" class="headerlink" title="2.2 类型二：求最大 (Find Maximum)"></a>2.2 类型二：求最大 (Find Maximum)</h4><ul>
+<li><strong>适用场景</strong>：<ul>
+<li>求满足条件的<strong>最大值</strong>（如：最大收益、H指数）。</li>
+<li><strong>最大化最小值</strong>（如：两球之间的最大磁力、让所有人分到的最小值最大）。</li>
+</ul>
+</li>
+<li><strong>染色模型</strong>：<strong>左边 <code>True</code>（蓝色）</strong>，右边 <code>False</code>（红色）。</li>
+<li><strong>核心逻辑</strong>：我们要找<strong>蓝色区域的终点</strong>。</li>
+<li><strong>开区间口诀</strong>：<code>check</code> 成功更新 <code>left</code>，最后返回 <code>left</code>。</li>
+</ul>
+<hr>
+<h3 id="3-四种常见应用模式"><a href="#3-四种常见应用模式" class="headerlink" title="3. 四种常见应用模式"></a>3. 四种常见应用模式</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">模式名称</th>
+<th style="text-align:left">本质归属</th>
+<th style="text-align:left">典型题目描述</th>
+<th style="text-align:left">核心 Check 思路</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>基础最值</strong></td>
+<td style="text-align:left">求最小/最大</td>
+<td style="text-align:left">x 秒能否完成？</td>
+<td style="text-align:left">模拟过程，判断是否可行</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>最小化最大值</strong></td>
+<td style="text-align:left"><strong>求最小</strong></td>
+<td style="text-align:left">限制最大负荷，求这个负荷的最小值</td>
+<td style="text-align:left">设阈值为 <code>mid</code>，用贪心判断能否将所有组的数值都压在 <code>mid</code> 以下</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>最大化最小值</strong></td>
+<td style="text-align:left"><strong>求最大</strong></td>
+<td style="text-align:left">保证每人至少分到 x，求 x 的最大值</td>
+<td style="text-align:left">设下界为 <code>mid</code>，用贪心判断能否选出足够多的元素满足间距/大小 $\ge mid$</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>第 K 小/大</strong></td>
+<td style="text-align:left"><strong>求最小</strong>/最大</td>
+<td style="text-align:left">乘法表第 K 小、第 K 小数对距离</td>
+<td style="text-align:left">设答案为 <code>x</code>，计算 $\le x$ 的元素个数是否 $\ge k$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h3 id="4-代码模板（开区间）"><a href="#4-代码模板（开区间）" class="headerlink" title="4. 代码模板（开区间）"></a>4. 代码模板（开区间）</h3><p><strong>开区间二分法</strong>因其逻辑统一（“check更新谁，最后就返回谁”）被强烈推荐。</p>
+<h4 id="4-1-求最小-Find-Minimum-Lower-Bound"><a href="#4-1-求最小-Find-Minimum-Lower-Bound" class="headerlink" title="4.1 求最小 (Find Minimum) / Lower Bound"></a>4.1 求最小 (Find Minimum) / Lower Bound</h4><p><strong>适用场景</strong>：</p>
+<ul>
+<li>求满足条件的<strong>最小值</strong>（如：完成任务的最少时间）。</li>
+<li><strong>最小化最大值</strong>。</li>
+<li><strong>第 K 小</strong>。</li>
+<li>红蓝染色：<strong>左红（False）右蓝（True）</strong>，目标是寻找蓝色区域的起点。</li>
+</ul>
+<p><strong>核心口诀</strong>：<code>check(mid)</code> 成功时更新 <code>right</code>，最后返回 <code>right</code>。</p>
+<h5 id="4-1-1-Java-代码"><a href="#4-1-1-Java-代码" class="headerlink" title="4.1.1 Java 代码"></a>4.1.1 Java 代码</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-comment">// 模板：计算满足 check(x) == true 的最小整数 x</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">binarySearchMin</span><span class="hljs-params">(<span class="hljs-type">int</span>[] nums)</span> &#123;<br>        <span class="hljs-comment">// 1. 定义解空间范围 (根据题目具体要求设定)</span><br>        <span class="hljs-comment">// left 指向红色区域(不满足)，right 指向蓝色区域(满足)</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">left</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>; <br>        <span class="hljs-type">int</span> <span class="hljs-variable">right</span> <span class="hljs-operator">=</span> nums.length; <span class="hljs-comment">// 或者根据题目范围，如 max(nums) 等</span><br>        <br>        <span class="hljs-comment">// 2. 循环不变量：left + 1 &lt; right</span><br>        <span class="hljs-keyword">while</span> (left + <span class="hljs-number">1</span> &lt; right) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">mid</span> <span class="hljs-operator">=</span> left + (right - left) / <span class="hljs-number">2</span>;<br>            <br>            <span class="hljs-comment">// 3. 核心判定</span><br>            <span class="hljs-keyword">if</span> (check(mid)) &#123;<br>                right = mid; <span class="hljs-comment">// 满足条件，尝试更小的（收缩右边界）</span><br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                left = mid;  <span class="hljs-comment">// 不满足，需要更大的（收缩左边界）</span><br>            &#125;<br>        &#125;<br>        <br>        <span class="hljs-comment">// 4. 返回 right (最小的满足值)</span><br>        <span class="hljs-keyword">return</span> right;<br>    &#125;<br><br>    <span class="hljs-comment">// 具体的判断逻辑</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">check</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> &#123;<br>        <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> 根据题目实现</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="4-1-2-C语言-代码"><a href="#4-1-2-C语言-代码" class="headerlink" title="4.1.2 C语言 代码"></a>4.1.2 C语言 代码</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdbool.h&gt;</span></span><br><br><span class="hljs-comment">// 具体的判断逻辑</span><br><span class="hljs-type">bool</span> <span class="hljs-title function_">check</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> &#123;<br>    <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> 根据题目实现</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br><br><span class="hljs-comment">// 模板：计算满足 check(x) == true 的最小整数 x</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">binarySearchMin</span><span class="hljs-params">(<span class="hljs-type">int</span>* nums, <span class="hljs-type">int</span> numsSize)</span> &#123;<br>    <span class="hljs-comment">// 1. 定义解空间 (开区间)</span><br>    <span class="hljs-comment">// left 始终不满足，right 始终满足</span><br>    <span class="hljs-type">int</span> left = <span class="hljs-number">-1</span>;<br>    <span class="hljs-type">int</span> right = numsSize; <br>    <br>    <span class="hljs-comment">// 2. 循环不变量</span><br>    <span class="hljs-keyword">while</span> (left + <span class="hljs-number">1</span> &lt; right) &#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <br>        <span class="hljs-keyword">if</span> (check(mid)) &#123;<br>            right = mid; <span class="hljs-comment">// 满足条件，记录并在左侧继续找</span><br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            left = mid;  <span class="hljs-comment">// 不满足，去右侧找</span><br>        &#125;<br>    &#125;<br>    <br>    <span class="hljs-comment">// 3. 返回 right</span><br>    <span class="hljs-keyword">return</span> right;<br>&#125;<br></code></pre></td></tr></table></figure>
+<hr>
+<h4 id="4-2-求最大-Find-Maximum"><a href="#4-2-求最大-Find-Maximum" class="headerlink" title="4.2 求最大 (Find Maximum)"></a>4.2 求最大 (Find Maximum)</h4><p><strong>适用场景</strong>：</p>
+<ul>
+<li>求满足条件的<strong>最大值</strong>（如：最大化收益）。</li>
+<li><strong>最大化最小值</strong>（如：磁力球最大距离）。</li>
+<li>红蓝染色：<strong>左蓝（True）右红（False）</strong>，目标是寻找蓝色区域的终点。</li>
+</ul>
+<p><strong>核心口诀</strong>：<code>check(mid)</code> 成功时更新 <code>left</code>，最后返回 <code>left</code>。</p>
+<h5 id="4-2-1-Java-代码"><a href="#4-2-1-Java-代码" class="headerlink" title="4.2.1 Java 代码"></a>4.2.1 Java 代码</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-comment">// 模板：计算满足 check(x) == true 的最大整数 x</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">binarySearchMax</span><span class="hljs-params">(<span class="hljs-type">int</span>[] nums)</span> &#123;<br>        <span class="hljs-comment">// 1. 定义解空间 (根据题目范围设定)</span><br>        <span class="hljs-comment">// left 指向蓝色区域(满足)，right 指向红色区域(不满足)</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">left</span> <span class="hljs-operator">=</span> -<span class="hljs-number">1</span>;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">right</span> <span class="hljs-operator">=</span> nums.length; <br>        <br>        <span class="hljs-keyword">while</span> (left + <span class="hljs-number">1</span> &lt; right) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">mid</span> <span class="hljs-operator">=</span> left + (right - left) / <span class="hljs-number">2</span>;<br>            <br>            <span class="hljs-keyword">if</span> (check(mid)) &#123;<br>                left = mid;  <span class="hljs-comment">// 满足条件，尝试更大的（收缩左边界）</span><br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                right = mid; <span class="hljs-comment">// 不满足，需要更小的（收缩右边界）</span><br>            &#125;<br>        &#125;<br>        <br>        <span class="hljs-comment">// 4. 返回 left (最大的满足值)</span><br>        <span class="hljs-keyword">return</span> left;<br>    &#125;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">check</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> &#123;<br>        <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> 根据题目实现</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="4-2-2-C语言-代码"><a href="#4-2-2-C语言-代码" class="headerlink" title="4.2.2 C语言 代码"></a>4.2.2 C语言 代码</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdbool.h&gt;</span></span><br><br><span class="hljs-type">bool</span> <span class="hljs-title function_">check</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> &#123;<br>    <span class="hljs-comment">// <span class="hljs-doctag">TODO:</span> 根据题目实现</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br><br><span class="hljs-comment">// 模板：计算满足 check(x) == true 的最大整数 x</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">binarySearchMax</span><span class="hljs-params">(<span class="hljs-type">int</span>* nums, <span class="hljs-type">int</span> numsSize)</span> &#123;<br>    <span class="hljs-comment">// 1. 定义解空间</span><br>    <span class="hljs-comment">// left 始终满足，right 始终不满足</span><br>    <span class="hljs-type">int</span> left = <span class="hljs-number">-1</span>;<br>    <span class="hljs-type">int</span> right = numsSize;<br>    <br>    <span class="hljs-keyword">while</span> (left + <span class="hljs-number">1</span> &lt; right) &#123;<br>        <span class="hljs-type">int</span> mid = left + (right - left) / <span class="hljs-number">2</span>;<br>        <br>        <span class="hljs-keyword">if</span> (check(mid)) &#123;<br>            left = mid;  <span class="hljs-comment">// 满足条件，记录答案并在右侧继续找更大值</span><br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            right = mid; <span class="hljs-comment">// 不满足，去左侧找</span><br>        &#125;<br>    &#125;<br>    <br>    <span class="hljs-comment">// 3. 返回 left</span><br>    <span class="hljs-keyword">return</span> left;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="4-3-总结"><a href="#4-3-总结" class="headerlink" title="4.3 总结"></a>4.3 总结</h4><p>根据资料推荐的<strong>开区间</strong>写法：</p>
+<ul>
+<li><strong>求最小</strong>：<code>right</code> 维护满足条件的值，<code>check</code> 成功更新 <code>right</code>，返回 <code>right</code>。</li>
+<li><strong>求最大</strong>：<code>left</code> 维护满足条件的值，<code>check</code> 成功更新 <code>left</code>，返回 <code>left</code>。</li>
+</ul>
+<h3 id="5-最小化最大值-Minimize-the-Maximum"><a href="#5-最小化最大值-Minimize-the-Maximum" class="headerlink" title="5. 最小化最大值 (Minimize the Maximum)"></a>5. 最小化最大值 (Minimize the Maximum)</h3><p>这类问题通常描述为：“在满足某种分组或分配限制下，让某个最大指标（如最大负荷、最大距离、最大花费）尽可能小”。</p>
+<ul>
+<li><strong>本质归属</strong>：<strong>二分答案求最小</strong>（Find Minimum）。</li>
+<li><strong>思维模型</strong>：<strong>“压盖子”</strong>。<ul>
+<li>二分的 <code>mid</code> 是一个<strong>上界</strong>（Upper Bound）。</li>
+<li>我们试图用这个盖子去“压”住所有元素，看能否在限制条件（如分组成 $k$ 份）下把所有数值都压在 <code>mid</code> 之下。</li>
+</ul>
+</li>
+<li><strong>Check 函数逻辑</strong>：<ul>
+<li>通常使用 <strong>贪心 + 模拟</strong>。</li>
+<li>判断：<strong>“如果最大值不能超过 <code>mid</code>，我最少需要多少组/多少时间？”</strong></li>
+<li>如果需要的组数 $\le k$，说明 <code>mid</code> 给的预算太宽裕或者刚好，尝试<strong>更小</strong>的（收缩右边界 <code>right = mid</code>）。</li>
+<li>如果需要的组数 $&gt; k$，说明 <code>mid</code> 太严苛了，压不住，必须<strong>更大</strong>（收缩左边界 <code>left = mid</code>）。</li>
+</ul>
+</li>
+<li><strong>典型题目</strong>：分割数组的最大值、完成任务的最少时间、爱吃香蕉的珂珂。</li>
+<li><strong>代码行为 (开区间)</strong>：<ul>
+<li><code>check(mid)</code> 成功（True）时更新 <code>right = mid</code>。</li>
+<li>最终返回 <strong><code>right</code></strong>。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="6-最大化最小值-Maximize-the-Minimum"><a href="#6-最大化最小值-Maximize-the-Minimum" class="headerlink" title="6. 最大化最小值 (Maximize the Minimum)"></a>6. 最大化最小值 (Maximize the Minimum)</h3><p>这类问题通常描述为：“在选取 $k$ 个元素或进行某种分配时，让其中最小的指标（如最小间距、最小得分）尽可能大”。</p>
+<ul>
+<li><strong>本质归属</strong>：<strong>二分答案求最大</strong>（Find Maximum）。</li>
+<li><strong>思维模型</strong>：<strong>“抬地板”</strong>。<ul>
+<li>二分的 <code>mid</code> 是一个<strong>下界</strong>（Lower Bound）。</li>
+<li>我们试图把标准“抬”高，看能否找到足够多的元素/方案，使得它们都<strong>至少</strong>达到 <code>mid</code> 的水平。</li>
+</ul>
+</li>
+<li><strong>Check 函数逻辑</strong>：<ul>
+<li>通常使用 <strong>贪心</strong>。</li>
+<li>判断：<strong>“如果要求所有选中的元素都 $\ge mid$，我最多能选出多少个？”</strong></li>
+<li>如果选出的个数 $\ge k$，说明 <code>mid</code> 这个标准是可行的，尝试<strong>更大</strong>的（收缩左边界 <code>left = mid</code>）。</li>
+<li>如果选出的个数 $&lt; k$，说明 <code>mid</code> 定太高了，凑不齐，必须<strong>更小</strong>（收缩右边界 <code>right = mid</code>）。</li>
+</ul>
+</li>
+<li><strong>典型题目</strong>：两球之间的磁力、木头切割、H指数。</li>
+<li><strong>代码行为 (开区间)</strong>：<ul>
+<li><code>check(mid)</code> 成功（True）时更新 <code>left = mid</code>。</li>
+<li>最终返回 <strong><code>left</code></strong>。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="7-对比总结表"><a href="#7-对比总结表" class="headerlink" title="7. 对比总结表"></a>7. 对比总结表</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">维度</th>
+<th style="text-align:left"><strong>最小化最大值</strong> (Min-Max)</th>
+<th style="text-align:left"><strong>最大化最小值</strong> (Max-Min)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>问题类型</strong></td>
+<td style="text-align:left"><strong>求最小</strong> (Find Minimum)</td>
+<td style="text-align:left"><strong>求最大</strong> (Find Maximum)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>物理含义</strong></td>
+<td style="text-align:left">限制上限，越小越好</td>
+<td style="text-align:left">保证下限，越大越好</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Check方向</strong></td>
+<td style="text-align:left">$\le mid$ 是否可行？</td>
+<td style="text-align:left">$\ge mid$ 是否可行？</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>更新逻辑</strong></td>
+<td style="text-align:left">Check成功 $\to$ <code>right = mid</code> (试更小)</td>
+<td style="text-align:left">Check成功 $\to$ <code>left = mid</code> (试更大)</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>开区间返回</strong></td>
+<td style="text-align:left"><strong><code>right</code></strong></td>
+<td style="text-align:left"><strong><code>left</code></strong></td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>闭区间返回</strong></td>
+<td style="text-align:left"><strong><code>left</code></strong></td>
+<td style="text-align:left"><strong><code>right</code></strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="8-代码模板建议-开区间"><a href="#8-代码模板建议-开区间" class="headerlink" title="8. 代码模板建议 (开区间)"></a>8. 代码模板建议 (开区间)</h3><p>根据资料推荐，使用<strong>开区间</strong>写法可以避免复杂的边界判断。</p>
+<p><strong>最小化最大值（求最小）：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 核心：Check成功更新 right，返回 right</span><br><span class="hljs-keyword">while</span> (left + <span class="hljs-number">1</span> &lt; right) &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">mid</span> <span class="hljs-operator">=</span> left + (right - left) / <span class="hljs-number">2</span>;<br>    <span class="hljs-keyword">if</span> (check(mid)) right = mid; <span class="hljs-comment">// 满足条件，试探更小的</span><br>    <span class="hljs-keyword">else</span> left = mid;<br>&#125;<br><span class="hljs-keyword">return</span> right;<br></code></pre></td></tr></table></figure></p>
+<p><strong>最大化最小值（求最大）：</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 核心：Check成功更新 left，返回 left</span><br><span class="hljs-keyword">while</span> (left + <span class="hljs-number">1</span> &lt; right) &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">mid</span> <span class="hljs-operator">=</span> left + (right - left) / <span class="hljs-number">2</span>;<br>    <span class="hljs-keyword">if</span> (check(mid)) left = mid;  <span class="hljs-comment">// 满足条件，试探更大的</span><br>    <span class="hljs-keyword">else</span> right = mid;<br>&#125;<br><span class="hljs-keyword">return</span> left;<br></code></pre></td></tr></table></figure></p>
+<p><strong>记忆口诀</strong>：</p>
+<ul>
+<li>求最小（压盖子）：返回右边的 <code>right</code>。</li>
+<li>求最大（抬地板）：返回左边的 <code>left</code>。</li>
+</ul>
+<h3 id="9-第-K-小-大"><a href="#9-第-K-小-大" class="headerlink" title="9. 第 K 小/大"></a>9. 第 K 小/大</h3><h4 id="9-1-核心转换逻辑"><a href="#9-1-核心转换逻辑" class="headerlink" title="9.1 核心转换逻辑"></a>9.1 核心转换逻辑</h4><h5 id="9-1-1-第-K-小-Kth-Smallest"><a href="#9-1-1-第-K-小-Kth-Smallest" class="headerlink" title="9.1.1 第 K 小 (Kth Smallest)"></a>9.1.1 第 K 小 (Kth Smallest)</h5><ul>
+<li><strong>定义</strong>：在一个（可能虚拟的）有序序列中，第 K 小的数是 $x$。</li>
+<li><strong>转化公式</strong>：等价于求 <strong>最小</strong> 的 $x$，满足 <strong>$\le x$ 的数至少有 $k$ 个</strong>。</li>
+<li><strong>归属类型</strong>：<strong>求最小</strong>（Find Minimum）。</li>
+<li><strong>单调性</strong>：$x$ 越大，$\le x$ 的数的个数越多（单调递增）。我们要找的是刚刚达到 $k$ 个的那个临界点。</li>
+</ul>
+<h5 id="9-1-2-第-K-大-Kth-Largest"><a href="#9-1-2-第-K-大-Kth-Largest" class="headerlink" title="9.1.2 第 K 大 (Kth Largest)"></a>9.1.2 第 K 大 (Kth Largest)</h5><ul>
+<li><strong>定义</strong>：第 K 大的数是 $x$。</li>
+<li><strong>转化公式</strong>：等价于求 <strong>最大</strong> 的 $x$，满足 <strong>$\ge x$ 的数至少有 $k$ 个</strong>。</li>
+<li><strong>归属类型</strong>：<strong>求最大</strong>（Find Maximum）。</li>
+<li><strong>实际技巧</strong>：虽然可以直接按“求最大”做，但工程和竞赛中常将其转换为 <strong>第 $N - K + 1$ 小</strong> 的问题，从而统一使用“求最小”的模板。</li>
+</ul>
+<hr>
+<h4 id="9-2-代码模板（开区间写法）"><a href="#9-2-代码模板（开区间写法）" class="headerlink" title="9.2 代码模板（开区间写法）"></a>9.2 代码模板（开区间写法）</h4><h5 id="9-2-1-第-K-小模板（推荐）"><a href="#9-2-1-第-K-小模板（推荐）" class="headerlink" title="9.2.1 第 K 小模板（推荐）"></a>9.2.1 第 K 小模板（推荐）</h5><p>这是最常用的形式。例如：乘法表中第 K 小的数、第 K 小的数对距离。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 目标：求最小的 x，使得 count(&lt;= x) &gt;= k</span><br><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">kthSmallest</span><span class="hljs-params">(<span class="hljs-type">int</span> k, <span class="hljs-type">int</span> minVal, <span class="hljs-type">int</span> maxVal)</span> &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">left</span> <span class="hljs-operator">=</span> minVal - <span class="hljs-number">1</span>;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">right</span> <span class="hljs-operator">=</span> maxVal + <span class="hljs-number">1</span>;<br>    <br>    <span class="hljs-keyword">while</span> (left + <span class="hljs-number">1</span> &lt; right) &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">mid</span> <span class="hljs-operator">=</span> left + (right - left) / <span class="hljs-number">2</span>;<br>        <br>        <span class="hljs-comment">// Check逻辑：计算 &lt;= mid 的元素个数是否达到了 k</span><br>        <span class="hljs-keyword">if</span> (countLessOrEqual(mid) &gt;= k) &#123;<br>            right = mid; <span class="hljs-comment">// 够了，甚至多了 -&gt; 尝试更小的（收缩右边界）</span><br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            left = mid;  <span class="hljs-comment">// 不够 -&gt; 必须更大（收缩左边界）</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> right; <span class="hljs-comment">// Check成功更新的是 right，故返回 right</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="9-2-2-第-K-大模板（直接法）"><a href="#9-2-2-第-K-大模板（直接法）" class="headerlink" title="9.2.2 第 K 大模板（直接法）"></a>9.2.2 第 K 大模板（直接法）</h5><p>如果不进行转换，直接求第 K 大。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 目标：求最大的 x，使得 count(&gt;= x) &gt;= k</span><br><span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">kthLargest</span><span class="hljs-params">(<span class="hljs-type">int</span> k, <span class="hljs-type">int</span> minVal, <span class="hljs-type">int</span> maxVal)</span> &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">left</span> <span class="hljs-operator">=</span> minVal - <span class="hljs-number">1</span>;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">right</span> <span class="hljs-operator">=</span> maxVal + <span class="hljs-number">1</span>;<br>    <br>    <span class="hljs-keyword">while</span> (left + <span class="hljs-number">1</span> &lt; right) &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">mid</span> <span class="hljs-operator">=</span> left + (right - left) / <span class="hljs-number">2</span>;<br>        <br>        <span class="hljs-comment">// Check逻辑：计算 &gt;= mid 的元素个数是否达到了 k</span><br>        <span class="hljs-keyword">if</span> (countGreaterOrEqual(mid) &gt;= k) &#123;<br>            left = mid;  <span class="hljs-comment">// 够了 -&gt; 尝试更大的（收缩左边界）</span><br>        &#125; <span class="hljs-keyword">else</span> &#123; <br>            right = mid; <span class="hljs-comment">// 不够 -&gt; 必须更小（收缩右边界）</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> left; <span class="hljs-comment">// Check成功更新的是 left，故返回 left</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<hr>
+<h3 id="10-总结"><a href="#10-总结" class="headerlink" title="10. 总结"></a>10. 总结</h3><p><strong>“第 K 小”本质上是二分答案求最小</strong>。<br>只需记住：我们二分一个数值 <code>mid</code>，计算“小于等于 <code>mid</code> 的数有多少个”。</p>
+<ul>
+<li>如果个数 $\ge k$，说明 <code>mid</code> 可能是答案，甚至答案比 <code>mid</code> 还小（<strong>Right = mid</strong>）。</li>
+<li>如果个数 $&lt; k$，说明 <code>mid</code> 太小了，不够排到第 $k$ 位（<strong>Left = mid</strong>）。</li>
+<li>最后返回 <strong>Right</strong>。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Leetcode/" class="category-chain-item">Leetcode</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%AE%97%E6%B3%95/" class="print-no-link">#算法</a>
+      
+        <a href="/tags/DS/" class="print-no-link">#DS</a>
+      
+        <a href="/tags/%E4%BA%8C%E5%88%86/" class="print-no-link">#二分</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>二分思想不只能查找</div>
+      <div>https://zjjyyds.github.io/2026/01/03/Leetcode/二分/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/01/14/%E5%AD%A6%E9%99%A2%E6%B4%BE/CS50%20AI%20note%201/" title="CS50AI note1">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CS50AI note1</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/03/JavaSE/Java%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81String%E4%B8%8D%E5%8F%98%E7%9A%84/" title="Java怎么实现Stirng不变的">
+                        <span class="hidden-mobile">Java怎么实现Stirng不变的</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

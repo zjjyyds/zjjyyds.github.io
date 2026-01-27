@@ -1,0 +1,1521 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Lecture 1Knowledge人类会基于已有知识进行推理并得出结论。AI 中也同样会用“表示知识 + 从知识中推出结论”的概念。在这一讲中，我们将探索如何实现这种行为。 知识型智能体（Knowledge-Based Agents）这些智能体通过对内部的知识表示进行运算，从而完成推理。 那么，“基于知识推理并得出结论”到底是什么意思？ 我们用一个《哈利·波特》的例子开始。考虑下面这些句子：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS50AI note1">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/01/14/%E5%AD%A6%E9%99%A2%E6%B4%BE/CS50%20AI%20note%201/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="Lecture 1Knowledge人类会基于已有知识进行推理并得出结论。AI 中也同样会用“表示知识 + 从知识中推出结论”的概念。在这一讲中，我们将探索如何实现这种行为。 知识型智能体（Knowledge-Based Agents）这些智能体通过对内部的知识表示进行运算，从而完成推理。 那么，“基于知识推理并得出结论”到底是什么意思？ 我们用一个《哈利·波特》的例子开始。考虑下面这些句子：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/mastermind1.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/mastermind2.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/mastermind3.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/modusponensexample.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/modusponens.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/andelimination.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/doublenegationelimination.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/implicationelimination.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/biconditionalelimination.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/demorgans1.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/demorgans2.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/distributive1.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/distributive2.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/resolution1.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/notes/1/resolution2.png">
+<meta property="article:published_time" content="2026-01-14T12:16:00.000Z">
+<meta property="article:modified_time" content="2026-01-24T11:41:30.894Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="CS50AI">
+<meta property="article:tag" content="讲义">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cs50.harvard.edu/ai/notes/1/mastermind1.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>CS50AI note1 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CS50AI note1"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-14 20:16" pubdate>
+          2026年1月14日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CS50AI note1</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <hr>
+<h1 id="Lecture-1"><a href="#Lecture-1" class="headerlink" title="Lecture 1"></a><a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/notes/1/#lecture-1">Lecture 1</a></h1><h1 id="Knowledge"><a href="#Knowledge" class="headerlink" title="Knowledge"></a><a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/notes/1/#knowledge">Knowledge</a></h1><p>人类会基于已有知识进行推理并得出结论。AI 中也同样会用“表示知识 + 从知识中推出结论”的概念。在这一讲中，我们将探索如何实现这种行为。</p>
+<h2 id="知识型智能体（Knowledge-Based-Agents）"><a href="#知识型智能体（Knowledge-Based-Agents）" class="headerlink" title="知识型智能体（Knowledge-Based Agents）"></a>知识型智能体（Knowledge-Based Agents）</h2><p>这些智能体通过对内部的知识表示进行运算，从而完成推理。</p>
+<p>那么，“基于知识推理并得出结论”到底是什么意思？</p>
+<p>我们用一个《哈利·波特》的例子开始。考虑下面这些句子：</p>
+<ol>
+<li>如果今天没有下雨，Harry 今天去看了 Hagrid。</li>
+<li>Harry 今天要么去看了 Hagrid，要么去看了 Dumbledore，但不能两个都去。</li>
+<li>Harry 今天去看了 Dumbledore。</li>
+</ol>
+<p>根据这三句话，我们可以回答问题：“今天下雨了吗？”，尽管每一句都没有直接告诉我们今天是否下雨。推理过程如下：</p>
+<p>观察句子 3，我们知道 Harry 去了 Dumbledore。<br>观察句子 2，我们知道 Harry 去了 Dumbledore 或 Hagrid（二者之一），因此我们可以推出：</p>
+<ol>
+<li>Harry 今天没有去看 Hagrid。</li>
+</ol>
+<p>再观察句子 1，我们知道：如果今天没有下雨，那么 Harry 会去看 Hagrid。<br>但根据句子 4，我们知道 Harry 并没有去看 Hagrid，因此可以推出：</p>
+<ol>
+<li>今天下雨了。</li>
+</ol>
+<p>为了得出这个结论，我们使用了<strong>逻辑（logic）</strong>。这一讲将探索 AI 如何利用逻辑从已有信息推出新的结论。</p>
+<hr>
+<h2 id="句子（Sentence）"><a href="#句子（Sentence）" class="headerlink" title="句子（Sentence）"></a>句子（Sentence）</h2><p>句子是对世界的断言，存在于某种知识表示语言中。句子是 AI 存储知识并据此推理新信息的方式。</p>
+<hr>
+<h1 id="Propositional-Logic"><a href="#Propositional-Logic" class="headerlink" title="Propositional Logic"></a><a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/notes/1/#propositional-logic">Propositional Logic</a></h1><p>命题逻辑基于命题（propositions）：对世界的陈述，它们要么为真，要么为假（就像上面的句子 1-5）。</p>
+<h2 id="命题符号（Propositional-Symbols）"><a href="#命题符号（Propositional-Symbols）" class="headerlink" title="命题符号（Propositional Symbols）"></a>命题符号（Propositional Symbols）</h2><p>命题符号通常用字母（P, Q, R）表示，用来代表一个命题。</p>
+<h2 id="逻辑连接词（Logical-Connectives）"><a href="#逻辑连接词（Logical-Connectives）" class="headerlink" title="逻辑连接词（Logical Connectives）"></a>逻辑连接词（Logical Connectives）</h2><p>逻辑连接词是逻辑符号，用来连接命题符号，从而更复杂地推理世界。</p>
+<h3 id="否定（Not-¬）"><a href="#否定（Not-¬）" class="headerlink" title="否定（Not, ¬）"></a>否定（Not, ¬）</h3><p>否定会反转命题的真值。例如若 P：“正在下雨”，则 ¬P：“没有下雨”。</p>
+<p>真值表（truth tables）用于枚举所有可能的真值赋值，从而比较不同连接词下命题的真值。下面是第一个真值表例子：</p>
+<h3 id="与（And-∧）"><a href="#与（And-∧）" class="headerlink" title="与（And, ∧）"></a>与（And, ∧）</h3><p>当两个命题 P 和 Q 用 ∧ 连接时，P ∧ Q 仅在 P 和 Q 都为真时为真。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>P</th>
+<th>Q</th>
+<th>P ∧ Q</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="或（Or-∨）"><a href="#或（Or-∨）" class="headerlink" title="或（Or, ∨）"></a>或（Or, ∨）</h3><p>P ∨ Q 只要任一参数为真即为真。也就是说，P ∨ Q 为真要求 P 或 Q 至少一个为真。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>P</th>
+<th>Q</th>
+<th>P ∨ Q</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>值得一提的是，“或”有两种：<strong>包含式或（inclusive Or）</strong>与<strong>排他式或（exclusive Or）</strong>。<br>在排他式或中，如果 P ∧ Q 为真，则 P ∨ Q 为假：也就是要求只能一个为真，不能都为真。<br>包含式或在 P、Q 或 P ∧ Q 为真时都为真。这里的 Or（∨）默认指<strong>包含式或</strong>。</p>
+<blockquote>
+<p>旁注（课堂没提到）：</p>
+<ul>
+<li>一个例子可帮助理解包含式 vs 排他式：<ul>
+<li>包含式：为了吃甜点，你必须“打扫房间<strong>或</strong>割草”。如果两个都做了，也依然能吃到饼干。</li>
+<li>排他式：甜点你可以吃“曲奇<strong>或</strong>冰淇淋”。这时不能两个都吃。</li>
+</ul>
+</li>
+<li>排他式或常缩写为 XOR，常用符号 ⊕。</li>
+</ul>
+</blockquote>
+<h3 id="蕴含（Implication-→）"><a href="#蕴含（Implication-→）" class="headerlink" title="蕴含（Implication, →）"></a>蕴含（Implication, →）</h3><p>蕴含表示“如果 P，那么 Q”。例如：</p>
+<ul>
+<li>P：“正在下雨”</li>
+<li>Q：“我在室内”<br>则 P → Q 表示：“如果下雨，那么我在室内。”<br>其中 P 称为<strong>前件（antecedent）</strong>，Q 称为<strong>后件（consequent）</strong>。</li>
+</ul>
+<p>当<strong>前件为真</strong>时，整个蕴含在<strong>后件为真</strong>时为真（下雨且在室内，则“如果下雨我在室内”是真的）。<br>当<strong>前件为真</strong>时，如果<strong>后件为假</strong>，则蕴含为假（下雨却在室外，“如果下雨我在室内”为假）。<br>然而当<strong>前件为假</strong>时，不论后件如何，蕴含都为真。这可能令人困惑：逻辑上，若 P 为假，则从 P → Q 中无法推出关于 Q 的任何信息。<br>在例子中：如果没下雨，那么蕴含并没有说明我是否在室内；我可能一直在室内，也可能一直在室外。<br>因此当前件为假时，我们称蕴含为<strong>平凡真（trivially true）</strong>。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>P</th>
+<th>Q</th>
+<th>P → Q</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="双条件（Biconditional-↔）"><a href="#双条件（Biconditional-↔）" class="headerlink" title="双条件（Biconditional, ↔）"></a>双条件（Biconditional, ↔）</h3><p>双条件是双向的蕴含，可读作“当且仅当”。<br>P ↔ Q 等价于 (P → Q) 与 (Q → P) 同时成立。</p>
+<p>例如：</p>
+<ul>
+<li>P：“正在下雨”</li>
+<li>Q：“我在室内”<br>P ↔ Q 表示：“如果下雨则我在室内”并且“如果我在室内则下雨”。<br>这比单向蕴含能推出更多信息：如果 P 为假，那么 Q 也为假；如果没下雨，则我也不在室内。</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>P</th>
+<th>Q</th>
+<th>P ↔ Q</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h2 id="模型（Model）"><a href="#模型（Model）" class="headerlink" title="模型（Model）"></a>模型（Model）</h2><p>模型是对每个命题都赋予真值的一种赋值方式。再次强调，命题是可以为真或假的世界陈述；世界知识体现在这些命题的真值上。模型就是这种真值赋值，它描述了一个可能的世界。</p>
+<p>例如：</p>
+<ul>
+<li>P：“正在下雨”</li>
+<li>Q：“今天是星期二”<br>一种模型可以是：{P = True, Q = False}<br>这表示：下雨，但不是星期二。</li>
+</ul>
+<p>当然还有其他可能模型，例如 {P=True, Q=True} 表示既下雨又是星期二。<br>一般来说，n 个命题会有 2^n 种可能模型。这里 n=2，所以 2²=4 种。</p>
+<hr>
+<h2 id="知识库（Knowledge-Base-KB）"><a href="#知识库（Knowledge-Base-KB）" class="headerlink" title="知识库（Knowledge Base, KB）"></a>知识库（Knowledge Base, KB）</h2><p>知识库是一组句子（sentences），它们是知识型智能体已知为真的知识集合。<br>AI 以命题逻辑句子的形式获得这些关于世界的信息，并利用它们进行额外推理。</p>
+<hr>
+<h2 id="蕴含（Entailment-⊨）"><a href="#蕴含（Entailment-⊨）" class="headerlink" title="蕴含（Entailment, ⊨）"></a>蕴含（Entailment, ⊨）</h2><p>若 α ⊨ β（α 蕴含 β），则在任何 α 为真的世界里，β 也为真。</p>
+<p>例如：</p>
+<ul>
+<li>α：“一月的某个星期二”</li>
+<li>β：“是一月”<br>则 α ⊨ β。若真的是“一月的星期二”，必然是在一月。</li>
+</ul>
+<p>蕴含不同于蕴含连接词（implication）。  </p>
+<ul>
+<li><strong>Implication（→）</strong>是逻辑连接词，把两个命题连成一个复合命题。  </li>
+<li><strong>Entailment（⊨）</strong>是关系：当 α 中所有信息为真时，β 也必为真。</li>
+</ul>
+<hr>
+<h1 id="Inference"><a href="#Inference" class="headerlink" title="Inference"></a><a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/notes/1/#inference">Inference</a></h1><p>推理（Inference）是从旧句子推导出新句子的过程。</p>
+<p>例如，在前面的哈利波特例子中，句子 4 和 5 是由 1、2、3 推导出来的。</p>
+<p>从已有知识中推出新知识有多种方法。首先我们考虑 <strong>模型检测（Model Checking）</strong>算法。</p>
+<h2 id="模型检测（Model-Checking）"><a href="#模型检测（Model-Checking）" class="headerlink" title="模型检测（Model Checking）"></a>模型检测（Model Checking）</h2><p>为了判断 KB ⊨ α（即回答：“我们能否仅依据 KB 推出 α 为真？”）：</p>
+<ul>
+<li>枚举所有可能模型</li>
+<li>若在所有使 KB 为真的模型中，α 也为真，则 KB 蕴含 α（KB ⊨ α）</li>
+</ul>
+<p>考虑例子：</p>
+<ul>
+<li>P：今天是星期二  </li>
+<li>Q：正在下雨  </li>
+<li>R：Harry 会去跑步  </li>
+<li>KB：(P ∧ ¬Q) → R（即：P 且不 Q 蕴含 R）  </li>
+<li>KB 还包含：P（P 为真）、¬Q（Q 为假）  </li>
+<li>Query：R（我们想知道 KB 是否蕴含 R）</li>
+</ul>
+<p>枚举所有模型（3 个命题 → 2^3=8 行）：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>P</th>
+<th>Q</th>
+<th>R</th>
+<th>KB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td></td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td></td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td></td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>逐步筛掉与 KB 不一致的模型：</p>
+<p>1）KB 中包含 P 为真 → 所有 P 为 false 的行都让 KB 为 false：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>P</th>
+<th>Q</th>
+<th>R</th>
+<th>KB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td></td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>2）KB 中包含 ¬Q → 所有 Q 为 true 的行都让 KB 为 false：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>P</th>
+<th>Q</th>
+<th>R</th>
+<th>KB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td></td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>3）只剩两行：P=true 且 Q=false。<br>由于 KB 有 (P ∧ ¬Q) → R，所以在 P=true 且 Q=false 时，R 必须为真。<br>因此 R=false 那一行 KB 为 false，而 R=true 那一行 KB 为 true：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>P</th>
+<th>Q</th>
+<th>R</th>
+<th>KB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>最终只有一个模型使 KB 为真，而在该模型里 R 也为真。<br>所以 KB ⊨ R。</p>
+<hr>
+<p>接下来我们看如何用代码表示知识与逻辑。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">from</span> logic <span class="hljs-keyword">import</span> *<br><br><span class="hljs-comment"># 为每个命题创建一个符号（Symbol）</span><br>rain = Symbol(<span class="hljs-string">&quot;rain&quot;</span>)              <span class="hljs-comment"># 正在下雨</span><br>hagrid = Symbol(<span class="hljs-string">&quot;hagrid&quot;</span>)          <span class="hljs-comment"># Harry 去看了 Hagrid</span><br>dumbledore = Symbol(<span class="hljs-string">&quot;dumbledore&quot;</span>)  <span class="hljs-comment"># Harry 去看了 Dumbledore</span><br><br><span class="hljs-comment"># 将句子保存进 KB（knowledge）</span><br>knowledge = And(<br>    Implication(Not(rain), hagrid),        <span class="hljs-comment"># ¬rain → hagrid</span><br>    Or(hagrid, dumbledore),                <span class="hljs-comment"># hagrid ∨ dumbledore</span><br>    Not(And(hagrid, dumbledore)),          <span class="hljs-comment"># ¬(hagrid ∧ dumbledore)</span><br>    dumbledore                             <span class="hljs-comment"># dumbledore 为真（事实）</span><br>)<br></code></pre></td></tr></table></figure>
+<p>要运行模型检测算法，需要：</p>
+<ul>
+<li><p>Knowledge Base（知识库）</p>
+</li>
+<li><p>Query（查询命题）</p>
+</li>
+<li><p>Symbols（所有原子命题符号列表）</p>
+</li>
+<li><p>Model（对符号的真值赋值）</p>
+</li>
+</ul>
+<p>模型检测算法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">check_all</span>(<span class="hljs-params">knowledge, query, symbols, model</span>):<br><br>    <span class="hljs-comment"># 如果 model 已经对每个 symbol 赋值</span><br>    <span class="hljs-comment"># （这里的逻辑可能有点绕：symbols 初始是符号列表。函数递归，每次弹出一个 symbol 并据此生成模型。</span><br>    <span class="hljs-comment"># 当 symbols 为空，表示所有符号都已被赋值，因此我们完成了所有可能模型的生成。）</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> symbols:<br><br>        <span class="hljs-comment"># 如果 KB 在该 model 下为真，则 query 必须也为真</span><br>        <span class="hljs-keyword">if</span> knowledge.evaluate(model):<br>            <span class="hljs-keyword">return</span> query.evaluate(model)<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span><br>    <span class="hljs-keyword">else</span>:<br><br>        <span class="hljs-comment"># 选择一个尚未使用的符号</span><br>        remaining = symbols.copy()<br>        p = remaining.pop()<br><br>        <span class="hljs-comment"># 创建 p 为真的 model</span><br>        model_true = model.copy()<br>        model_true[p] = <span class="hljs-literal">True</span><br><br>        <span class="hljs-comment"># 创建 p 为假的 model</span><br>        model_false = model.copy()<br>        model_false[p] = <span class="hljs-literal">False</span><br><br>        <span class="hljs-comment"># 在两种 model 下都必须成立（保证蕴含）</span><br>        <span class="hljs-keyword">return</span> (<br>            check_all(knowledge, query, remaining, model_true)<br>            <span class="hljs-keyword">and</span> check_all(knowledge, query, remaining, model_false)<br>        )<br></code></pre></td></tr></table></figure>
+<p>注意：我们只关心 KB 为真的模型。若 KB 为假，则意味着这些模型不符合我们已知事实，因此对推理无关。</p>
+<blockquote>
+<p>课堂外例子：<br>令 P：Harry 是找球手（seeker），Q：Oliver 是守门员（keeper），R：Gryffindor 赢。<br>KB 指定：P、Q、(P ∧ Q) → R。<br>如果某个模型中 ¬P（Harry 不是找球手），那么我们不关心 R 是否为真，因为 KB 已经告诉我们 P 为真。<br>我们只关心与 KB 一致的模型。</p>
+</blockquote>
+<p>此外，<code>check_all</code> 是递归的：每次选一个符号，生成两个模型（真/假），继续递归，直到符号列表为空。<br>一旦为空（<code>if not symbols</code>），函数会检查 KB 是否在该模型下为真；若为真，则再检查 query 是否为真。</p>
+<hr>
+<h1 id="Knowledge-Engineering"><a href="#Knowledge-Engineering" class="headerlink" title="Knowledge Engineering"></a><a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/notes/1/#knowledge-engineering">Knowledge Engineering</a></h1><p>知识工程（Knowledge Engineering）是思考“如何用命题与逻辑表示现实问题”的过程。</p>
+<p>我们用 Clue（妙探寻凶/Cluedo）游戏练习知识工程：</p>
+<p>谋杀由 <strong>人物</strong>、<strong>工具</strong>、<strong>地点</strong> 三类中的各一个组成。每类随机抽一张放入信封，其余发给玩家。玩家通过不断获得线索推断信封里是什么。<br>在模型中，我们将与谋杀有关的项标为 True，否则标为 False。</p>
+<p>假设：</p>
+<ul>
+<li><p>人物：Mustard, Plum, Scarlet</p>
+</li>
+<li><p>工具：knife, revolver, wrench</p>
+</li>
+<li><p>地点：ballroom, kitchen, library</p>
+</li>
+</ul>
+<p>先加入游戏规则：每类至少一个为真：</p>
+<ul>
+<li><p>(Mustard ∨ Plum ∨ Scarlet)</p>
+</li>
+<li><p>(knife ∨ revolver ∨ wrench)</p>
+</li>
+<li><p>(ballroom ∨ kitchen ∨ library)</p>
+</li>
+</ul>
+<p>游戏开始时，你看到一张人物、一张工具、一张地点，确定它们不在信封。<br>假设你拿到 Mustard、kitchen、revolver，则加入：</p>
+<ul>
+<li><p>¬Mustard</p>
+</li>
+<li><p>¬kitchen</p>
+</li>
+<li><p>¬revolver</p>
+</li>
+</ul>
+<p>在游戏中，你可以提出猜测：某人物 + 某工具 + 某地点。<br>假设猜测 “Scarlet 用 wrench 在 library”，如果这个猜测是错的，则至少有一个不成立：</p>
+<ul>
+<li>(¬Scarlet ∨ ¬library ∨ ¬wrench)</li>
+</ul>
+<p>再假设有人给你看了 Plum 卡，则加入：</p>
+<ul>
+<li>¬Plum</li>
+</ul>
+<p>此时可推出凶手是 Scarlet，因为凶手必须在 Mustard/Plum/Scarlet 中，而前两者都已排除。</p>
+<p>再加入一个知识：地点不是 ballroom：</p>
+<ul>
+<li>¬ballroom</li>
+</ul>
+<p>现在就能推出：Scarlet 在 library 用 knife 作案。<br>library 的推理：地点必须在 ballroom/kitchen/library 中，而 ballroom、kitchen 都被排除。<br>工具的推理：猜测 “Scarlet, library, wrench” 为假，且 Scarlet、library 已为真，因此 wrench 必为假；<br>工具必须在 knife/revolver/wrench 中且 revolver、wrench 都为假，因此 knife 为真。</p>
+<p>将这些信息写入 Python：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python">knowledge = And(<br>    <span class="hljs-comment"># 游戏条件：每类至少一个为真</span><br>    Or(mustard, plum, scarlet),<br>    Or(ballroom, kitchen, library),<br>    Or(knife, revolver, wrench),<br><br>    <span class="hljs-comment"># 起手三张牌（不在信封）</span><br>    Not(mustard),<br>    Not(kitchen),<br>    Not(revolver),<br><br>    <span class="hljs-comment"># 有人猜 Scarlet + library + wrench，但猜错了</span><br>    Or(Not(scarlet), Not(library), Not(wrench)),<br><br>    <span class="hljs-comment"># 后续看到的牌与线索</span><br>    Not(plum),<br>    Not(ballroom)<br>)<br></code></pre></td></tr></table></figure>
+<p>也可以看其他逻辑谜题。<br>例如：四个人（Gilderoy, Pomona, Minerva, Horace）要分配到四个学院（Gryffindor, Hufflepuff, Ravenclaw, Slytherin），每个学院恰好一个人。<br>用命题逻辑表示会非常繁琐：每一种“人-学院”的组合都要一个命题，如 MinervaGryffindor、MinervaHufflepuff 等。<br>还要表示“每个人至少属于一个学院”，需要写一个 Or 列出所有学院；<br>再表示“若属于某学院，则不属于其他学院”，需要写大量蕴含式。<br>这种低效在“一阶逻辑”部分会给出解决思路，但命题逻辑也能解，只是很啰嗦。</p>
+<p>另一类可用命题逻辑解决的是 Mastermind（猜颜色位置）游戏。<br>玩家一设定颜色顺序，玩家二不断猜；每次反馈“有多少个颜色位置正确”。<br>例如四种颜色：</p>
+<p>第一猜：<br><img src="https://cs50.harvard.edu/ai/notes/1/mastermind1.png" srcset="/img/loading.gif" lazyload alt="Mastermind1"></p>
+<p>反馈 “two”：两个位置正确，两个位置错误。<br>接着交换其中两个颜色位置再猜：</p>
+<p><img src="https://cs50.harvard.edu/ai/notes/1/mastermind2.png" srcset="/img/loading.gif" lazyload alt="Mastermind2"></p>
+<p>反馈 “zero”：说明刚才交换的两个其实原来就在正确位置，因此未动的两个原来位置是错的。<br>再交换剩下两个：</p>
+<p><img src="https://cs50.harvard.edu/ai/notes/1/mastermind3.png" srcset="/img/loading.gif" lazyload alt="Mastermind3"></p>
+<p>反馈 “four”：结束。</p>
+<p>用命题逻辑表示需要 (颜色数)² 个原子命题：如 red0、red1… 表示颜色与位置。<br>接着要表示规则（每个位置只有一种颜色、颜色不重复）并加入 KB；<br>最后加入线索（第一猜两个对、第二猜零对），用模型检测就能求解。</p>
+<hr>
+<h1 id="Inference-Rules"><a href="#Inference-Rules" class="headerlink" title="Inference Rules"></a><a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/notes/1/#inference-rules">Inference Rules</a></h1><p>模型检测效率不高，因为要枚举所有模型。<br>推理规则（Inference Rules）允许我们不枚举所有模型就推出新知识。</p>
+<p>推理规则通常画成一条横线：上面是前提（premise），下面是结论（conclusion）。</p>
+<p><img src="https://cs50.harvard.edu/ai/notes/1/modusponensexample.png" srcset="/img/loading.gif" lazyload alt="Modus Ponens Example"></p>
+<p>例子前提：</p>
+<ul>
+<li><p>如果下雨，则 Harry 在室内</p>
+</li>
+<li><p>下雨</p>
+</li>
+</ul>
+<p>结论：</p>
+<ul>
+<li>Harry 在室内</li>
+</ul>
+<h2 id="Modus-Ponens（肯定前件）"><a href="#Modus-Ponens（肯定前件）" class="headerlink" title="Modus Ponens（肯定前件）"></a>Modus Ponens（肯定前件）</h2><p>如果知道 P → Q 且 P 为真，则 Q 为真。</p>
+<p><img src="https://cs50.harvard.edu/ai/notes/1/modusponens.png" srcset="/img/loading.gif" lazyload alt="Modus Ponens"></p>
+<h2 id="And-Elimination（合取消去）"><a href="#And-Elimination（合取消去）" class="headerlink" title="And Elimination（合取消去）"></a>And Elimination（合取消去）</h2><p>若 P ∧ Q 为真，则 P 为真（或 Q 为真）。<br>例如知道 Harry 同时是 Ron 和 Hermione 的朋友，则可推出 Harry 是 Hermione 的朋友。</p>
+<p><img src="https://cs50.harvard.edu/ai/notes/1/andelimination.png" srcset="/img/loading.gif" lazyload alt="And Elimination"></p>
+<h2 id="Double-Negation-Elimination（双重否定消去）"><a href="#Double-Negation-Elimination（双重否定消去）" class="headerlink" title="Double Negation Elimination（双重否定消去）"></a>Double Negation Elimination（双重否定消去）</h2><p>¬¬P 等价于 P。<br>例如 “并非（Harry 没通过考试）” → Harry 通过了考试。</p>
+<p><img src="https://cs50.harvard.edu/ai/notes/1/doublenegationelimination.png" srcset="/img/loading.gif" lazyload alt="Double Negation Elimination"></p>
+<h2 id="Implication-Elimination（蕴含消去）"><a href="#Implication-Elimination（蕴含消去）" class="headerlink" title="Implication Elimination（蕴含消去）"></a>Implication Elimination（蕴含消去）</h2><p>P → Q 等价于 ¬P ∨ Q。<br>例如 “如果下雨，Harry 在室内” 等价于 “不下雨 或 Harry 在室内”。</p>
+<p><img src="https://cs50.harvard.edu/ai/notes/1/implicationelimination.png" srcset="/img/loading.gif" lazyload alt="Implication Elimination"></p>
+<p>这可能有点绕。看真值表可知二者等价：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>P</th>
+<th>Q</th>
+<th>P → Q</th>
+<th>¬P ∨ Q</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>false</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>true</td>
+<td>false</td>
+<td>false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="Biconditional-Elimination（双条件消去）"><a href="#Biconditional-Elimination（双条件消去）" class="headerlink" title="Biconditional Elimination（双条件消去）"></a>Biconditional Elimination（双条件消去）</h2><p>P ↔ Q 等价于 (P → Q) ∧ (Q → P)。</p>
+<p><img src="https://cs50.harvard.edu/ai/notes/1/biconditionalelimination.png" srcset="/img/loading.gif" lazyload alt="Biconditional Elimination"></p>
+<h2 id="De-Morgan’s-Law（德摩根定律）"><a href="#De-Morgan’s-Law（德摩根定律）" class="headerlink" title="De Morgan’s Law（德摩根定律）"></a>De Morgan’s Law（德摩根定律）</h2><p>把 And 与 Or 在否定下互换：</p>
+<p>¬(P ∧ Q) ≡ ¬P ∨ ¬Q<br>¬(P ∨ Q) ≡ ¬P ∧ ¬Q</p>
+<p><img src="https://cs50.harvard.edu/ai/notes/1/demorgans1.png" srcset="/img/loading.gif" lazyload alt="De Morgan&#39;s 1"><br><img src="https://cs50.harvard.edu/ai/notes/1/demorgans2.png" srcset="/img/loading.gif" lazyload alt="De Morgan&#39;s 2"></p>
+<h2 id="Distributive-Property（分配律）"><a href="#Distributive-Property（分配律）" class="headerlink" title="Distributive Property（分配律）"></a>Distributive Property（分配律）</h2><p>将 And/Or 分配展开：</p>
+<p><img src="https://cs50.harvard.edu/ai/notes/1/distributive1.png" srcset="/img/loading.gif" lazyload alt="Distributive 1"><br><img src="https://cs50.harvard.edu/ai/notes/1/distributive2.png" srcset="/img/loading.gif" lazyload alt="Distributive 2"></p>
+<hr>
+<h2 id="知识与搜索问题（Knowledge-and-Search-Problems）"><a href="#知识与搜索问题（Knowledge-and-Search-Problems）" class="headerlink" title="知识与搜索问题（Knowledge and Search Problems）"></a>知识与搜索问题（Knowledge and Search Problems）</h2><p>推理可以被视为一个搜索问题：</p>
+<ul>
+<li><p>初始状态：起始知识库</p>
+</li>
+<li><p>动作：推理规则</p>
+</li>
+<li><p>状态转移：应用推理规则后的新知识库</p>
+</li>
+<li><p>目标测试：想证明的语句是否已在 KB 中</p>
+</li>
+<li><p>路径代价：证明步数</p>
+</li>
+</ul>
+<p>这说明搜索算法的普适性：推理也能视为“在证明空间里搜索”。</p>
+<hr>
+<h1 id="Resolution"><a href="#Resolution" class="headerlink" title="Resolution"></a><a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/notes/1/#resolution">Resolution</a></h1><p>归结（Resolution）是一条强大的推理规则：若在一个 Or 子句中，一个文字为假，则另一个必须为真。</p>
+<p>例如：</p>
+<ul>
+<li><p>Ron 在大厅 ∨ Hermione 在图书馆</p>
+</li>
+<li><p>¬(Ron 在大厅)<br>  则可推出：</p>
+</li>
+<li><p>Hermione 在图书馆</p>
+</li>
+</ul>
+<p>形式化：</p>
+<p><img src="https://cs50.harvard.edu/ai/notes/1/resolution1.png" srcset="/img/loading.gif" lazyload alt="Resolution"></p>
+<p>归结依赖<strong>互补文字（Complementary Literals）</strong>：同一个命题的正负形式，如 P 与 ¬P。</p>
+<p>归结可推广：若还有</p>
+<ul>
+<li>¬(Ron 在大厅) ∨ Harry 在睡觉</li>
+</ul>
+<p>可归结出：</p>
+<ul>
+<li>Hermione 在图书馆 ∨ Harry 在睡觉</li>
+</ul>
+<p><img src="https://cs50.harvard.edu/ai/notes/1/resolution2.png" srcset="/img/loading.gif" lazyload alt="Resolution"></p>
+<hr>
+<h2 id="子句（Clause）与-CNF（合取范式）"><a href="#子句（Clause）与-CNF（合取范式）" class="headerlink" title="子句（Clause）与 CNF（合取范式）"></a>子句（Clause）与 CNF（合取范式）</h2><ul>
+<li><p><strong>文字（literal）</strong>：命题符号或其否定（P 或 ¬P）</p>
+</li>
+<li><p><strong>子句（clause）</strong>：文字的析取（Or），如 (P ∨ Q ∨ ¬R)</p>
+</li>
+<li><p><strong>CNF（Conjunctive Normal Form）</strong>：多个子句的合取（And），如：<br>  (A ∨ B ∨ C) ∧ (D ∨ ¬E) ∧ (F ∨ G)</p>
+</li>
+</ul>
+<hr>
+<h2 id="将命题转换为-CNF-的步骤"><a href="#将命题转换为-CNF-的步骤" class="headerlink" title="将命题转换为 CNF 的步骤"></a>将命题转换为 CNF 的步骤</h2><ol>
+<li><p>消除双条件<br> (α ↔ β) → (α → β) ∧ (β → α)</p>
+</li>
+<li><p>消除蕴含<br> (α → β) → (¬α ∨ β)</p>
+</li>
+<li><p>将否定向内推进到只否定文字（用德摩根）<br> ¬(α ∧ β) → ¬α ∨ ¬β</p>
+</li>
+</ol>
+<p>示例：把 (P ∨ Q) → R 转成 CNF：</p>
+<ul>
+<li><p>(P ∨ Q) → R</p>
+</li>
+<li><p>¬(P ∨ Q) ∨ R（消除蕴含）</p>
+</li>
+<li><p>(¬P ∧ ¬Q) ∨ R（德摩根）</p>
+</li>
+<li><p>(¬P ∨ R) ∧ (¬Q ∨ R)（分配律）</p>
+</li>
+</ul>
+<hr>
+<h2 id="因式分解（Factoring）与空子句"><a href="#因式分解（Factoring）与空子句" class="headerlink" title="因式分解（Factoring）与空子句"></a>因式分解（Factoring）与空子句</h2><p>归结过程中可能出现同一个文字重复，如推导出 (Q ∨ R ∨ S ∨ S)。<br><strong>Factoring</strong> 会去掉重复的 S，得到 (Q ∨ R ∨ S)。</p>
+<p>当归结 P 与 ¬P 时，会得到<strong>空子句</strong> ()。空子句恒为假，表示矛盾（不可能同时 P 与 ¬P 为真）。</p>
+<hr>
+<h2 id="用归结判断蕴含（反证法）"><a href="#用归结判断蕴含（反证法）" class="headerlink" title="用归结判断蕴含（反证法）"></a>用归结判断蕴含（反证法）</h2><p>判断 KB ⊨ α：</p>
+<ul>
+<li><p>检查 (KB ∧ ¬α) 是否矛盾</p>
+<ul>
+<li><p>若矛盾，则 KB ⊨ α</p>
+</li>
+<li><p>否则不蕴含</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>更技术化的算法：</p>
+<ol>
+<li><p>将 (KB ∧ ¬α) 转为 CNF</p>
+</li>
+<li><p>不断用归结产生新子句</p>
+</li>
+<li><p>若产生空子句 ()，则得到矛盾，证明 KB ⊨ α</p>
+</li>
+<li><p>若无法得到矛盾且也无法产生新子句，则不蕴含</p>
+</li>
+</ol>
+<p>示例：</p>
+<p>要判断 (A ∨ B) ∧ (¬B ∨ C) ∧ (¬C) 是否蕴含 A？</p>
+<ul>
+<li><p>反证：假设 ¬A</p>
+</li>
+<li><p>得到 (A ∨ B) ∧ (¬B ∨ C) ∧ (¬C) ∧ (¬A)</p>
+</li>
+<li><p>由 ¬C，可知 (¬B ∨ C) 要为真只能 ¬B</p>
+</li>
+<li><p>有了 ¬B，(A ∨ B) 要为真只能 A</p>
+</li>
+<li><p>现在有 A 与 ¬A，归结得到空子句 () → 矛盾 → 蕴含成立</p>
+</li>
+</ul>
+<hr>
+<h1 id="First-Order-Logic"><a href="#First-Order-Logic" class="headerlink" title="First Order Logic"></a><a target="_blank" rel="noopener" href="https://cs50.harvard.edu/ai/notes/1/#first-order-logic">First Order Logic</a></h1><p>一阶逻辑能比命题逻辑更简洁地表达复杂信息。</p>
+<p>一阶逻辑包含两类符号：</p>
+<ul>
+<li><p><strong>常量符号（Constant Symbols）</strong>：表示对象（如人物、学院）</p>
+</li>
+<li><p><strong>谓词符号（Predicate Symbols）</strong>：像关系/函数，输入参数并返回真假</p>
+</li>
+</ul>
+<p>例如：</p>
+<ul>
+<li><p>Person(Minerva)：Minerva 是人</p>
+</li>
+<li><p>House(Gryffindor)：Gryffindor 是学院</p>
+</li>
+<li><p>¬House(Minerva)：Minerva 不是学院</p>
+</li>
+<li><p>BelongsTo(Minerva, Gryffindor)：Minerva 属于 Gryffindor</p>
+</li>
+</ul>
+<p>一阶逻辑能让“每个人一个符号、每个学院一个符号”，比命题逻辑为每个“人-学院组合”都建一个命题更简洁。</p>
+<hr>
+<h2 id="全称量化（Universal-Quantification-∀）"><a href="#全称量化（Universal-Quantification-∀）" class="headerlink" title="全称量化（Universal Quantification, ∀）"></a>全称量化（Universal Quantification, ∀）</h2><p>量化可以表示“不指明具体常量”的句子。<br>全称量化 ∀ 表示“对所有”。</p>
+<p>例如：</p>
+<p>∀x. BelongsTo(x, Gryffindor) → ¬BelongsTo(x, Hufflepuff)</p>
+<p>表示：对任何 x，如果 x 属于 Gryffindor，则 x 不属于 Hufflepuff。</p>
+<hr>
+<h2 id="存在量化（Existential-Quantification-∃）"><a href="#存在量化（Existential-Quantification-∃）" class="headerlink" title="存在量化（Existential Quantification, ∃）"></a>存在量化（Existential Quantification, ∃）</h2><p>存在量化 ∃ 表示“至少存在一个”。</p>
+<p>例如：</p>
+<p>∃x. House(x) ∧ BelongsTo(Minerva, x)</p>
+<p>表示：存在至少一个对象 x，它既是学院，且 Minerva 属于 x。<br>也就是：Minerva 属于某个学院。</p>
+<hr>
+<h2 id="同时使用-∀-与-∃"><a href="#同时使用-∀-与-∃" class="headerlink" title="同时使用 ∀ 与 ∃"></a>同时使用 ∀ 与 ∃</h2><p>例如：</p>
+<p>∀x. Person(x) → (∃y. House(y) ∧ BelongsTo(x, y))</p>
+<p>表示：对所有 x，如果 x 是人，则存在至少一个学院 y，使得 x 属于 y。<br>也就是说：每个人都属于某个学院。</p>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CS50AI/" class="print-no-link">#CS50AI</a>
+      
+        <a href="/tags/%E8%AE%B2%E4%B9%89/" class="print-no-link">#讲义</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CS50AI note1</div>
+      <div>https://zjjyyds.github.io/2026/01/14/学院派/CS50 AI note 1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/01/21/Leetcode/%E6%A8%A1%E8%BF%90%E7%AE%97/" title="模运算">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">模运算</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/03/Leetcode/%E4%BA%8C%E5%88%86/" title="二分思想不只能查找">
+                        <span class="hidden-mobile">二分思想不只能查找</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

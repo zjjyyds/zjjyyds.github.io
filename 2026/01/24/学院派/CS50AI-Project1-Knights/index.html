@@ -1,0 +1,1089 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Knights编写一个程序来解决逻辑谜题。  何时完成（When to Do It）截止时间：📅 2026 年 7 月 1 日（星期三）上午 7:59（GMT+8）之前    如何获取帮助（How to Get Help） 通过 Ed 提问   通过任意一个 CS50 官方社区 提问     背景（Background）1978 年，逻辑学家 Raymond Smullyan 出版了一本名为《W">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS50 AI project1 Knights">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/01/24/%E5%AD%A6%E9%99%A2%E6%B4%BE/CS50AI-Project1-Knights/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="Knights编写一个程序来解决逻辑谜题。  何时完成（When to Do It）截止时间：📅 2026 年 7 月 1 日（星期三）上午 7:59（GMT+8）之前    如何获取帮助（How to Get Help） 通过 Ed 提问   通过任意一个 CS50 官方社区 提问     背景（Background）1978 年，逻辑学家 Raymond Smullyan 出版了一本名为《W">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-24T11:49:00.000Z">
+<meta property="article:modified_time" content="2026-01-24T12:12:56.870Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="CS50AI">
+<meta property="article:tag" content="project">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>CS50 AI project1 Knights - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CS50 AI project1 Knights"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-24 19:49" pubdate>
+          2026年1月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.5k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          21 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CS50 AI project1 Knights</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Knights"><a href="#Knights" class="headerlink" title="Knights"></a>Knights</h1><p>编写一个程序来解决逻辑谜题。</p>
+<hr>
+<h2 id="何时完成（When-to-Do-It）"><a href="#何时完成（When-to-Do-It）" class="headerlink" title="何时完成（When to Do It）"></a>何时完成（When to Do It）</h2><p><strong>截止时间：</strong><br>📅 <strong>2026 年 7 月 1 日（星期三）上午 7:59（GMT+8）之前</strong>  </p>
+<hr>
+<h2 id="如何获取帮助（How-to-Get-Help）"><a href="#如何获取帮助（How-to-Get-Help）" class="headerlink" title="如何获取帮助（How to Get Help）"></a>如何获取帮助（How to Get Help）</h2><ol>
+<li>通过 <strong>Ed</strong> 提问  </li>
+<li>通过任意一个 <strong>CS50 官方社区</strong> 提问  </li>
+</ol>
+<hr>
+<h2 id="背景（Background）"><a href="#背景（Background）" class="headerlink" title="背景（Background）"></a>背景（Background）</h2><p>1978 年，逻辑学家 <strong>Raymond Smullyan</strong> 出版了一本名为<br><strong>《What is the name of this book?》</strong> 的书。</p>
+<p>在这本书中包含了一类著名的逻辑谜题，被称为：</p>
+<blockquote>
+<p><strong>骑士与骗子（Knights and Knaves）谜题</strong></p>
+</blockquote>
+<p>在这类谜题中，有如下设定：</p>
+<ul>
+<li>每个角色<strong>要么是骑士（Knight），要么是骗子（Knave）</strong></li>
+<li><strong>骑士永远说真话</strong><ul>
+<li>如果骑士说出一句话，那么这句话一定为真</li>
+</ul>
+</li>
+<li><strong>骗子永远说假话</strong><ul>
+<li>如果骗子说出一句话，那么这句话一定为假</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="谜题目标"><a href="#谜题目标" class="headerlink" title="谜题目标"></a>谜题目标</h3><p>给定每个角色所说的句子：</p>
+<blockquote>
+<p><strong>判断每个角色究竟是骑士还是骗子。</strong></p>
+</blockquote>
+<hr>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>假设只有一个角色 <strong>A</strong>。</p>
+<p>A 说：</p>
+<blockquote>
+<p>“我既是骑士，又是骗子。”</p>
+</blockquote>
+<p>我们可以这样推理：</p>
+<ul>
+<li>如果 A 是骑士，那么他说的话必须为真  </li>
+<li>但这句话<strong>不可能为真</strong><br>因为一个人不可能同时既是骑士又是骗子  </li>
+</ul>
+<p>因此可以得出结论：</p>
+<blockquote>
+<p>✅ <strong>A 一定是骗子（knave）</strong></p>
+</blockquote>
+<hr>
+<p>当然，这只是最简单的情况。<br>当角色更多、语句更复杂时，推理也会变得更加困难。</p>
+<hr>
+<h3 id="本项目的任务"><a href="#本项目的任务" class="headerlink" title="本项目的任务"></a>本项目的任务</h3><p>你的任务是：</p>
+<blockquote>
+<p><strong>使用命题逻辑来表示这些谜题，<br>使得一个运行模型检测算法（model-checking）的 AI 能够自动求解它们。</strong></p>
+</blockquote>
+<hr>
+<h2 id="开始（Getting-Started）"><a href="#开始（Getting-Started）" class="headerlink" title="开始（Getting Started）"></a>开始（Getting Started）</h2><p>下载并解压项目代码：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>cdn.cs50.net<span class="hljs-regexp">/ai/</span><span class="hljs-number">2023</span><span class="hljs-regexp">/x/</span>projects<span class="hljs-regexp">/1/</span>knights.zip<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="理解项目结构（Understanding）"><a href="#理解项目结构（Understanding）" class="headerlink" title="理解项目结构（Understanding）"></a>理解项目结构（Understanding）</h2><p>请查看文件 <strong><code>logic.py</code></strong>。</p>
+<p>你不需要完全理解其中的所有代码，但需要注意：</p>
+<h3 id="1️⃣-逻辑连接词类"><a href="#1️⃣-逻辑连接词类" class="headerlink" title="1️⃣ 逻辑连接词类"></a>1️⃣ 逻辑连接词类</h3><p>该文件中定义了多种逻辑结构，例如：</p>
+<ul>
+<li><code>And</code></li>
+<li><code>Or</code></li>
+<li><code>Not</code></li>
+<li><code>Implication</code></li>
+<li>等等</li>
+</ul>
+<p>这些类可以<strong>互相嵌套组合</strong>。</p>
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">And(Not(A), Or(B, C))<br></code></pre></td></tr></table></figure>
+<p>表示的逻辑含义是：</p>
+<blockquote>
+<p>A 不成立，<br>并且 B 或 C 成立<br>（这里的“或”为<strong>包含或</strong>，不是异或）</p>
+</blockquote>
+<hr>
+<h3 id="2️⃣-model-check-函数"><a href="#2️⃣-model-check-函数" class="headerlink" title="2️⃣ model_check 函数"></a>2️⃣ <code>model_check</code> 函数</h3><p><code>logic.py</code> 中还包含一个重要函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">model_check(knowledge, query)<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>knowledge（知识库）</strong><br>一个逻辑表达式<br>如果有多条知识，可以用 <code>And(...)</code> 连接起来</p>
+</li>
+<li><p><strong>query（查询语句）</strong><br>想要判断是否能从知识库中推出的命题</p>
+</li>
+</ul>
+<p>该函数会：</p>
+<ul>
+<li>枚举所有可能的模型</li>
+<li>判断：</li>
+</ul>
+<figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs erlang">knowledge ⊨ <span class="hljs-keyword">query</span><br></code></pre></td></tr></table></figure>
+<p>如果知识库逻辑蕴含该查询，则返回 <code>True</code>，否则返回 <code>False</code>。</p>
+<hr>
+<h2 id="puzzle-py-文件说明"><a href="#puzzle-py-文件说明" class="headerlink" title="puzzle.py 文件说明"></a>puzzle.py 文件说明</h2><p>在 <code>puzzle.py</code> 文件顶部，已经定义了 6 个命题符号：</p>
+<ul>
+<li><code>AKnight</code>：A 是骑士  </li>
+<li><code>AKnave</code>：A 是骗子  </li>
+</ul>
+<p>同样地，也为 B、C 定义了对应变量。</p>
+<hr>
+<h3 id="知识库变量"><a href="#知识库变量" class="headerlink" title="知识库变量"></a>知识库变量</h3><p>接下来你会看到四个知识库：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">knowledge0<br>knowledge1<br>knowledge2<br>knowledge3<br></code></pre></td></tr></table></figure>
+<p>它们分别对应：</p>
+<ul>
+<li>Puzzle 0</li>
+<li>Puzzle 1</li>
+<li>Puzzle 2</li>
+<li>Puzzle 3</li>
+</ul>
+<p>目前它们都是<strong>空的</strong>。</p>
+<p>👉 <strong>你的任务就是向这些知识库中添加逻辑知识。</strong></p>
+<hr>
+<h3 id="main-函数做了什么？"><a href="#main-函数做了什么？" class="headerlink" title="main 函数做了什么？"></a>main 函数做了什么？</h3><p><code>main</code> 函数会：</p>
+<ol>
+<li>遍历所有谜题</li>
+<li>使用模型检测算法</li>
+<li>推断每个角色是骑士还是骗子</li>
+<li>输出能够确定的结论</li>
+</ol>
+<hr>
+<h2 id="任务说明（Specification）"><a href="#任务说明（Specification）" class="headerlink" title="任务说明（Specification）"></a>任务说明（Specification）</h2><p>请向 <code>knowledge0</code>、<code>knowledge1</code>、<code>knowledge2</code>、<code>knowledge3</code> 中添加知识，使程序能够解决以下谜题。</p>
+<hr>
+<h3 id="🧩-Puzzle-0"><a href="#🧩-Puzzle-0" class="headerlink" title="🧩 Puzzle 0"></a>🧩 Puzzle 0</h3><ul>
+<li>只有一个角色：A  </li>
+<li>A 说：</li>
+</ul>
+<blockquote>
+<p>“我既是骑士，又是骗子。”</p>
+</blockquote>
+<hr>
+<h3 id="🧩-Puzzle-1"><a href="#🧩-Puzzle-1" class="headerlink" title="🧩 Puzzle 1"></a>🧩 Puzzle 1</h3><ul>
+<li>两个角色：A 和 B  </li>
+<li>A 说：</li>
+</ul>
+<blockquote>
+<p>“我们都是骗子。”</p>
+</blockquote>
+<ul>
+<li>B 什么也没说</li>
+</ul>
+<hr>
+<h3 id="🧩-Puzzle-2"><a href="#🧩-Puzzle-2" class="headerlink" title="🧩 Puzzle 2"></a>🧩 Puzzle 2</h3><ul>
+<li>两个角色：A 和 B  </li>
+<li>A 说：</li>
+</ul>
+<blockquote>
+<p>“我们是同一种人。”</p>
+</blockquote>
+<ul>
+<li>B 说：</li>
+</ul>
+<blockquote>
+<p>“我们是不同种类的人。”</p>
+</blockquote>
+<hr>
+<h3 id="🧩-Puzzle-3"><a href="#🧩-Puzzle-3" class="headerlink" title="🧩 Puzzle 3"></a>🧩 Puzzle 3</h3><ul>
+<li><p>三个角色：A、B、C  </p>
+</li>
+<li><p>A 说了以下两句话之一（但你不知道是哪一句）：</p>
+<ul>
+<li>“我是骑士。”</li>
+<li>“我是骗子。”</li>
+</ul>
+</li>
+<li><p>B 说：</p>
+<blockquote>
+<p>“A 说过：‘我是骗子。’”</p>
+</blockquote>
+</li>
+<li><p>B 接着又说：</p>
+<blockquote>
+<p>“C 是骗子。”</p>
+</blockquote>
+</li>
+<li><p>C 说：</p>
+<blockquote>
+<p>“A 是骑士。”</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h3 id="通用规则"><a href="#通用规则" class="headerlink" title="通用规则"></a>通用规则</h3><p>在以上所有谜题中：</p>
+<ul>
+<li>每个人要么是骑士，要么是骗子</li>
+<li>骑士说的所有话都是真的</li>
+<li>骗子说的所有话都是假的</li>
+</ul>
+<hr>
+<p>完成知识库后，运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python puzzle.py<br></code></pre></td></tr></table></figure>
+<p>即可看到谜题的解答结果。</p>
+<hr>
+<h2 id="提示（Hints）"><a href="#提示（Hints）" class="headerlink" title="提示（Hints）"></a>提示（Hints）</h2><ul>
+<li><p>每个知识库通常需要编码两类信息：</p>
+<ol>
+<li><strong>谜题的结构性规则</strong><ul>
+<li>每个人非骑士即骗子</li>
+</ul>
+</li>
+<li><strong>角色所说的话本身</strong></li>
+</ol>
+</li>
+<li><p>思考：</p>
+<ul>
+<li>如果一句话是由骑士说的，会意味着什么？</li>
+<li>如果一句话是由骗子说的，又意味着什么？</li>
+<li>如何将“说真话 / 说假话”转化为逻辑公式？</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="⚠️-注意"><a href="#⚠️-注意" class="headerlink" title="⚠️ 注意"></a>⚠️ 注意</h3><p>虽然存在很多种写法都能得出正确答案：</p>
+<p>例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">knowledge0 = AKnave<br></code></pre></td></tr></table></figure>
+<p>确实能得到正确结果，</p>
+<p>但这<strong>违背了本题的精神</strong>。</p>
+<blockquote>
+<p>你的目标是：<br><strong>让 AI 自己推理出答案，而不是你提前替它推理。</strong></p>
+</blockquote>
+<hr>
+<p>你也<strong>不需要，也不应该</strong>修改 <code>logic.py</code> 文件。</p>
+<hr>
+<h2 id="测试（Testing）"><a href="#测试（Testing）" class="headerlink" title="测试（Testing）"></a>测试（Testing）</h2><p>如果你已经配置好 <code>check50</code>，可以运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">check50 ai50/projects/2024/x/knights<br></code></pre></td></tr></table></figure>
+<p>检查正确性。</p>
+<p>使用下面命令检查代码风格：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">style50<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="提交方式（How-to-Submit）"><a href="#提交方式（How-to-Submit）" class="headerlink" title="提交方式（How to Submit）"></a>提交方式（How to Submit）</h2><ol>
+<li><p>打开以下链接并使用 GitHub 登录：<br><a target="_blank" rel="noopener" href="https://submit.cs50.io/invites/d03c31aef1984c29b5e7b268c3a87b7b">https://submit.cs50.io/invites/d03c31aef1984c29b5e7b268c3a87b7b</a></p>
+</li>
+<li><p>安装 Git（可选安装 submit50）</p>
+</li>
+<li><p>提交代码：</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">submit50 ai50/projects/2024/x/knights<br></code></pre></td></tr></table></figure>
+<p>或将代码推送至：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/me50/</span>USERNAME.git<br></code></pre></td></tr></table></figure>
+<p>分支名：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">ai50<span class="hljs-regexp">/projects/</span><span class="hljs-number">2024</span><span class="hljs-regexp">/x/</span>knights<br></code></pre></td></tr></table></figure>
+<hr>
+<p>作业通常会在 <strong>5 分钟内完成评分</strong>。</p>
+<p>你可以在这里查看进度：</p>
+<p>👉 <a target="_blank" rel="noopener" href="https://cs50.me/cs50ai">https://cs50.me/cs50ai</a></p>
+<hr>
+<h1 id="Solutions"><a href="#Solutions" class="headerlink" title="Solutions"></a>Solutions</h1><h2 id="1-核心逻辑支柱"><a href="#1-核心逻辑支柱" class="headerlink" title="1. 核心逻辑支柱"></a>1. 核心逻辑支柱</h2><h3 id="A-身份约束（Identity-Constraints）"><a href="#A-身份约束（Identity-Constraints）" class="headerlink" title="A. 身份约束（Identity Constraints）"></a>A. 身份约束（Identity Constraints）</h3><p>在所有谜题中，每个角色（如 A）必须满足：</p>
+<ul>
+<li><strong>非此即彼</strong>：A 要么是骑士，要么是骗子。逻辑表达为：<code>Or(AKnight, AKnave)</code>。</li>
+<li><strong>互斥性</strong>：A 不能同时既是骑士又是骗子。逻辑表达为：<code>Not(And(AKnight, AKnave))</code>。</li>
+</ul>
+<h3 id="B-说话规则（Speech-Rules）"><a href="#B-说话规则（Speech-Rules）" class="headerlink" title="B. 说话规则（Speech Rules）"></a>B. 说话规则（Speech Rules）</h3><p>这是将自然语言转化为逻辑公式的关键。若角色 A 说出命题 $S$：</p>
+<ul>
+<li>如果 A 是骑士，则 $S$ 为真；如果 A 是骗子，则 $S$ 为假。</li>
+<li>在 <code>logic.py</code> 中，这可以用 <strong>双条件（Biconditional）</strong> 完美表达：<code>Biconditional(AKnight, S)</code>，意味着 $AKnight$ 与 $S$ 的真值必须始终保持一致。</li>
+</ul>
+<hr>
+<h2 id="2-谜题逻辑建模代码实现"><a href="#2-谜题逻辑建模代码实现" class="headerlink" title="2. 谜题逻辑建模代码实现"></a>2. 谜题逻辑建模代码实现</h2><p>以下是各谜题在 <code>puzzle.py</code> 中的完整逻辑构建方案：</p>
+<h3 id="🧩-Puzzle-0-1"><a href="#🧩-Puzzle-0-1" class="headerlink" title="🧩 Puzzle 0"></a>🧩 Puzzle 0</h3><p><strong>题目</strong>：A 说：“我既是骑士，又是骗子。”<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python">knowledge0 = And(<br>    <span class="hljs-comment"># 身份约束</span><br>    Or(AKnight, AKnave), Not(And(AKnight, AKnave)),<br>    <span class="hljs-comment"># 说话规则</span><br>    Biconditional(AKnight, And(AKnight, AKnave))<br>)<br><br></code></pre></td></tr></table></figure></p>
+<h3 id="🧩-Puzzle-1-1"><a href="#🧩-Puzzle-1-1" class="headerlink" title="🧩 Puzzle 1"></a>🧩 Puzzle 1</h3><p><strong>题目</strong>：A 说：“我们两个都是骗子。” B 什么也没说。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python">knowledge1 = And(<br>    <span class="hljs-comment"># A, B 身份约束</span><br>    Or(AKnight, AKnave), Not(And(AKnight, AKnave)),<br>    Or(BKnight, BKnave), Not(And(BKnight, BKnave)),<br>    <span class="hljs-comment"># A 的陈述与其身份绑定</span><br>    Biconditional(AKnight, And(AKnave, BKnave))<br>)<br><br></code></pre></td></tr></table></figure>
+<h3 id="🧩-Puzzle-2-1"><a href="#🧩-Puzzle-2-1" class="headerlink" title="🧩 Puzzle 2"></a>🧩 Puzzle 2</h3><p><strong>题目</strong>：A 说：“我们是同类。” B 说：“我们是不同种类的人。”</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">knowledge2 = And(<br>    <span class="hljs-comment"># A, B 身份约束</span><br>    Or(AKnight, AKnave), Not(And(AKnight, AKnave)),<br>    Or(BKnight, BKnave), Not(And(BKnight, BKnave)),<br>    <span class="hljs-comment"># A 说两人身份等价</span><br>    Biconditional(AKnight, Biconditional(AKnight, BKnight)),<br>    <span class="hljs-comment"># B 说两人身份不等价</span><br>    Biconditional(BKnight, Not(Biconditional(AKnight, BKnight)))<br>)<br><br></code></pre></td></tr></table></figure>
+<h3 id="🧩-Puzzle-3-1"><a href="#🧩-Puzzle-3-1" class="headerlink" title="🧩 Puzzle 3"></a>🧩 Puzzle 3</h3><p><strong>题目</strong>：A 说了“我是骑士”或“我是骗子”；B 声称“A 说了‘我是骗子’”；B 又说“C 是骗子”；C 说“A 是骑士”。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs python">knowledge3 = And(<br>    <span class="hljs-comment"># A, B, C 身份约束</span><br>    Or(AKnight, AKnave), Not(And(AKnight, AKnave)),<br>    Or(BKnight, BKnave), Not(And(BKnight, BKnave)),<br>    Or(CKnight, CKnave), Not(And(CKnight, CKnave)),<br><br>    <span class="hljs-comment"># 1. 关于 A 的言论逻辑：无论 A 选哪句，其身份与陈述的真值一致性是隐含的。</span><br>    <span class="hljs-comment"># 2. B 的第一句：B 声称 A 说了“我是骗子”。</span><br>    <span class="hljs-comment"># 逻辑表达：B 是骑士 当且仅当 “A 是骑士 &lt;=&gt; A 是骗子” 为真。</span><br>    Biconditional(BKnight, Biconditional(AKnight, AKnave)),<br><br>    <span class="hljs-comment"># 3. B 的第二句：B 声称“C 是骗子”。</span><br>    Biconditional(BKnight, CKnave),<br><br>    <span class="hljs-comment"># 4. C 的陈述：C 声称“A 是骑士”。</span><br>    Biconditional(CKnight, AKnight)<br>)<br><br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="3-模型检测算法原理"><a href="#3-模型检测算法原理" class="headerlink" title="3. 模型检测算法原理"></a>3. 模型检测算法原理</h2><p><code>model_check(knowledge, query)</code> 函数的核心任务是判断一个逻辑推论是否有效。在逻辑学中，这被称为<strong>逻辑蕴含（Entailment）</strong>，记作 。</p>
+<p>它的工作原理可以概括为：<strong>穷举所有可能的真相组合，验证在所有使“知识库”成立的情况下，“查询语句”是否也成立。</strong></p>
+<hr>
+<h2 id="1-核心算法流程：递归穷举"><a href="#1-核心算法流程：递归穷举" class="headerlink" title="1. 核心算法流程：递归穷举"></a>1. 核心算法流程：递归穷举</h2><p><code>model_check</code> 使用了一种深度优先的递归搜索算法（通常称为真值表枚举）：</p>
+<ol>
+<li><strong>收集符号</strong>：首先找出 <code>knowledge</code> 和 <code>query</code> 中出现的所有原子命题符号（如 <code>AKnight</code>, <code>AKnave</code>）。</li>
+<li><strong>构建模型</strong>：模型（Model）是一个字典，为每个符号分配一个布尔值（<code>True</code> 或 <code>False</code>）。</li>
+<li><strong>递归分支</strong>：</li>
+</ol>
+<ul>
+<li>从符号集合中取出一个符号 。</li>
+<li>分别创建一个  为 <code>True</code> 的分支和  为 <code>False</code> 的分支。</li>
+<li>在每个分支中继续为剩余符号赋值，直到所有符号都被分配了真值。</li>
+</ul>
+<ol>
+<li><strong>最终评估</strong>：当一个完整的模型建立后，评估该模型是否让 <code>knowledge</code> 为真。</li>
+</ol>
+<ul>
+<li>如果 <code>knowledge</code> 在该模型下为 <strong>True</strong>，则必须检查 <code>query</code> 是否也为 <strong>True</strong>。</li>
+<li>如果 <code>knowledge</code> 为 <strong>True</strong> 但 <code>query</code> 为 <strong>False</strong>，则推论失败，返回 <code>False</code>。</li>
+</ul>
+<hr>
+<h2 id="2-详细案例分析：以-Puzzle-0-为例"><a href="#2-详细案例分析：以-Puzzle-0-为例" class="headerlink" title="2. 详细案例分析：以 Puzzle 0 为例"></a>2. 详细案例分析：以 Puzzle 0 为例</h2><p>假设我们要判断：在 <strong>Puzzle 0</strong> 的条件下，<strong>A 是否为骗子（AKnave）</strong>。</p>
+<h3 id="初始条件"><a href="#初始条件" class="headerlink" title="初始条件"></a>初始条件</h3><ul>
+<li><strong>符号集合</strong>：<code>&#123;AKnight, AKnave&#125;</code>。</li>
+<li><strong>知识库 (<code>knowledge</code>)</strong>：</li>
+</ul>
+<ol>
+<li><code>Or(AKnight, AKnave)</code>（A 是骑士或骗子）</li>
+<li><code>Not(And(AKnight, AKnave))</code>（不能同时是两者）</li>
+<li><code>Biconditional(AKnight, And(AKnight, AKnave))</code>（A 是骑士，当且仅当他说的话“我是骑士也是骗子”为真）</li>
+</ol>
+<ul>
+<li><strong>查询句 (<code>query</code>)</strong>：<code>AKnave</code>。</li>
+</ul>
+<h3 id="递归遍历过程（真值表）"><a href="#递归遍历过程（真值表）" class="headerlink" title="递归遍历过程（真值表）"></a>递归遍历过程（真值表）</h3><p>AI 会遍历以下 4 个可能的模型：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>模型 #</th>
+<th>AKnight</th>
+<th>AKnave</th>
+<th>知识库 (<code>knowledge</code>) 评估</th>
+<th>查询句 (<code>query</code>) 评估</th>
+<th>结论</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1</strong></td>
+<td>True</td>
+<td>True</td>
+<td><strong>False</strong> (违反互斥规则)</td>
+<td>True</td>
+<td>跳过</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>True</td>
+<td>False</td>
+<td><strong>False</strong> (违反说话规则： 为假)</td>
+<td>False</td>
+<td>跳过</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td><strong>False</strong></td>
+<td><strong>True</strong></td>
+<td><strong>True</strong> (所有条件均满足)</td>
+<td><strong>True</strong></td>
+<td><strong>符合蕴含</strong></td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>False</td>
+<td>False</td>
+<td><strong>False</strong> (违反完备规则)</td>
+<td>True</td>
+<td>跳过</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="逻辑判定"><a href="#逻辑判定" class="headerlink" title="逻辑判定"></a>逻辑判定</h3><p>在上述所有模型中，<strong>唯一一个</strong>能让 <code>knowledge</code> 为真的模型是 <strong>模型 3</strong>。在模型 3 中，<code>AKnave</code> 的值为 <code>True</code>。因此，AI 判定 <code>knowledge</code> 逻辑蕴含 <code>AKnave</code>，返回 <code>True</code>。</p>
+<hr>
+<h2 id="3-代码实现逻辑拆解"><a href="#3-代码实现逻辑拆解" class="headerlink" title="3. 代码实现逻辑拆解"></a>3. 代码实现逻辑拆解</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">check_all</span>(<span class="hljs-params">knowledge, query, symbols, model</span>):<br>    <span class="hljs-comment"># 基准情况：如果符号集为空，说明模型已完整构建</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> symbols:<br>        <span class="hljs-comment"># 逻辑蕴含的定义：如果前提为真，结论必须为真</span><br>        <span class="hljs-keyword">if</span> knowledge.evaluate(model):<br>            <span class="hljs-keyword">return</span> query.evaluate(model)<br>        <span class="hljs-comment"># 如果前提为假，根据蕴含定义，该模型自动满足</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">True</span><br>    <span class="hljs-keyword">else</span>:<br>        <span class="hljs-comment"># 递归步骤：选取一个符号</span><br>        remaining = symbols.copy()<br>        p = remaining.pop()<br><br>        <span class="hljs-comment"># 分支 1：假设 p 为真</span><br>        model_true = model.copy()<br>        model_true[p] = <span class="hljs-literal">True</span><br><br>        <span class="hljs-comment"># 分支 2：假设 p 为假</span><br>        model_false = model.copy()<br>        model_false[p] = <span class="hljs-literal">False</span><br><br>        <span class="hljs-comment"># 只有两个分支都满足蕴含关系，才返回 True</span><br>        <span class="hljs-keyword">return</span> (check_all(knowledge, query, remaining, model_true) <span class="hljs-keyword">and</span><br>                check_all(knowledge, query, remaining, model_false))<br><br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CS50AI/" class="print-no-link">#CS50AI</a>
+      
+        <a href="/tags/project/" class="print-no-link">#project</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CS50 AI project1 Knights</div>
+      <div>https://zjjyyds.github.io/2026/01/24/学院派/CS50AI-Project1-Knights/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/01/24/%E5%AD%A6%E9%99%A2%E6%B4%BE/CS50AI-Project1-%20Minesweeper/" title="CS50 AI project0 Minesweeper">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">CS50 AI project0 Minesweeper</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/21/Leetcode/%E5%BF%AB%E9%80%9F%E5%B9%82/" title="快速幂">
+                        <span class="hidden-mobile">快速幂</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

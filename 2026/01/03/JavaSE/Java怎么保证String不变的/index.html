@@ -1,0 +1,878 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这是一个问到 Java 设计“核心骨架”的问题。我先给你一句结论级答案，然后我们像拆发动机一样，把每一层都拆开。  String 的不可变性不是靠一句 final，而是靠一整套“多层封锁 + JVM 协同”的设计体系共同保证的。  下面我们分 5 道防线 来看。  第一层防线：String 类本身是 final1public final class String &#123; ... &#125;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java怎么实现Stirng不变的">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/01/03/JavaSE/Java%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81String%E4%B8%8D%E5%8F%98%E7%9A%84/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="这是一个问到 Java 设计“核心骨架”的问题。我先给你一句结论级答案，然后我们像拆发动机一样，把每一层都拆开。  String 的不可变性不是靠一句 final，而是靠一整套“多层封锁 + JVM 协同”的设计体系共同保证的。  下面我们分 5 道防线 来看。  第一层防线：String 类本身是 final1public final class String &#123; ... &#125;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-03T06:01:00.000Z">
+<meta property="article:modified_time" content="2026-01-03T06:17:42.055Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="JavaSE">
+<meta property="article:tag" content="思考">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>Java怎么实现Stirng不变的 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Java怎么实现Stirng不变的"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-03 14:01" pubdate>
+          2026年1月3日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          815 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          7 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Java怎么实现Stirng不变的</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>这是一个<strong>问到 Java 设计“核心骨架”的问题</strong>。<br>我先给你一句<strong>结论级答案</strong>，然后我们像拆发动机一样，把每一层都拆开。</p>
+<blockquote>
+<p><strong><code>String</code> 的不可变性不是靠一句 <code>final</code>，<br>而是靠一整套“多层封锁 + JVM 协同”的设计体系共同保证的。</strong></p>
+</blockquote>
+<p>下面我们分 <strong>5 道防线</strong> 来看。</p>
+<hr>
+<h2 id="第一层防线：String-类本身是-final"><a href="#第一层防线：String-类本身是-final" class="headerlink" title="第一层防线：String 类本身是 final"></a>第一层防线：<code>String</code> 类本身是 <code>final</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">String</span> &#123; ... &#125;<br></code></pre></td></tr></table></figure>
+<h3 id="这意味着什么？"><a href="#这意味着什么？" class="headerlink" title="这意味着什么？"></a>这意味着什么？</h3><ul>
+<li>❌ 不能被继承</li>
+<li>❌ 不能通过子类添加“破坏性方法”</li>
+<li>❌ 不能 override 任何行为</li>
+</ul>
+<h3 id="为什么这是第一道防线？"><a href="#为什么这是第一道防线？" class="headerlink" title="为什么这是第一道防线？"></a>为什么这是第一道防线？</h3><p>假如 <code>String</code> <strong>可以被继承</strong>：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">EvilString</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">String</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">hack</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">// 改内部 char[]</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>那么：</p>
+<ul>
+<li>JVM</li>
+<li>HashMap</li>
+<li>ClassLoader</li>
+<li>安全管理器</li>
+</ul>
+<p>都会被<strong>彻底破坏</strong></p>
+<p>📌 <strong>第一层作用</strong>：<br>👉 <strong>防止通过继承破坏不可变性</strong></p>
+<hr>
+<h2 id="第二层防线：内部状态是-private-final"><a href="#第二层防线：内部状态是-private-final" class="headerlink" title="第二层防线：内部状态是 private final"></a>第二层防线：内部状态是 <code>private final</code></h2><h3 id="早期-JDK（≤8）："><a href="#早期-JDK（≤8）：" class="headerlink" title="早期 JDK（≤8）："></a>早期 JDK（≤8）：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">char</span>[] value;<br></code></pre></td></tr></table></figure>
+<h3 id="JDK-9-（压缩字符串）："><a href="#JDK-9-（压缩字符串）：" class="headerlink" title="JDK 9+（压缩字符串）："></a>JDK 9+（压缩字符串）：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">byte</span>[] value;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">byte</span> coder; <span class="hljs-comment">// LATIN1 / UTF16</span><br></code></pre></td></tr></table></figure>
+<h3 id="这两点非常关键："><a href="#这两点非常关键：" class="headerlink" title="这两点非常关键："></a>这两点非常关键：</h3><ol>
+<li><p><strong><code>final</code></strong></p>
+<ul>
+<li>引用不能被替换</li>
+</ul>
+</li>
+<li><p><strong><code>private</code></strong></p>
+<ul>
+<li>外界完全无法访问</li>
+</ul>
+</li>
+</ol>
+<p>📌 注意：<br><code>final</code> 只保证“引用不变”，<br><strong>真正防修改的是 <code>private</code> + 不暴露引用</strong>。</p>
+<hr>
+<h2 id="第三层防线：没有任何“修改自身”的方法"><a href="#第三层防线：没有任何“修改自身”的方法" class="headerlink" title="第三层防线：没有任何“修改自身”的方法"></a>第三层防线：没有任何“修改自身”的方法</h2><p>你仔细想一下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br></code></pre></td></tr></table></figure>
+<h3 id="String-提供的方法是什么？"><a href="#String-提供的方法是什么？" class="headerlink" title="String 提供的方法是什么？"></a>String 提供的方法是什么？</h3><ul>
+<li><code>substring</code></li>
+<li><code>replace</code></li>
+<li><code>toUpperCase</code></li>
+<li><code>concat</code></li>
+</ul>
+<p><strong>它们全部：</strong></p>
+<blockquote>
+<p>❌ 不修改原对象<br>✅ 返回一个新 <code>String</code></p>
+</blockquote>
+<p>例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">s.toUpperCase();<br></code></pre></td></tr></table></figure>
+<p>实际等价于：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">newStr</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(...);<br></code></pre></td></tr></table></figure>
+<p>📌 <strong>这是不可变设计的“行为层保证”</strong>。</p>
+<hr>
+<h2 id="第四层防线：构造阶段的“防御性拷贝”"><a href="#第四层防线：构造阶段的“防御性拷贝”" class="headerlink" title="第四层防线：构造阶段的“防御性拷贝”"></a>第四层防线：构造阶段的“防御性拷贝”</h2><h3 id="你以为这样能破坏-String？"><a href="#你以为这样能破坏-String？" class="headerlink" title="你以为这样能破坏 String？"></a>你以为这样能破坏 String？</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">char</span>[] arr = &#123;<span class="hljs-string">&#x27;a&#x27;</span>,<span class="hljs-string">&#x27;b&#x27;</span>,<span class="hljs-string">&#x27;c&#x27;</span>&#125;;<br><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(arr);<br>arr[<span class="hljs-number">0</span>] = <span class="hljs-string">&#x27;x&#x27;</span>;<br>System.out.println(s);<br></code></pre></td></tr></table></figure>
+<h3 id="实际输出："><a href="#实际输出：" class="headerlink" title="实际输出："></a>实际输出：</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">abc</span><br></code></pre></td></tr></table></figure>
+<h3 id="为什么？"><a href="#为什么？" class="headerlink" title="为什么？"></a>为什么？</h3><p>因为 <code>String</code> 构造器里做了：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-built_in">this</span>.value = Arrays.copyOf(arr, arr.length);<br></code></pre></td></tr></table></figure>
+<p>📌 <strong>String 永远不信任外部传入的数据</strong></p>
+<blockquote>
+<p>这是“不可变类”的黄金法则之一。</p>
+</blockquote>
+<hr>
+<h2 id="第五层防线（终极）：JVM-amp-语言层级的“特权协作”"><a href="#第五层防线（终极）：JVM-amp-语言层级的“特权协作”" class="headerlink" title="第五层防线（终极）：JVM &amp; 语言层级的“特权协作”"></a>第五层防线（终极）：JVM &amp; 语言层级的“特权协作”</h2><p>这是很多人<strong>不知道但最关键的一层</strong>。</p>
+<hr>
+<h3 id="1️⃣-字符串常量池（String-Pool）"><a href="#1️⃣-字符串常量池（String-Pool）" class="headerlink" title="1️⃣ 字符串常量池（String Pool）"></a>1️⃣ 字符串常量池（String Pool）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">a</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br><span class="hljs-type">String</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>a</code> 和 <code>b</code> 指向 <strong>同一个对象</strong></li>
+<li><p>如果 String 可变：</p>
+<ul>
+<li>改一个，全世界跟着改</li>
+</ul>
+</li>
+</ul>
+<p>👉 所以 <strong>String 必须不可变</strong></p>
+<hr>
+<h3 id="2️⃣-hashCode-缓存"><a href="#2️⃣-hashCode-缓存" class="headerlink" title="2️⃣ hashCode 缓存"></a>2️⃣ <code>hashCode</code> 缓存</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-type">int</span> hash;<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>hashCode()</code> 只算一次</li>
+<li>之后直接缓存</li>
+</ul>
+<p>如果 String 可变：</p>
+<ul>
+<li>hash 失效</li>
+<li>HashMap 直接崩溃</li>
+</ul>
+<hr>
+<h3 id="3️⃣-ClassLoader-安全模型依赖-String"><a href="#3️⃣-ClassLoader-安全模型依赖-String" class="headerlink" title="3️⃣ ClassLoader / 安全模型依赖 String"></a>3️⃣ ClassLoader / 安全模型依赖 String</h3><ul>
+<li>类名</li>
+<li>方法名</li>
+<li>权限名</li>
+<li>文件路径</li>
+</ul>
+<p>📌 <strong>如果 String 可变，Java 的安全模型不成立</strong></p>
+<hr>
+<h2 id="一句话拆穿所有误解（非常重要）"><a href="#一句话拆穿所有误解（非常重要）" class="headerlink" title="一句话拆穿所有误解（非常重要）"></a>一句话拆穿所有误解（非常重要）</h2><blockquote>
+<p><strong>String 的不可变性不是“防你”，<br>而是“防整个 Java 世界被你不小心炸掉”。</strong></p>
+</blockquote>
+<hr>
+<h2 id="用一个“完整类比”帮你彻底定型"><a href="#用一个“完整类比”帮你彻底定型" class="headerlink" title="用一个“完整类比”帮你彻底定型"></a>用一个“完整类比”帮你彻底定型</h2><p>把 <code>String</code> 想成：</p>
+<blockquote>
+<p><strong>法律里的“身份证号码”</strong></p>
+</blockquote>
+<ul>
+<li>不能改</li>
+<li>可以复制</li>
+<li>可以传递</li>
+<li>可以比较</li>
+<li>但绝不允许“修改原值”</li>
+</ul>
+<p>而：</p>
+<ul>
+<li><code>StringBuilder</code> = 草稿纸</li>
+<li><code>char[]</code> = 可随意涂改的纸</li>
+</ul>
+<hr>
+<h2 id="最容易被忽略的一点（高手标志）"><a href="#最容易被忽略的一点（高手标志）" class="headerlink" title="最容易被忽略的一点（高手标志）"></a>最容易被忽略的一点（高手标志）</h2><h3 id="为什么-String-的-value-数组不是暴露的？"><a href="#为什么-String-的-value-数组不是暴露的？" class="headerlink" title="为什么 String 的 value 数组不是暴露的？"></a>为什么 <code>String</code> 的 <code>value</code> 数组不是暴露的？</h3><p>如果有：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">char</span>[] getValue();<br></code></pre></td></tr></table></figure>
+<p>哪怕是 <code>final</code>，<strong>整个设计立刻崩塌</strong>。</p>
+<p>📌 所以不可变性的真正核心是：</p>
+<blockquote>
+<p><strong>不暴露任何可变内部状态的引用</strong></p>
+</blockquote>
+<hr>
+<h2 id="终极总结（请记住）"><a href="#终极总结（请记住）" class="headerlink" title="终极总结（请记住）"></a>终极总结（请记住）</h2><p><code>String</code> 的不可变性 =</p>
+<ol>
+<li>类是 <code>final</code></li>
+<li>内部状态 <code>private final</code></li>
+<li>不提供修改自身的方法</li>
+<li>构造期防御性拷贝</li>
+<li>JVM / 常量池 / hash / 安全模型共同依赖</li>
+</ol>
+<blockquote>
+<p><strong>它是 Java 中“不可变设计”的教科书级范例。</strong></p>
+</blockquote>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/JavaSE/" class="category-chain-item">JavaSE</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/JavaSE/" class="print-no-link">#JavaSE</a>
+      
+        <a href="/tags/%E6%80%9D%E8%80%83/" class="print-no-link">#思考</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Java怎么实现Stirng不变的</div>
+      <div>https://zjjyyds.github.io/2026/01/03/JavaSE/Java怎么保证String不变的/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月3日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/01/03/Leetcode/%E4%BA%8C%E5%88%86/" title="二分思想不只能查找">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">二分思想不只能查找</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/01/%E5%AD%A6%E9%99%A2%E6%B4%BE/CS50X%20project0%20Degrees/" title="CS50 AI project0 Degrees">
+                        <span class="hidden-mobile">CS50 AI project0 Degrees</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

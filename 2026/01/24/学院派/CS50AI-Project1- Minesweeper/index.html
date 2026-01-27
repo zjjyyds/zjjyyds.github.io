@@ -1,0 +1,1294 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Minesweeper编写一个 可以自动玩扫雷（Minesweeper）的人工智能程序。  🕒 完成时间（When to Do It）截止时间： 📅 2026 年 7 月 1 日（星期三）上午 7:59（GMT+8）  🆘 如何获取帮助（How to Get Help） 通过 Ed Discussion 提问   通过任意一个 CS50 官方社区   📘 背景（Background）Min">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CS50 AI project0 Minesweeper">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/01/24/%E5%AD%A6%E9%99%A2%E6%B4%BE/CS50AI-Project1-%20Minesweeper/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="Minesweeper编写一个 可以自动玩扫雷（Minesweeper）的人工智能程序。  🕒 完成时间（When to Do It）截止时间： 📅 2026 年 7 月 1 日（星期三）上午 7:59（GMT+8）  🆘 如何获取帮助（How to Get Help） 通过 Ed Discussion 提问   通过任意一个 CS50 官方社区   📘 背景（Background）Min">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/game.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/safe_cells.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/middle_safe.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/infer_safe.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/infer_mines.png">
+<meta property="og:image" content="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/subset_inference.png">
+<meta property="article:published_time" content="2026-01-24T11:50:00.000Z">
+<meta property="article:modified_time" content="2026-01-24T12:12:48.467Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="CS50AI">
+<meta property="article:tag" content="project">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/game.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>CS50 AI project0 Minesweeper - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="CS50 AI project0 Minesweeper"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-24 19:50" pubdate>
+          2026年1月24日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          32 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">CS50 AI project0 Minesweeper</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Minesweeper"><a href="#Minesweeper" class="headerlink" title="Minesweeper"></a>Minesweeper</h1><p>编写一个 <strong>可以自动玩扫雷（Minesweeper）的人工智能程序</strong>。</p>
+<hr>
+<h2 id="🕒-完成时间（When-to-Do-It）"><a href="#🕒-完成时间（When-to-Do-It）" class="headerlink" title="🕒 完成时间（When to Do It）"></a>🕒 完成时间（When to Do It）</h2><p><strong>截止时间：</strong></p>
+<p>📅 <strong>2026 年 7 月 1 日（星期三）上午 7:59（GMT+8）</strong></p>
+<hr>
+<h2 id="🆘-如何获取帮助（How-to-Get-Help）"><a href="#🆘-如何获取帮助（How-to-Get-Help）" class="headerlink" title="🆘 如何获取帮助（How to Get Help）"></a>🆘 如何获取帮助（How to Get Help）</h2><ol>
+<li>通过 <strong>Ed Discussion</strong> 提问  </li>
+<li>通过任意一个 <strong>CS50 官方社区</strong></li>
+</ol>
+<hr>
+<h2 id="📘-背景（Background）"><a href="#📘-背景（Background）" class="headerlink" title="📘 背景（Background）"></a>📘 背景（Background）</h2><h3 id="Minesweeper（扫雷）"><a href="#Minesweeper（扫雷）" class="headerlink" title="Minesweeper（扫雷）"></a>Minesweeper（扫雷）</h3><p>扫雷是一种经典的逻辑益智游戏，由一个由格子组成的网格构成，其中：</p>
+<ul>
+<li>某些格子中隐藏着 <strong>地雷（mines）</strong></li>
+<li>点击含有地雷的格子会：<ul>
+<li>引爆地雷</li>
+<li>游戏失败</li>
+</ul>
+</li>
+<li>点击一个 <strong>安全格子</strong>（没有地雷）会显示一个数字</li>
+</ul>
+<p>这个数字表示：</p>
+<blockquote>
+<p><strong>该格子周围 8 个相邻格子中，有多少个地雷</strong></p>
+</blockquote>
+<p>邻居格子的定义包括：</p>
+<ul>
+<li>上、下、左、右</li>
+<li>四个对角方向</li>
+</ul>
+<hr>
+<h3 id="游戏界面示例"><a href="#游戏界面示例" class="headerlink" title="游戏界面示例"></a>游戏界面示例</h3><p><img src="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/game.png" srcset="/img/loading.gif" lazyload alt="Minesweeper Game"></p>
+<hr>
+<h3 id="数字含义示例"><a href="#数字含义示例" class="headerlink" title="数字含义示例"></a>数字含义示例</h3><p>在下面这个 3×3 的棋盘中：</p>
+<p><img src="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/safe_cells.png" srcset="/img/loading.gif" lazyload alt="Sample safe cell numbers"></p>
+<ul>
+<li>数字 <code>1</code> 表示周围 <strong>有 1 个地雷</strong></li>
+<li>数字 <code>0</code> 表示周围 <strong>没有任何地雷</strong></li>
+</ul>
+<p>通过这些信息，具有逻辑推理能力的玩家可以判断：</p>
+<ul>
+<li>右下角格子 <strong>一定是地雷</strong></li>
+<li>左上角格子 <strong>一定是安全的</strong></li>
+</ul>
+<p>否则，其余数字将无法成立。</p>
+<hr>
+<h3 id="🎯-游戏目标"><a href="#🎯-游戏目标" class="headerlink" title="🎯 游戏目标"></a>🎯 游戏目标</h3><blockquote>
+<p><strong>找出并标记棋盘上的所有地雷。</strong></p>
+</blockquote>
+<p>在本项目中：</p>
+<ul>
+<li>玩家（或 AI）可以通过右键点击格子来标记地雷。</li>
+</ul>
+<hr>
+<h2 id="🧠-命题逻辑（Propositional-Logic）"><a href="#🧠-命题逻辑（Propositional-Logic）" class="headerlink" title="🧠 命题逻辑（Propositional Logic）"></a>🧠 命题逻辑（Propositional Logic）</h2><p>在本项目中，你的目标是：</p>
+<blockquote>
+<p><strong>构建一个可以通过逻辑推理来玩扫雷的 AI。</strong></p>
+</blockquote>
+<p>回顾课堂内容：</p>
+<ul>
+<li>知识型智能体（Knowledge-Based Agent）</li>
+<li>通过维护一个 <strong>知识库（Knowledge Base）</strong></li>
+<li>利用逻辑推理做出决策</li>
+</ul>
+<hr>
+<h3 id="如何表示扫雷中的知识？"><a href="#如何表示扫雷中的知识？" class="headerlink" title="如何表示扫雷中的知识？"></a>如何表示扫雷中的知识？</h3><p>我们可以将：</p>
+<blockquote>
+<p><strong>棋盘上的每一个格子视为一个命题变量</strong></p>
+</blockquote>
+<ul>
+<li>若该格子是地雷 → 命题为 <code>True</code></li>
+<li>若不是地雷 → 命题为 <code>False</code></li>
+</ul>
+<hr>
+<h3 id="AI-可以获得哪些信息？"><a href="#AI-可以获得哪些信息？" class="headerlink" title="AI 可以获得哪些信息？"></a>AI 可以获得哪些信息？</h3><p>当 AI 点击一个安全格子时，会看到一个数字。</p>
+<p>例如：</p>
+<p><img src="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/middle_safe.png" srcset="/img/loading.gif" lazyload alt="Middle cell with labeled neighbors"></p>
+<p>假设中间格子显示为 <code>1</code>。</p>
+<p>这意味着：</p>
+<blockquote>
+<p>在 A～H 八个相邻格子中，<strong>恰好有 1 个是地雷</strong>。</p>
+</blockquote>
+<hr>
+<h3 id="最弱的逻辑表达"><a href="#最弱的逻辑表达" class="headerlink" title="最弱的逻辑表达"></a>最弱的逻辑表达</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python">Or(A, B, C, D, E, F, G, H)<br></code></pre></td></tr></table></figure>
+<p>表示：</p>
+<blockquote>
+<p>至少有一个格子是地雷。</p>
+</blockquote>
+<p>但这还不够精确。</p>
+<hr>
+<h3 id="正确含义：恰好一个"><a href="#正确含义：恰好一个" class="headerlink" title="正确含义：恰好一个"></a>正确含义：<strong>恰好一个</strong></h3><p>逻辑上真正的含义应为：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs python">Or(<br>    And(A, Not(B), Not(C), Not(D), Not(E), Not(F), Not(G), Not(H)),<br>    And(Not(A), B, Not(C), Not(D), Not(E), Not(F), Not(G), Not(H)),<br>    And(Not(A), Not(B), C, Not(D), Not(E), Not(F), Not(G), Not(H)),<br>    And(Not(A), Not(B), Not(C), D, Not(E), Not(F), Not(G), Not(H)),<br>    And(Not(A), Not(B), Not(C), Not(D), E, Not(F), Not(G), Not(H)),<br>    And(Not(A), Not(B), Not(C), Not(D), Not(E), F, Not(G), Not(H)),<br>    And(Not(A), Not(B), Not(C), Not(D), Not(E), Not(F), G, Not(H)),<br>    And(Not(A), Not(B), Not(C), Not(D), Not(E), Not(F), Not(G), H)<br>)<br></code></pre></td></tr></table></figure>
+<p>仅仅表达数字 <code>1</code> 就如此复杂。</p>
+<p>如果是 <code>2</code>、<code>3</code>，复杂度会急剧上升。</p>
+<hr>
+<h3 id="🚫-模型检测不可行"><a href="#🚫-模型检测不可行" class="headerlink" title="🚫 模型检测不可行"></a>🚫 模型检测不可行</h3><p>在一个 8×8 的棋盘中：</p>
+<ul>
+<li>有 64 个格子</li>
+<li>可能模型数量为：</li>
+</ul>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">2</span>^<span class="hljs-number">64</span><br></code></pre></td></tr></table></figure>
+<p>这在现实中是完全不可计算的。</p>
+<hr>
+<h2 id="✅-更高效的知识表示方法"><a href="#✅-更高效的知识表示方法" class="headerlink" title="✅ 更高效的知识表示方法"></a>✅ 更高效的知识表示方法</h2><p>我们使用如下形式：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">&#123;A, B, C, D, E, F, G, H&#125; = 1<br></code></pre></td></tr></table></figure>
+<p>含义：</p>
+<blockquote>
+<p>在这些格子中，<strong>恰好有 1 个地雷</strong>。</p>
+</blockquote>
+<hr>
+<h3 id="每条知识句子包含："><a href="#每条知识句子包含：" class="headerlink" title="每条知识句子包含："></a>每条知识句子包含：</h3><ul>
+<li><code>cells</code>：涉及的格子集合</li>
+<li><code>count</code>：其中地雷的数量</li>
+</ul>
+<hr>
+<h3 id="🔍-推理规则一：count-0"><a href="#🔍-推理规则一：count-0" class="headerlink" title="🔍 推理规则一：count = 0"></a>🔍 推理规则一：count = 0</h3><p><img src="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/infer_safe.png" srcset="/img/loading.gif" lazyload alt="infer safe"></p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-punctuation">&#123;</span><span class="hljs-built_in">D</span><span class="hljs-operator">,</span> <span class="hljs-built_in">E</span><span class="hljs-operator">,</span> <span class="hljs-variable">G</span><span class="hljs-punctuation">&#125;</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<p>说明：</p>
+<blockquote>
+<p>所有格子都是安全的。</p>
+</blockquote>
+<hr>
+<h3 id="🔥-推理规则二：cells-数量-count"><a href="#🔥-推理规则二：cells-数量-count" class="headerlink" title="🔥 推理规则二：cells 数量 = count"></a>🔥 推理规则二：cells 数量 = count</h3><p><img src="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/infer_mines.png" srcset="/img/loading.gif" lazyload alt="infer mines"></p>
+<figure class="highlight dust"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dust"><span class="hljs-template-variable">&#123;E, F, H&#125;</span><span class="language-xml"> = 3</span><br></code></pre></td></tr></table></figure>
+<p>说明：</p>
+<blockquote>
+<p>E、F、H 全部是地雷。</p>
+</blockquote>
+<hr>
+<h3 id="🔄-更新已有知识"><a href="#🔄-更新已有知识" class="headerlink" title="🔄 更新已有知识"></a>🔄 更新已有知识</h3><p>若已知：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dns">&#123;<span class="hljs-keyword">A</span>, B, C&#125; = <span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>若 C 是安全的：</li>
+</ul>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dns">&#123;<span class="hljs-keyword">A</span>, B&#125; = <span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>若 C 是地雷：</li>
+</ul>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dns">&#123;<span class="hljs-keyword">A</span>, B&#125; = <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<hr>
+<h3 id="⭐-子集推理（最关键）"><a href="#⭐-子集推理（最关键）" class="headerlink" title="⭐ 子集推理（最关键）"></a>⭐ 子集推理（最关键）</h3><p><img src="https://cs50.harvard.edu/ai/projects/1/minesweeper/images/subset_inference.png" srcset="/img/loading.gif" lazyload alt="subset inference"></p>
+<p>若：</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-punctuation">&#123;</span><span class="hljs-variable">A</span><span class="hljs-operator">,</span> <span class="hljs-variable">B</span><span class="hljs-operator">,</span> <span class="hljs-built_in">C</span><span class="hljs-punctuation">&#125;</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span><br><span class="hljs-punctuation">&#123;</span><span class="hljs-variable">A</span><span class="hljs-operator">,</span> <span class="hljs-variable">B</span><span class="hljs-operator">,</span> <span class="hljs-built_in">C</span><span class="hljs-operator">,</span> <span class="hljs-built_in">D</span><span class="hljs-operator">,</span> <span class="hljs-built_in">E</span><span class="hljs-punctuation">&#125;</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+<p>则可推出：</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-punctuation">&#123;</span><span class="hljs-built_in">D</span><span class="hljs-operator">,</span> <span class="hljs-built_in">E</span><span class="hljs-punctuation">&#125;</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<hr>
+<h3 id="通用推理规则"><a href="#通用推理规则" class="headerlink" title="通用推理规则"></a>通用推理规则</h3><p>如果：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-keyword">set</span>1 ⊆ <span class="hljs-keyword">set</span>2<br></code></pre></td></tr></table></figure>
+<p>那么：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-keyword">set</span>2 - <span class="hljs-keyword">set</span>1 = count2 - count1<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="🚀-Getting-Started"><a href="#🚀-Getting-Started" class="headerlink" title="🚀 Getting Started"></a>🚀 Getting Started</h2><ol>
+<li>下载项目代码：</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//</span>cdn.cs50.net<span class="hljs-regexp">/ai/</span><span class="hljs-number">2023</span><span class="hljs-regexp">/x/</span>projects<span class="hljs-regexp">/1/mi</span>nesweeper.zip<br></code></pre></td></tr></table></figure>
+<ol>
+<li>安装依赖：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">pip3 install -r requirements.txt<br></code></pre></td></tr></table></figure>
+<p>（主要依赖：<code>pygame</code>）</p>
+<hr>
+<h2 id="📂-项目结构（Understanding）"><a href="#📂-项目结构（Understanding）" class="headerlink" title="📂 项目结构（Understanding）"></a>📂 项目结构（Understanding）</h2><h3 id="文件说明"><a href="#文件说明" class="headerlink" title="文件说明"></a>文件说明</h3><ul>
+<li><p><code>runner.py</code></p>
+<ul>
+<li>游戏界面（已完成）</li>
+</ul>
+</li>
+<li><p><code>minesweeper.py</code></p>
+<ul>
+<li>游戏逻辑</li>
+<li>AI 推理系统（你需要完成）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="minesweeper-py-中的三个类"><a href="#minesweeper-py-中的三个类" class="headerlink" title="minesweeper.py 中的三个类"></a>minesweeper.py 中的三个类</h3><h4 id="1️⃣-Minesweeper"><a href="#1️⃣-Minesweeper" class="headerlink" title="1️⃣ Minesweeper"></a>1️⃣ Minesweeper</h4><p>负责棋盘逻辑（已完成）</p>
+<hr>
+<h4 id="2️⃣-Sentence"><a href="#2️⃣-Sentence" class="headerlink" title="2️⃣ Sentence"></a>2️⃣ Sentence</h4><p>表示逻辑语句：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs abnf"><span class="hljs-attribute">cells</span> <span class="hljs-operator">=</span> 一组未知格子<br><span class="hljs-attribute">count</span> <span class="hljs-operator">=</span> 地雷数量<br></code></pre></td></tr></table></figure>
+<p>包含方法：</p>
+<ul>
+<li><code>known_mines</code></li>
+<li><code>known_safes</code></li>
+<li><code>mark_mine</code></li>
+<li><code>mark_safe</code></li>
+</ul>
+<hr>
+<h4 id="3️⃣-MinesweeperAI"><a href="#3️⃣-MinesweeperAI" class="headerlink" title="3️⃣ MinesweeperAI"></a>3️⃣ MinesweeperAI</h4><p>维护：</p>
+<ul>
+<li><code>moves_made</code></li>
+<li><code>mines</code></li>
+<li><code>safes</code></li>
+<li><code>knowledge</code></li>
+</ul>
+<p>并根据逻辑推理选择下一步。</p>
+<hr>
+<h2 id="📝-作业要求（Specification）"><a href="#📝-作业要求（Specification）" class="headerlink" title="📝 作业要求（Specification）"></a>📝 作业要求（Specification）</h2><p>你需要完成以下函数：</p>
+<h3 id="Sentence-类"><a href="#Sentence-类" class="headerlink" title="Sentence 类"></a>Sentence 类</h3><ul>
+<li><code>known_mines</code></li>
+<li><code>known_safes</code></li>
+<li><code>mark_mine</code></li>
+<li><code>mark_safe</code></li>
+</ul>
+<hr>
+<h3 id="MinesweeperAI-类"><a href="#MinesweeperAI-类" class="headerlink" title="MinesweeperAI 类"></a>MinesweeperAI 类</h3><ul>
+<li><code>add_knowledge</code></li>
+<li><code>make_safe_move</code></li>
+<li><code>make_random_move</code></li>
+</ul>
+<hr>
+<h3 id="add-knowledge-必须实现："><a href="#add-knowledge-必须实现：" class="headerlink" title="add_knowledge 必须实现："></a>add_knowledge 必须实现：</h3><ol>
+<li>标记该格子已被点击  </li>
+<li>标记为安全格子  </li>
+<li>添加新的逻辑句子  </li>
+<li>推导新的安全格子  </li>
+<li>推导新的地雷  </li>
+<li>使用子集规则生成新句子  </li>
+<li>不断重复推理直到无新知识  </li>
+</ol>
+<hr>
+<h3 id="make-safe-move"><a href="#make-safe-move" class="headerlink" title="make_safe_move"></a>make_safe_move</h3><ul>
+<li>返回一个：<ul>
+<li>已知安全</li>
+<li>且尚未点击的格子</li>
+</ul>
+</li>
+<li>若不存在，返回 <code>None</code></li>
+</ul>
+<hr>
+<h3 id="make-random-move"><a href="#make-random-move" class="headerlink" title="make_random_move"></a>make_random_move</h3><ul>
+<li>随机选择：<ul>
+<li>未点击</li>
+<li>未被标记为地雷的格子</li>
+</ul>
+</li>
+<li>若不存在，返回 <code>None</code></li>
+</ul>
+<hr>
+<h2 id="💡-提示（Hints）"><a href="#💡-提示（Hints）" class="headerlink" title="💡 提示（Hints）"></a>💡 提示（Hints）</h2><ul>
+<li>仔细阅读 Background（非常重要）</li>
+<li>熟练使用 Python 的 <code>set</code></li>
+<li>不要在遍历集合时修改集合</li>
+<li>AI 并不保证每局都能赢（有时必须猜）</li>
+</ul>
+<hr>
+<h2 id="🧪-测试（Testing）"><a href="#🧪-测试（Testing）" class="headerlink" title="🧪 测试（Testing）"></a>🧪 测试（Testing）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">check50 ai50/projects/2024/x/minesweeper<br></code></pre></td></tr></table></figure>
+<p>风格检查：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">style50<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="📤-提交（How-to-Submit）"><a href="#📤-提交（How-to-Submit）" class="headerlink" title="📤 提交（How to Submit）"></a>📤 提交（How to Submit）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">submit50 ai50/projects/2024/x/minesweeper<br></code></pre></td></tr></table></figure>
+<p>或推送至：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/me50/</span>USERNAME.git<br></code></pre></td></tr></table></figure>
+<p>分支名：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">ai50<span class="hljs-regexp">/projects/</span><span class="hljs-number">2024</span><span class="hljs-regexp">/x/mi</span>nesweeper<br></code></pre></td></tr></table></figure>
+<hr>
+<h1 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h1><h1 id="一、实现思路"><a href="#一、实现思路" class="headerlink" title="一、实现思路"></a>一、实现思路</h1><p>本项目实现的是一个<strong>基于知识推理的扫雷人工智能（Knowledge-Based Agent）</strong>。</p>
+<p>核心思想只有一句话：</p>
+<blockquote>
+<p><strong>把扫雷数字信息转化为逻辑约束，再通过集合推理不断推出新的安全格和地雷格。</strong></p>
+</blockquote>
+<hr>
+<h2 id="1-扫雷信息如何转化为知识"><a href="#1-扫雷信息如何转化为知识" class="headerlink" title="1. 扫雷信息如何转化为知识"></a>1. 扫雷信息如何转化为知识</h2><p>当 AI 点击一个安全格时，游戏会返回一个数字：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs applescript"><span class="hljs-built_in">count</span><br></code></pre></td></tr></table></figure>
+<p>表示：</p>
+<blockquote>
+<p>该格周围 8 个相邻格子中有 <code>count</code> 个地雷。</p>
+</blockquote>
+<p>AI 会做三件事：</p>
+<ol>
+<li>找出该格周围 <strong>所有状态未知的格子</strong></li>
+<li>统计其中已经确定为地雷的数量</li>
+<li>构造如下逻辑表达式：</li>
+</ol>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">&#123;相邻未知格集合&#125; <span class="hljs-operator">=</span> count<br></code></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-punctuation">&#123;</span><span class="hljs-variable">A</span><span class="hljs-operator">,</span> <span class="hljs-variable">B</span><span class="hljs-operator">,</span> <span class="hljs-built_in">C</span><span class="hljs-operator">,</span> <span class="hljs-built_in">D</span><span class="hljs-punctuation">&#125;</span> <span class="hljs-operator">=</span> <span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+<p>含义是：</p>
+<blockquote>
+<p>在 A、B、C、D 四个格子中，<strong>恰好有 2 个地雷</strong>。</p>
+</blockquote>
+<hr>
+<h2 id="2-知识的存储方式"><a href="#2-知识的存储方式" class="headerlink" title="2. 知识的存储方式"></a>2. 知识的存储方式</h2><p>每一条逻辑知识用一个 <code>Sentence</code> 表示：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">Sentence(<br>    cells = 一组未知格子,<br>    count = 这些格子中地雷的数量<br>)<br></code></pre></td></tr></table></figure>
+<p>AI 内部维护一个知识库：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-variable language_">self</span>.knowledge = []<br></code></pre></td></tr></table></figure>
+<p>用于存储所有逻辑句子。</p>
+<hr>
+<h2 id="3-基本推理规则"><a href="#3-基本推理规则" class="headerlink" title="3. 基本推理规则"></a>3. 基本推理规则</h2><p>AI 主要依靠以下三条规则进行推理。</p>
+<hr>
+<h3 id="（1）安全格推理"><a href="#（1）安全格推理" class="headerlink" title="（1）安全格推理"></a>（1）安全格推理</h3><p>若某个句子满足：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf"><span class="hljs-attribute">cells</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<p>说明：</p>
+<blockquote>
+<p>所有格子都不是地雷。</p>
+</blockquote>
+<p>因此这些格子全部是安全格。</p>
+<hr>
+<h3 id="（2）地雷推理"><a href="#（2）地雷推理" class="headerlink" title="（2）地雷推理"></a>（2）地雷推理</h3><p>若某个句子满足：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">len</span><span class="hljs-params">(cells)</span></span> == count<br></code></pre></td></tr></table></figure>
+<p>说明：</p>
+<blockquote>
+<p>所有格子都是地雷。</p>
+</blockquote>
+<hr>
+<h3 id="（3）知识更新规则"><a href="#（3）知识更新规则" class="headerlink" title="（3）知识更新规则"></a>（3）知识更新规则</h3><p>当某个格子被确定后：</p>
+<ul>
+<li><p>如果是安全格：<br>从所有句子中移除该格</p>
+</li>
+<li><p>如果是地雷：<br>从所有句子中移除该格，并将计数减 1</p>
+</li>
+</ul>
+<p>从而保证所有知识始终一致。</p>
+<hr>
+<h2 id="4-子集推理（核心）"><a href="#4-子集推理（核心）" class="headerlink" title="4. 子集推理（核心）"></a>4. 子集推理（核心）</h2><p>这是整个算法最重要的部分。</p>
+<p>若存在两个逻辑句子：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-built_in">S1</span> ⊆ <span class="hljs-built_in">S2</span><br></code></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dns">&#123;<span class="hljs-keyword">A</span>, B&#125; = <span class="hljs-number">1</span><br>&#123;<span class="hljs-keyword">A</span>, B, C, D&#125; = <span class="hljs-number">2</span><br></code></pre></td></tr></table></figure>
+<p>则可推出：</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><span class="hljs-punctuation">&#123;</span><span class="hljs-built_in">C</span><span class="hljs-operator">,</span> <span class="hljs-built_in">D</span><span class="hljs-punctuation">&#125;</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<p>推理公式为：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-built_in">S2</span> - <span class="hljs-built_in">S1</span> = count2 - count1<br></code></pre></td></tr></table></figure>
+<p>通过不断应用该规则，AI 可以自动生成新的逻辑句子。</p>
+<hr>
+<h2 id="5-推理流程总结"><a href="#5-推理流程总结" class="headerlink" title="5. 推理流程总结"></a>5. 推理流程总结</h2><p>当 AI 获得新信息时，会不断循环执行：</p>
+<ol>
+<li>找出所有确定安全的格子</li>
+<li>找出所有确定地雷的格子</li>
+<li>更新所有句子</li>
+<li>执行子集推理生成新句子</li>
+</ol>
+<p>直到知识库无法产生新信息为止。</p>
+<hr>
+<h1 id="1-Sentence-类：每段代码详细解释"><a href="#1-Sentence-类：每段代码详细解释" class="headerlink" title="1) Sentence 类：每段代码详细解释"></a>1) Sentence 类：每段代码详细解释</h1><p><code>Sentence</code> 的含义是一个约束：</p>
+<blockquote>
+<p><code>cells</code> 这堆格子里 <strong>恰好</strong> 有 <code>count</code> 个雷</p>
+</blockquote>
+<p>例如：<code>&#123;(1,2),(1,3),(2,3)&#125; = 1</code></p>
+<hr>
+<h2 id="1-1-known-mines"><a href="#1-1-known-mines" class="headerlink" title="1.1 known_mines"></a>1.1 <code>known_mines</code></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">known_mines</span>(<span class="hljs-params">self</span>):<br>    <span class="hljs-comment"># 若数量等于格子数，则所有格子都必为地雷</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-variable language_">self</span>.count == <span class="hljs-built_in">len</span>(<span class="hljs-variable language_">self</span>.cells) <span class="hljs-keyword">and</span> <span class="hljs-variable language_">self</span>.count &gt; <span class="hljs-number">0</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">set</span>(<span class="hljs-variable language_">self</span>.cells)<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">set</span>()<br></code></pre></td></tr></table></figure>
+<h3 id="这段代码在做什么？"><a href="#这段代码在做什么？" class="headerlink" title="这段代码在做什么？"></a>这段代码在做什么？</h3><ul>
+<li>它想从一条句子里<strong>直接推出“哪些格子一定是雷”</strong>。</li>
+</ul>
+<h3 id="为什么-count-len-cells-就全是雷？"><a href="#为什么-count-len-cells-就全是雷？" class="headerlink" title="为什么 count == len(cells) 就全是雷？"></a>为什么 <code>count == len(cells)</code> 就全是雷？</h3><ul>
+<li><code>cells</code> 里有 <code>len(cells)</code> 个格子</li>
+<li>句子说其中 <strong>有 <code>count</code> 个雷</strong></li>
+<li><p>如果 <code>count</code> 恰好等于格子数，意味着：</p>
+<ul>
+<li>“这里面每一个格子都是雷”，否则雷数就不够。</li>
+</ul>
+</li>
+</ul>
+<h3 id="为什么还要-count-gt-0？"><a href="#为什么还要-count-gt-0？" class="headerlink" title="为什么还要 count &gt; 0？"></a>为什么还要 <code>count &gt; 0</code>？</h3><ul>
+<li><p>防止 <code>cells</code> 为空或一些边界情况：</p>
+<ul>
+<li>比如 <code>cells</code> 为空，<code>len(cells)=0</code>，<code>count</code> 也可能为 0（理论上）</li>
+<li><code>count==len(cells)</code> 会成立，但“全是雷”没有意义</li>
+</ul>
+</li>
+<li>加上 <code>count&gt;0</code> 更严谨：只有真的存在雷数量时才返回。</li>
+</ul>
+<h3 id="为什么-return-set-self-cells-要再套一层-set？"><a href="#为什么-return-set-self-cells-要再套一层-set？" class="headerlink" title="为什么 return set(self.cells) 要再套一层 set？"></a>为什么 <code>return set(self.cells)</code> 要再套一层 <code>set</code>？</h3><ul>
+<li>返回一个新的集合拷贝，避免外部误修改 <code>self.cells</code>（更安全）。</li>
+</ul>
+<hr>
+<h2 id="1-2-known-safes"><a href="#1-2-known-safes" class="headerlink" title="1.2 known_safes"></a>1.2 <code>known_safes</code></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">known_safes</span>(<span class="hljs-params">self</span>):<br>    <span class="hljs-comment"># 若数量为 0，则所有格子都安全</span><br>    <span class="hljs-keyword">if</span> <span class="hljs-variable language_">self</span>.count == <span class="hljs-number">0</span>:<br>        <span class="hljs-keyword">return</span> <span class="hljs-built_in">set</span>(<span class="hljs-variable language_">self</span>.cells)<br>    <span class="hljs-keyword">return</span> <span class="hljs-built_in">set</span>()<br></code></pre></td></tr></table></figure>
+<h3 id="这段代码在做什么？-1"><a href="#这段代码在做什么？-1" class="headerlink" title="这段代码在做什么？"></a>这段代码在做什么？</h3><ul>
+<li>从句子直接推出“哪些格子一定安全”。</li>
+</ul>
+<h3 id="为什么-count-0-就全安全？"><a href="#为什么-count-0-就全安全？" class="headerlink" title="为什么 count == 0 就全安全？"></a>为什么 <code>count == 0</code> 就全安全？</h3><ul>
+<li>句子含义是“这些格子里有 <code>count</code> 个雷”</li>
+<li><p>如果 <code>count=0</code>，说明：</p>
+<ul>
+<li>“这里面一个雷都没有”</li>
+<li>所以全是安全格。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="1-3-mark-mine"><a href="#1-3-mark-mine" class="headerlink" title="1.3 mark_mine"></a>1.3 <code>mark_mine</code></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">mark_mine</span>(<span class="hljs-params">self, cell</span>):<br>    <span class="hljs-comment"># 移除该格并减少计数，因为这个雷已被“解释”掉</span><br>    <span class="hljs-keyword">if</span> cell <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.cells:<br>        <span class="hljs-variable language_">self</span>.cells.remove(cell)<br>        <span class="hljs-variable language_">self</span>.count -= <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+<h3 id="这段代码在做什么？-2"><a href="#这段代码在做什么？-2" class="headerlink" title="这段代码在做什么？"></a>这段代码在做什么？</h3><p>当外部已经确定某个格子 <code>cell</code> 是雷时，要把这个信息同步到当前句子里。</p>
+<h3 id="为什么要-remove-cell-？"><a href="#为什么要-remove-cell-？" class="headerlink" title="为什么要 remove(cell)？"></a>为什么要 <code>remove(cell)</code>？</h3><ul>
+<li>当前句子的 <code>cells</code> 表示“还不确定状态的格子”</li>
+<li>既然 <code>cell</code> 已经确定是雷了，就不应该继续留在“未知集合”里。</li>
+</ul>
+<h3 id="为什么还要-count-1？"><a href="#为什么还要-count-1？" class="headerlink" title="为什么还要 count -= 1？"></a>为什么还要 <code>count -= 1</code>？</h3><p>因为句子原本说：</p>
+<blockquote>
+<p><code>cells</code> 里一共有 <code>count</code> 个雷</p>
+</blockquote>
+<p>如果我们已经知道其中某一个 <code>cell</code> 是雷，那么剩下的雷数量就应该减少 1：</p>
+<ul>
+<li>原来：<code>&#123;A, B, C&#125; = 2</code></li>
+<li><p>若发现 <code>C</code> 是雷：</p>
+<ul>
+<li>剩余未知就变成 <code>&#123;A, B&#125;</code></li>
+<li>雷数变成 <code>1</code></li>
+</ul>
+</li>
+<li>所以必须 <code>count -= 1</code></li>
+</ul>
+<hr>
+<h2 id="1-4-mark-safe"><a href="#1-4-mark-safe" class="headerlink" title="1.4 mark_safe"></a>1.4 <code>mark_safe</code></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">mark_safe</span>(<span class="hljs-params">self, cell</span>):<br>    <span class="hljs-comment"># 安全格可直接移除，计数不变</span><br>    <span class="hljs-keyword">if</span> cell <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.cells:<br>        <span class="hljs-variable language_">self</span>.cells.remove(cell)<br></code></pre></td></tr></table></figure>
+<h3 id="为什么安全格移除但-count-不变？"><a href="#为什么安全格移除但-count-不变？" class="headerlink" title="为什么安全格移除但 count 不变？"></a>为什么安全格移除但 <code>count</code> 不变？</h3><p>句子说的是“雷的数量”，安全格不是雷，因此不会占用雷数：</p>
+<ul>
+<li>原来：<code>&#123;A, B, C&#125; = 2</code></li>
+<li><p>若发现 <code>C</code> 安全：</p>
+<ul>
+<li>剩余未知变 <code>&#123;A, B&#125;</code></li>
+<li>雷还是 <code>2</code></li>
+</ul>
+</li>
+<li>所以只移除，不减 count。</li>
+</ul>
+<hr>
+<h1 id="2-MinesweeperAI-类：每段代码详细解释"><a href="#2-MinesweeperAI-类：每段代码详细解释" class="headerlink" title="2) MinesweeperAI 类：每段代码详细解释"></a>2) MinesweeperAI 类：每段代码详细解释</h1><p>AI 维护全局状态：</p>
+<ul>
+<li><code>moves_made</code>: 已经点过的格子</li>
+<li><code>safes</code>: 已知安全</li>
+<li><code>mines</code>: 已知地雷</li>
+<li><code>knowledge</code>: 逻辑句子列表</li>
+</ul>
+<hr>
+<h2 id="2-1-mark-mine"><a href="#2-1-mark-mine" class="headerlink" title="2.1 mark_mine"></a>2.1 <code>mark_mine</code></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">mark_mine</span>(<span class="hljs-params">self, cell</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    标记某格为地雷，并同步更新所有已知句子。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-variable language_">self</span>.mines.add(cell)<br>    <span class="hljs-keyword">for</span> sentence <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.knowledge:<br>        sentence.mark_mine(cell)<br></code></pre></td></tr></table></figure>
+<h3 id="这段代码做什么？"><a href="#这段代码做什么？" class="headerlink" title="这段代码做什么？"></a>这段代码做什么？</h3><ul>
+<li>把 <code>cell</code> 放到 AI 的“地雷集合”里</li>
+<li>并告诉知识库里的每一句话：这个格子是雷（更新约束）</li>
+</ul>
+<h3 id="为什么要遍历所有句子更新？"><a href="#为什么要遍历所有句子更新？" class="headerlink" title="为什么要遍历所有句子更新？"></a>为什么要遍历所有句子更新？</h3><p>因为任何一句话里只要包含这个格子，都必须变成“已解释过的雷”，不然知识库会不一致。</p>
+<hr>
+<h2 id="2-2-mark-safe"><a href="#2-2-mark-safe" class="headerlink" title="2.2 mark_safe"></a>2.2 <code>mark_safe</code></h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">mark_safe</span>(<span class="hljs-params">self, cell</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    标记某格为安全，并同步更新所有已知句子。</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    <span class="hljs-variable language_">self</span>.safes.add(cell)<br>    <span class="hljs-keyword">for</span> sentence <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.knowledge:<br>        sentence.mark_safe(cell)<br></code></pre></td></tr></table></figure>
+<p>同理：</p>
+<ul>
+<li>放入安全集合</li>
+<li>同步删掉所有句子里包含它的部分（保持一致）</li>
+</ul>
+<hr>
+<h1 id="2-3-add-knowledge（最关键：逐段拆解）"><a href="#2-3-add-knowledge（最关键：逐段拆解）" class="headerlink" title="2.3 add_knowledge（最关键：逐段拆解）"></a>2.3 <code>add_knowledge</code>（最关键：逐段拆解）</h1><p>函数目标：点击一个安全格 <code>cell</code>，游戏告诉你周围雷数 <code>count</code>，AI 要把它变成知识并推理。</p>
+<hr>
+<h3 id="1-记录“已经点过”"><a href="#1-记录“已经点过”" class="headerlink" title="(1) 记录“已经点过”"></a>(1) 记录“已经点过”</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-variable language_">self</span>.moves_made.add(cell)<br></code></pre></td></tr></table></figure>
+<ul>
+<li>防止后续再点同一个格子</li>
+<li><code>make_safe_move</code> / <code>make_random_move</code> 都会依赖它过滤候选。</li>
+</ul>
+<hr>
+<h3 id="2-标记为安全"><a href="#2-标记为安全" class="headerlink" title="(2) 标记为安全"></a>(2) 标记为安全</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-variable language_">self</span>.mark_safe(cell)<br></code></pre></td></tr></table></figure>
+<p>因为调用 <code>add_knowledge(cell,count)</code> 的前提就是：<strong>这个 cell 是你点开的安全格</strong>（游戏只会对安全格给数字）。</p>
+<hr>
+<h3 id="3-收集未知邻居，修正计数"><a href="#3-收集未知邻居，修正计数" class="headerlink" title="(3) 收集未知邻居，修正计数"></a>(3) 收集未知邻居，修正计数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python">neighbors = <span class="hljs-built_in">set</span>()<br>adjusted_count = count<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>neighbors</code>：用来放“周围尚未知状态”的格子</li>
+<li><code>adjusted_count</code>：因为周围如果有一些格子已知是雷，<code>count</code> 里已经包含它们了，但我们之后的句子里不会包含这些已知雷，所以要减掉。</li>
+</ul>
+<hr>
+<h3 id="4-枚举周围-8-格"><a href="#4-枚举周围-8-格" class="headerlink" title="(4) 枚举周围 8 格"></a>(4) 枚举周围 8 格</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(cell[<span class="hljs-number">0</span>] - <span class="hljs-number">1</span>, cell[<span class="hljs-number">0</span>] + <span class="hljs-number">2</span>):<br>    <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(cell[<span class="hljs-number">1</span>] - <span class="hljs-number">1</span>, cell[<span class="hljs-number">1</span>] + <span class="hljs-number">2</span>):<br></code></pre></td></tr></table></figure>
+<p>这里 <code>+2</code> 是因为 Python range 不包含右端点。<br>所以实际 i/j 取值是：</p>
+<ul>
+<li><code>cell[0]-1, cell[0], cell[0]+1</code></li>
+<li><code>cell[1]-1, cell[1], cell[1]+1</code></li>
+</ul>
+<p>即 3×3 的区域。</p>
+<hr>
+<h3 id="5-跳过自身"><a href="#5-跳过自身" class="headerlink" title="(5) 跳过自身"></a>(5) 跳过自身</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> (i, j) == cell:<br>    <span class="hljs-keyword">continue</span><br></code></pre></td></tr></table></figure>
+<p>扫雷规则中：数字只统计“周围”，不包括自己。</p>
+<hr>
+<h3 id="6-边界检查"><a href="#6-边界检查" class="headerlink" title="(6) 边界检查"></a>(6) 边界检查</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> <span class="hljs-number">0</span> &lt;= i &lt; <span class="hljs-variable language_">self</span>.height <span class="hljs-keyword">and</span> <span class="hljs-number">0</span> &lt;= j &lt; <span class="hljs-variable language_">self</span>.width:<br></code></pre></td></tr></table></figure>
+<p>防止访问越界（比如在角落格子时会出现 -1 或 width）。</p>
+<hr>
+<h3 id="7-处理邻居格子的三种情况"><a href="#7-处理邻居格子的三种情况" class="headerlink" title="(7) 处理邻居格子的三种情况"></a>(7) 处理邻居格子的三种情况</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">neighbor = (i, j)<br><span class="hljs-keyword">if</span> neighbor <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.mines:<br>    adjusted_count -= <span class="hljs-number">1</span><br><span class="hljs-keyword">elif</span> neighbor <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.safes:<br>    neighbors.add(neighbor)<br></code></pre></td></tr></table></figure>
+<p><strong>情况 A：邻居是已知雷</strong></p>
+<ul>
+<li>说明 <code>count</code> 的雷里有一个已经被我们“确定”了</li>
+<li>但我们的新句子不会把这个格子再算进 <code>cells</code>（因为它不再未知）</li>
+<li>所以必须：<code>adjusted_count -= 1</code></li>
+</ul>
+<p><strong>情况 B：邻居是已知安全</strong></p>
+<ul>
+<li>不加入 <code>neighbors</code></li>
+<li>因为句子只应该描述“未知格”</li>
+</ul>
+<p><strong>情况 C：邻居未知</strong></p>
+<ul>
+<li>加入 <code>neighbors</code></li>
+</ul>
+<hr>
+<h3 id="8-把新句子加入知识库"><a href="#8-把新句子加入知识库" class="headerlink" title="(8) 把新句子加入知识库"></a>(8) 把新句子加入知识库</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> neighbors:<br>    <span class="hljs-variable language_">self</span>.knowledge.append(Sentence(neighbors, adjusted_count))<br></code></pre></td></tr></table></figure>
+<p>如果周围还有未知格子，就形成约束：</p>
+<blockquote>
+<p><code>neighbors</code> 里恰好 <code>adjusted_count</code> 个雷</p>
+</blockquote>
+<hr>
+<h2 id="2-4-推理循环（直到无新结论）"><a href="#2-4-推理循环（直到无新结论）" class="headerlink" title="2.4 推理循环（直到无新结论）"></a>2.4 推理循环（直到无新结论）</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">changed = <span class="hljs-literal">True</span><br><span class="hljs-keyword">while</span> changed:<br>    changed = <span class="hljs-literal">False</span><br></code></pre></td></tr></table></figure>
+<p><code>changed</code> 作为“本轮是否推导出新信息”的标记。<br>只要推导出了新 safe/mine/new sentence，就再循环一次。</p>
+<hr>
+<h3 id="1-从每个句子里提取可确定信息"><a href="#1-从每个句子里提取可确定信息" class="headerlink" title="(1) 从每个句子里提取可确定信息"></a>(1) 从每个句子里提取可确定信息</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">new_mines = <span class="hljs-built_in">set</span>()<br>new_safes = <span class="hljs-built_in">set</span>()<br><span class="hljs-keyword">for</span> sentence <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.knowledge:<br>    new_mines.update(sentence.known_mines())<br>    new_safes.update(sentence.known_safes())<br></code></pre></td></tr></table></figure>
+<ul>
+<li>遍历所有句子</li>
+<li>如果发现 “全是雷” 或 “全是安全”</li>
+<li>就把这些格子加入临时集合，等待统一更新。</li>
+</ul>
+<hr>
+<h3 id="2-把推导结果同步到全局"><a href="#2-把推导结果同步到全局" class="headerlink" title="(2) 把推导结果同步到全局"></a>(2) 把推导结果同步到全局</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> mine <span class="hljs-keyword">in</span> new_mines:<br>    <span class="hljs-keyword">if</span> mine <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.mines:<br>        <span class="hljs-variable language_">self</span>.mark_mine(mine)<br>        changed = <span class="hljs-literal">True</span><br><span class="hljs-keyword">for</span> safe <span class="hljs-keyword">in</span> new_safes:<br>    <span class="hljs-keyword">if</span> safe <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.safes:<br>        <span class="hljs-variable language_">self</span>.mark_safe(safe)<br>        changed = <span class="hljs-literal">True</span><br></code></pre></td></tr></table></figure>
+<p>这里的 <code>if mine not in self.mines</code> 是为了避免重复标记。<br>只要新增了信息，就把 <code>changed</code> 设为 True，说明还要继续推理。</p>
+<hr>
+<h3 id="3-清理空句子"><a href="#3-清理空句子" class="headerlink" title="(3) 清理空句子"></a>(3) 清理空句子</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-variable language_">self</span>.knowledge = [s <span class="hljs-keyword">for</span> s <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.knowledge <span class="hljs-keyword">if</span> s.cells]<br></code></pre></td></tr></table></figure>
+<p>如果某句子的 <code>cells</code> 被删光了，就没意义了，删掉防止污染推理。</p>
+<hr>
+<h3 id="4-子集推理生成新句子"><a href="#4-子集推理生成新句子" class="headerlink" title="(4) 子集推理生成新句子"></a>(4) 子集推理生成新句子</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">for</span> s1 <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.knowledge:<br>    <span class="hljs-keyword">for</span> s2 <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.knowledge:<br>        <span class="hljs-keyword">if</span> s1 <span class="hljs-keyword">is</span> s2:<br>            <span class="hljs-keyword">continue</span><br>        <span class="hljs-keyword">if</span> s1.cells <span class="hljs-keyword">and</span> s1.cells.issubset(s2.cells):<br>            diff_cells = s2.cells - s1.cells<br>            diff_count = s2.count - s1.count<br>            candidate = Sentence(diff_cells, diff_count)<br></code></pre></td></tr></table></figure>
+<p>解释：</p>
+<ul>
+<li>遍历任意两句 <code>s1, s2</code></li>
+<li>如果 <code>s1.cells ⊆ s2.cells</code></li>
+<li><p>那么可以推出：</p>
+<ul>
+<li><code>diff_cells = s2 - s1</code></li>
+<li><code>diff_count = count2 - count1</code></li>
+</ul>
+</li>
+</ul>
+<p>这是作业说明里最重要的推理规则。</p>
+<hr>
+<h3 id="5-防止重复加入"><a href="#5-防止重复加入" class="headerlink" title="(5) 防止重复加入"></a>(5) 防止重复加入</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> diff_cells <span class="hljs-keyword">and</span> candidate <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.knowledge <span class="hljs-keyword">and</span> candidate <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> inferred:<br>    inferred.append(candidate)<br></code></pre></td></tr></table></figure>
+<ul>
+<li><code>diff_cells</code> 为空就没意义</li>
+<li>不能重复添加同样句子，否则知识库会无限膨胀</li>
+</ul>
+<hr>
+<h3 id="6-加入知识库并继续循环"><a href="#6-加入知识库并继续循环" class="headerlink" title="(6) 加入知识库并继续循环"></a>(6) 加入知识库并继续循环</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">if</span> inferred:<br>    <span class="hljs-variable language_">self</span>.knowledge.extend(inferred)<br>    changed = <span class="hljs-literal">True</span><br></code></pre></td></tr></table></figure>
+<p>只要产生了新句子，就说明可能可以推出更多 safe/mine，所以继续 while 循环。</p>
+<hr>
+<h1 id="3-make-safe-move-逐段解释"><a href="#3-make-safe-move-逐段解释" class="headerlink" title="3) make_safe_move 逐段解释"></a>3) <code>make_safe_move</code> 逐段解释</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">make_safe_move</span>(<span class="hljs-params">self</span>):<br>    <span class="hljs-keyword">for</span> cell <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.safes:<br>        <span class="hljs-keyword">if</span> cell <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.moves_made:<br>            <span class="hljs-keyword">return</span> cell<br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br></code></pre></td></tr></table></figure>
+<ul>
+<li>遍历所有已知安全格</li>
+<li>找一个没点过的就返回</li>
+<li>如果没有可点安全格，返回 <code>None</code></li>
+</ul>
+<p>注意：该函数<strong>不修改任何集合</strong>，只负责“选一个”。</p>
+<hr>
+<h1 id="4-make-random-move-逐段解释"><a href="#4-make-random-move-逐段解释" class="headerlink" title="4) make_random_move 逐段解释"></a>4) <code>make_random_move</code> 逐段解释</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">make_random_move</span>(<span class="hljs-params">self</span>):<br>    candidates = []<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-variable language_">self</span>.height):<br>        <span class="hljs-keyword">for</span> j <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-variable language_">self</span>.width):<br>            cell = (i, j)<br>            <span class="hljs-keyword">if</span> cell <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.moves_made <span class="hljs-keyword">or</span> cell <span class="hljs-keyword">in</span> <span class="hljs-variable language_">self</span>.mines:<br>                <span class="hljs-keyword">continue</span><br>            candidates.append(cell)<br><br>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> candidates:<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">None</span><br>    <span class="hljs-keyword">return</span> random.choice(candidates)<br></code></pre></td></tr></table></figure>
+<ul>
+<li>枚举全棋盘</li>
+<li><p>排除：</p>
+<ul>
+<li>已点过的格子</li>
+<li>已知地雷格子</li>
+</ul>
+</li>
+<li>剩下的是“可猜测”的候选</li>
+<li>从候选里随机挑一个</li>
+</ul>
+<p>如果候选为空，说明无路可走（游戏结束或全点完），返回 <code>None</code>。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/CS50AI/" class="print-no-link">#CS50AI</a>
+      
+        <a href="/tags/project/" class="print-no-link">#project</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>CS50 AI project0 Minesweeper</div>
+      <div>https://zjjyyds.github.io/2026/01/24/学院派/CS50AI-Project1- Minesweeper/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月24日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/01/24/%E9%9D%A2%E8%AF%95%E9%A2%98/Java%E9%9D%A2%E8%AF%95%E2%80%94QQ%E5%8F%B7%E5%8E%BB%E9%87%8D/" title="Java面试题-场景题-QQ号去重">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java面试题-场景题-QQ号去重</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/24/%E5%AD%A6%E9%99%A2%E6%B4%BE/CS50AI-Project1-Knights/" title="CS50 AI project1 Knights">
+                        <span class="hidden-mobile">CS50 AI project1 Knights</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
