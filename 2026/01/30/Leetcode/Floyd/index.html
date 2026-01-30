@@ -19,28 +19,25 @@
   <meta name="author" content="Jay">
   <meta name="keywords" content="">
   
-    <meta name="description" content="🧩 归并排序（Merge Sort）：分而治之的艺术归并排序的核心思想是：先拆分，后合并。它将一个大数组不断二分，直到每个小数组只有一个元素（此时每个小数组都是有序的），然后将这些有序的小数组两两合并，最终得到完整的有序数组。 1. 核心原理：两个阶段 分（Divide）：找到数组的中点，把数组一分为二。递归地对左右两半进行同样的操作，直到数组长度为 1。 治&#x2F;合（Merge）：这是最关键的一步">
+    <meta name="description" content="一、启发思考：寻找子问题 二、递归怎么写：状态定义与状态转移方程定义 $dfs(k, i, j)$ 表示从 $i$ 到 $j$ 的最短路长度，并且这条最短路的中间节点编号都 $\le k$。注意中间节点不包含 $i$ 和 $j$。 根据上面的讨论：  不选 $k$，那么中间节点的编号都 $\le k - 1$，即 $dfs(k, i, j) &#x3D; dfs(k - 1, i, j)$。 选 $k$，问">
 <meta property="og:type" content="article">
-<meta property="og:title" content="归并排序算法">
-<meta property="og:url" content="https://zjjyyds.github.io/2025/12/25/DS/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/index.html">
+<meta property="og:title" content="大雪深埋">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/01/30/Leetcode/Floyd/index.html">
 <meta property="og:site_name" content="大雪深埋">
-<meta property="og:description" content="🧩 归并排序（Merge Sort）：分而治之的艺术归并排序的核心思想是：先拆分，后合并。它将一个大数组不断二分，直到每个小数组只有一个元素（此时每个小数组都是有序的），然后将这些有序的小数组两两合并，最终得到完整的有序数组。 1. 核心原理：两个阶段 分（Divide）：找到数组的中点，把数组一分为二。递归地对左右两半进行同样的操作，直到数组长度为 1。 治&#x2F;合（Merge）：这是最关键的一步">
+<meta property="og:description" content="一、启发思考：寻找子问题 二、递归怎么写：状态定义与状态转移方程定义 $dfs(k, i, j)$ 表示从 $i$ 到 $j$ 的最短路长度，并且这条最短路的中间节点编号都 $\le k$。注意中间节点不包含 $i$ 和 $j$。 根据上面的讨论：  不选 $k$，那么中间节点的编号都 $\le k - 1$，即 $dfs(k, i, j) &#x3D; dfs(k - 1, i, j)$。 选 $k$，问">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://zjjyyds.github.io/img/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/2025-12-29-13-14-29.png">
-<meta property="article:published_time" content="2025-12-25T03:30:00.000Z">
-<meta property="article:modified_time" content="2025-12-29T05:14:30.761Z">
+<meta property="og:image" content="https://zjjyyds.github.io/img/Floyd/2026-01-30-16-55-03.png">
+<meta property="article:published_time" content="2026-01-30T08:53:58.529Z">
+<meta property="article:modified_time" content="2026-01-30T08:55:05.676Z">
 <meta property="article:author" content="Jay">
-<meta property="article:tag" content="算法">
-<meta property="article:tag" content="Java">
-<meta property="article:tag" content="归并排序">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://zjjyyds.github.io/img/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/2025-12-29-13-14-29.png">
+<meta name="twitter:image" content="https://zjjyyds.github.io/img/Floyd/2026-01-30-16-55-03.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>归并排序算法 - 大雪深埋</title>
+  <title>大雪深埋</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -206,7 +203,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="归并排序算法"></span>
+            <span id="subtitle" data-typed-text=""></span>
           
         </div>
 
@@ -217,8 +214,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-12-25 11:30" pubdate>
-          2025年12月25日 中午
+        <time datetime="2026-01-30 16:53" pubdate>
+          2026年1月30日 下午
         </time>
       </span>
     
@@ -229,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          937 字
+          1.2k 字
         
       </span>
     
@@ -240,7 +237,7 @@
         
         
         
-          8 分钟
+          10 分钟
         
       </span>
     
@@ -286,42 +283,40 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">归并排序算法</h1>
+            <h1 id="seo-header"></h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="🧩-归并排序（Merge-Sort）：分而治之的艺术"><a href="#🧩-归并排序（Merge-Sort）：分而治之的艺术" class="headerlink" title="🧩 归并排序（Merge Sort）：分而治之的艺术"></a>🧩 归并排序（Merge Sort）：分而治之的艺术</h1><p>归并排序的核心思想是：<strong>先拆分，后合并</strong>。<br>它将一个大数组不断二分，直到每个小数组只有一个元素（此时每个小数组都是有序的），然后将这些有序的小数组两两合并，最终得到完整的有序数组。<br><img src="/img/归并排序/2025-12-29-13-14-29.png" srcset="/img/loading.gif" lazyload alt=""></p>
-<h2 id="1-核心原理：两个阶段"><a href="#1-核心原理：两个阶段" class="headerlink" title="1. 核心原理：两个阶段"></a>1. 核心原理：两个阶段</h2><ol>
-<li><strong>分（Divide）</strong>：找到数组的中点，把数组一分为二。递归地对左右两半进行同样的操作，直到数组长度为 1。</li>
-<li><strong>治/合（Merge）</strong>：这是最关键的一步。将两个<strong>已经排好序</strong>的子数组合并成一个新的有序数组。</li>
-</ol>
-<h3 id="💡-生动比喻"><a href="#💡-生动比喻" class="headerlink" title="💡 生动比喻"></a>💡 生动比喻</h3><p>想象你要整理一副乱序的扑克牌：</p>
+                <h2 id="一、启发思考：寻找子问题"><a href="#一、启发思考：寻找子问题" class="headerlink" title="一、启发思考：寻找子问题"></a>一、启发思考：寻找子问题</h2><p><img src="/img/Floyd/2026-01-30-16-55-03.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="二、递归怎么写：状态定义与状态转移方程"><a href="#二、递归怎么写：状态定义与状态转移方程" class="headerlink" title="二、递归怎么写：状态定义与状态转移方程"></a>二、递归怎么写：状态定义与状态转移方程</h2><p>定义 $dfs(k, i, j)$ 表示从 $i$ 到 $j$ 的最短路长度，并且这条最短路的中间节点编号都 $\le k$。注意中间节点不包含 $i$ 和 $j$。</p>
+<p>根据上面的讨论：</p>
 <ul>
-<li><strong>分</strong>：你把牌堆不断对半切开，直到每个人手里都只拿<strong>一张牌</strong>（一张牌自然是有序的）。</li>
-<li><strong>合</strong>：两个拿牌的人比较谁手里的牌小，谁先放在桌上。接着四个人的两组牌再进行比较合并……最终整副牌就排好了。</li>
+<li><strong>不选 $k$</strong>，那么中间节点的编号都 $\le k - 1$，即 $dfs(k, i, j) = dfs(k - 1, i, j)$。</li>
+<li><strong>选 $k$</strong>，问题分解成从 $i$ 到 $k$ 的最短路，以及从 $k$ 到 $j$ 的最短路。由于这两条最短路的中间节点都不包含 $k$，所以中间节点的编号都 $\le k - 1$，故得到 $dfs(k, i, j) = dfs(k - 1, i, k) + dfs(k - 1, k, j)$。</li>
 </ul>
-<hr>
-<h2 id="2-核心语法与实现（Java）"><a href="#2-核心语法与实现（Java）" class="headerlink" title="2. 核心语法与实现（Java）"></a>2. 核心语法与实现（Java）</h2><p>归并排序通常使用<strong>递归</strong>来实现。我们需要一个辅助函数来执行“合并”操作。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.util.Arrays;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MergeSort</span> &#123;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-type">int</span>[] arr = &#123;<span class="hljs-number">12</span>, <span class="hljs-number">11</span>, <span class="hljs-number">13</span>, <span class="hljs-number">5</span>, <span class="hljs-number">6</span>, <span class="hljs-number">7</span>&#125;;<br>        System.out.println(<span class="hljs-string">&quot;排序前：&quot;</span> + Arrays.toString(arr));<br>        <br>        mergeSort(arr, <span class="hljs-number">0</span>, arr.length - <span class="hljs-number">1</span>);<br>        <br>        System.out.println(<span class="hljs-string">&quot;排序后：&quot;</span> + Arrays.toString(arr));<br>    &#125;<br><br>    <span class="hljs-comment">// 递归拆分函数</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">mergeSort</span><span class="hljs-params">(<span class="hljs-type">int</span>[] arr, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> right)</span> &#123;<br>        <span class="hljs-keyword">if</span> (left &lt; right) &#123;<br>            <span class="hljs-comment">// 找到中间索引，防止溢出的写法</span><br>            <span class="hljs-type">int</span> <span class="hljs-variable">mid</span> <span class="hljs-operator">=</span> left + (right - left) / <span class="hljs-number">2</span>;<br><br>            <span class="hljs-comment">// 递归拆分左半部分</span><br>            mergeSort(arr, left, mid);<br>            <span class="hljs-comment">// 递归拆分右半部分</span><br>            mergeSort(arr, mid + <span class="hljs-number">1</span>, right);<br><br>            <span class="hljs-comment">// 合并左右两部分</span><br>            merge(arr, left, mid, right);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-comment">// 核心合并函数：将两个有序区间 [left, mid] 和 [mid+1, right] 合并</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">merge</span><span class="hljs-params">(<span class="hljs-type">int</span>[] arr, <span class="hljs-type">int</span> left, <span class="hljs-type">int</span> mid, <span class="hljs-type">int</span> right)</span> &#123;<br>        <span class="hljs-comment">// 1. 创建临时数组存放合并结果</span><br>        <span class="hljs-type">int</span>[] temp = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[right - left + <span class="hljs-number">1</span>];<br>        <span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> left;      <span class="hljs-comment">// 左子数组的起点</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> mid + <span class="hljs-number">1</span>;   <span class="hljs-comment">// 右子数组的起点</span><br>        <span class="hljs-type">int</span> <span class="hljs-variable">k</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;         <span class="hljs-comment">// 临时数组的索引</span><br><br>        <span class="hljs-comment">// 2. 比较两个子数组，谁小就谁进 temp</span><br>        <span class="hljs-keyword">while</span> (i &lt;= mid &amp;&amp; j &lt;= right) &#123;<br>            <span class="hljs-keyword">if</span> (arr[i] &lt;= arr[j]) &#123;<br>                temp[k++] = arr[i++];<br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                temp[k++] = arr[j++];<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-comment">// 3. 将左边剩余元素放入 temp（如果有）</span><br>        <span class="hljs-keyword">while</span> (i &lt;= mid) &#123;<br>            temp[k++] = arr[i++];<br>        &#125;<br><br>        <span class="hljs-comment">// 4. 将右边剩余元素放入 temp（如果有）</span><br>        <span class="hljs-keyword">while</span> (j &lt;= right) &#123;<br>            temp[k++] = arr[j++];<br>        &#125;<br><br>        <span class="hljs-comment">// 5. 把排好序的 temp 复制回原数组 arr</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">p</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; p &lt; temp.length; p++) &#123;<br>            arr[left + p] = temp[p];<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<hr>
-<h2 id="3-性能分析"><a href="#3-性能分析" class="headerlink" title="3. 性能分析"></a>3. 性能分析</h2><ul>
-<li><strong>时间复杂度</strong>：始终是 $O(n \log n)$。不管原数组是乱序还是已经排好序，它的表现都非常稳定。</li>
-<li><strong>空间复杂度</strong>：$O(n)$。因为合并过程中需要一个和原数组一样大的临时数组。</li>
-<li><strong>稳定性</strong>：<strong>稳定</strong>排序。在合并逻辑中，如果 <code>arr[i] == arr[j]</code>，我们先放左边的 <code>arr[i]</code>，保证了相同元素的相对顺序不变。</li>
+<p>这两种情况取最小值，就得到了 $dfs(k, i, j)$。写成式子就是</p>
+<script type="math/tex; mode=display">dfs(k, i, j) = \min(dfs(k - 1, i, j), dfs(k - 1, i, k) + dfs(k - 1, k, j))</script><p><strong>递归边界：</strong> $dfs(-1, i, j) = w[i][j]$。$k = -1$ 表示 $i$ 和 $j$ 之间没有任何中间节点，此时最短路长度只能是连接 $i$ 和 $j$ 的边的边权，即 $w[i][j]$。如果没有连接 $i$ 和 $j$ 的边，则 $w[i][j] = \infty$。</p>
+<p><strong>递归入口：</strong> $dfs(n - 1, i, j)$，表示从 $i$ 到 $j$ 的最短路长度。$k = n - 1$ 是因为本题节点编号为 $0$ 到 $n - 1$，任意最短路的中间节点编号都 $\le n - 1$。</p>
+<h3 id="答疑"><a href="#答疑" class="headerlink" title="答疑"></a>答疑</h3><p><strong>问：</strong> 为什么要强调「中间节点不包含 $i$ 和 $j$」？我看代码中没有判断这个呀？</p>
+<p><strong>答：</strong> 只要最短路是简单路径（没有重复节点），中间节点就必然不会包含 $i$ 和 $j$。强调这个事实，便于大家理解后文空间优化写法的正确性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-comment">// 会超时的递归代码</span><br><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">findTheCity</span><span class="hljs-params">(<span class="hljs-type">int</span> n, <span class="hljs-type">int</span>[][] edges, <span class="hljs-type">int</span> distanceThreshold)</span> &#123;<br>        <span class="hljs-type">int</span>[][] w = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[n][n];<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span>[] row : w) &#123;<br>            Arrays.fill(row, Integer.MAX_VALUE / <span class="hljs-number">2</span>); <span class="hljs-comment">// 防止加法溢出</span><br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span>[] e : edges) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">x</span> <span class="hljs-operator">=</span> e[<span class="hljs-number">0</span>], y = e[<span class="hljs-number">1</span>], wt = e[<span class="hljs-number">2</span>];<br>            w[x][y] = w[y][x] = wt;<br>        &#125;<br><br>        <span class="hljs-type">int</span> <span class="hljs-variable">ans</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">minCnt</span> <span class="hljs-operator">=</span> n;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; n; i++) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">cnt</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; n; j++) &#123;<br>                <span class="hljs-keyword">if</span> (j != i &amp;&amp; dfs(n - <span class="hljs-number">1</span>, i, j, w) &lt;= distanceThreshold) &#123;<br>                    cnt++;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (cnt &lt;= minCnt) &#123; <span class="hljs-comment">// 相等时取最大的 i</span><br>                minCnt = cnt;<br>                ans = i;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> ans;<br>    &#125;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-title function_">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> k, <span class="hljs-type">int</span> i, <span class="hljs-type">int</span> j, <span class="hljs-type">int</span>[][] w)</span> &#123;<br>        <span class="hljs-keyword">if</span> (k &lt; <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 递归边界</span><br>            <span class="hljs-keyword">return</span> w[i][j];<br>        &#125;<br>        <span class="hljs-keyword">return</span> Math.min(dfs(k - <span class="hljs-number">1</span>, i, j, w), dfs(k - <span class="hljs-number">1</span>, i, k, w) + dfs(k - <span class="hljs-number">1</span>, k, j, w));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="复杂度分析"><a href="#复杂度分析" class="headerlink" title="复杂度分析"></a>复杂度分析</h4><ul>
+<li>时间复杂度：$O(n^2 3^n)$。外面调用 $O(n^2)$ 次 $dfs$，它的搜索树是一棵满三叉树（每个非叶节点都有三个子节点），树高为 $O(n)$，所以节点个数为 $O(3^n)$，遍历搜索树需要 $O(3^n)$ 的时间。</li>
+<li>空间复杂度：$O(n)$。递归需要 $O(n)$ 的栈空间。</li>
 </ul>
-<hr>
-<h2 id="4-应用场景"><a href="#4-应用场景" class="headerlink" title="4. 应用场景"></a>4. 应用场景</h2><ol>
-<li><strong>大规模数据排序</strong>：当内存装不下所有数据时，归并排序的思想可以用于<strong>外部排序</strong>（从磁盘读入部分数据排序后再合并）。</li>
-<li><strong>求逆序对</strong>：这是归并排序的一个典型算法变种题。</li>
-<li><strong>链表排序</strong>：在 LeetCode 中，排序链表的最佳选择通常是归并排序，因为链表不需要连续的内存空间。</li>
-</ol>
-<hr>
-<h2 id="⚠️-讲师提醒：新手易错点"><a href="#⚠️-讲师提醒：新手易错点" class="headerlink" title="⚠️ 讲师提醒：新手易错点"></a>⚠️ 讲师提醒：新手易错点</h2><ol>
-<li><strong>递归终止条件</strong>：一定要写 <code>if (left &lt; right)</code>，否则会进入死循环（栈溢出）。</li>
-<li><strong>中点计算</strong>：使用 <code>mid = left + (right - left) / 2</code> 能够有效避免 <code>(left + right)</code> 导致的整数溢出风险。</li>
-<li><strong>区间闭合</strong>：合并时注意 <code>while (i &lt;= mid)</code> 的等于号，漏掉会导致数组元素丢失。</li>
-</ol>
+<h3 id="三、递归-记录返回值-记忆化搜索"><a href="#三、递归-记录返回值-记忆化搜索" class="headerlink" title="三、递归 + 记录返回值 = 记忆化搜索"></a>三、递归 + 记录返回值 = 记忆化搜索</h3><p>上面的做法太慢了，怎么优化呢？</p>
+<p>比如，从 2 到 1 的最短路可以分解出从 2 到 7 的最短路（中间节点 $\le 6$），从 2 到 3 的最短路也可以分解出从 2 到 7 的最短路（中间节点 $\le 6$）。也就是说，都会递归到 $dfs(6, 2, 7)$。</p>
+<p>一叶知秋，$dfs$ 中有大量重复递归调用（递归入参相同）。由于 $dfs$ 没有副作用，同样的入参无论计算多少次，算出来的结果都是一样的，因此可以用<strong>记忆化搜索</strong>来优化：</p>
+<ul>
+<li>如果一个状态（递归入参）是第一次遇到，那么可以在返回前，把状态及其结果记到一个 $memo$ 数组中。</li>
+<li>如果一个状态不是第一次遇到（$memo$ 中保存的结果不等于 $memo$ 的初始值），那么可以直接返回 $memo$ 中保存的结果。</li>
+</ul>
+<p>注意：$memo$ 数组的初始值一定不能等于要记忆化的值。本题可以初始化成 0，因为边权都是正数。</p>
+<blockquote>
+<p>Python 用户可以无视上面这段，直接用 <code>@cache</code> 装饰器。</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs JAVA"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-type">int</span> <span class="hljs-title function_">findTheCity</span><span class="hljs-params">(<span class="hljs-type">int</span> n, <span class="hljs-type">int</span>[][] edges, <span class="hljs-type">int</span> distanceThreshold)</span> &#123;<br>        <span class="hljs-type">int</span>[][] w = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[n][n];<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span>[] row : w) &#123;<br>            Arrays.fill(row, Integer.MAX_VALUE / <span class="hljs-number">2</span>); <span class="hljs-comment">// 防止加法溢出</span><br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span>[] e : edges) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">x</span> <span class="hljs-operator">=</span> e[<span class="hljs-number">0</span>], y = e[<span class="hljs-number">1</span>], wt = e[<span class="hljs-number">2</span>];<br>            w[x][y] = w[y][x] = wt;<br>        &#125;<br>        <span class="hljs-type">int</span>[][][] memo = <span class="hljs-keyword">new</span> <span class="hljs-title class_">int</span>[n][n][n];<br><br>        <span class="hljs-type">int</span> <span class="hljs-variable">ans</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">minCnt</span> <span class="hljs-operator">=</span> n;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; n; i++) &#123;<br>            <span class="hljs-type">int</span> <span class="hljs-variable">cnt</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; n; j++) &#123;<br>                <span class="hljs-keyword">if</span> (j != i &amp;&amp; dfs(n - <span class="hljs-number">1</span>, i, j, memo, w) &lt;= distanceThreshold) &#123;<br>                    cnt++;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (cnt &lt;= minCnt) &#123; <span class="hljs-comment">// 相等时取最大的 i</span><br>                minCnt = cnt;<br>                ans = i;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> ans;<br>    &#125;<br><br>    <span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-title function_">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> k, <span class="hljs-type">int</span> i, <span class="hljs-type">int</span> j, <span class="hljs-type">int</span>[][][] memo, <span class="hljs-type">int</span>[][] w)</span> &#123;<br>        <span class="hljs-keyword">if</span> (k &lt; <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 递归边界</span><br>            <span class="hljs-keyword">return</span> w[i][j];<br>        &#125;<br>        <span class="hljs-keyword">if</span> (memo[k][i][j] != <span class="hljs-number">0</span>) &#123; <span class="hljs-comment">// 之前计算过</span><br>            <span class="hljs-keyword">return</span> memo[k][i][j];<br>        &#125;<br>        <span class="hljs-keyword">return</span> memo[k][i][j] = Math.min(dfs(k - <span class="hljs-number">1</span>, i, j, memo, w),<br>                dfs(k - <span class="hljs-number">1</span>, i, k, memo, w) + dfs(k - <span class="hljs-number">1</span>, k, j, memo, w));<br>    &#125;<br>&#125;   <br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -330,38 +325,6 @@
             <div>
               <div class="post-metas my-3">
   
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/DS/" class="category-chain-item">DS</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/%E7%AE%97%E6%B3%95/" class="print-no-link">#算法</a>
-      
-        <a href="/tags/Java/" class="print-no-link">#Java</a>
-      
-        <a href="/tags/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/" class="print-no-link">#归并排序</a>
-      
-    </div>
   
 </div>
 
@@ -371,8 +334,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>归并排序算法</div>
-      <div>https://zjjyyds.github.io/2025/12/25/DS/归并排序/</div>
+      <div></div>
+      <div>https://zjjyyds.github.io/2026/01/30/Leetcode/Floyd/</div>
     </div>
     <div class="license-meta">
       
@@ -384,7 +347,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年12月25日</div>
+          <div>2026年1月30日</div>
         </div>
       
       
@@ -416,18 +379,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/12/26/%E5%AD%A6%E9%99%A2%E6%B4%BE/CS50%20AI%20note%200/" title="CS50AI note0">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CS50AI note0</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/12/24/JavaSE/Java%E6%95%B0%E7%BB%84%E5%B8%B8%E7%94%A8API/" title="Java数组常用API">
-                        <span class="hidden-mobile">Java数组常用API</span>
+                      <a href="/2026/01/29/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20lab1/" title="OCF Linux System Administration DeCal lab1">
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab1</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
