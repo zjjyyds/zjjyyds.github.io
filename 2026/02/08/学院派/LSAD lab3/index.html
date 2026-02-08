@@ -1,0 +1,979 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="实验 3：软件包与打包（Packages and Packaging）OCF 系统管理员 DeCal  目录 关于本实验 评分说明 实验流程   Debian：apt 与 dpkg 简介 apt dpkg   开始之前 练习 1：编译与打包 编写并编译程序 将可执行文件打包   练习 2：故障排查 练习 3：深入探索（Spelunking） 进阶挑战（For Hotshots） 参考资源   关于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OCF Linux System Administration DeCal lab3">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/02/08/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20lab3/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="实验 3：软件包与打包（Packages and Packaging）OCF 系统管理员 DeCal  目录 关于本实验 评分说明 实验流程   Debian：apt 与 dpkg 简介 apt dpkg   开始之前 练习 1：编译与打包 编写并编译程序 将可执行文件打包   练习 2：故障排查 练习 3：深入探索（Spelunking） 进阶挑战（For Hotshots） 参考资源   关于">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-08T13:48:00.000Z">
+<meta property="article:modified_time" content="2026-02-08T13:15:02.522Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="LSAD">
+<meta property="article:tag" content="lab">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>OCF Linux System Administration DeCal lab3 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OCF Linux System Administration DeCal lab3"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-02-08 21:48" pubdate>
+          2026年2月8日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          23 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OCF Linux System Administration DeCal lab3</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="实验-3：软件包与打包（Packages-and-Packaging）"><a href="#实验-3：软件包与打包（Packages-and-Packaging）" class="headerlink" title="实验 3：软件包与打包（Packages and Packaging）"></a>实验 3：软件包与打包（Packages and Packaging）</h1><p>OCF 系统管理员 DeCal</p>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#about-this-lab">关于本实验</a><ul>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#grading-note">评分说明</a></li>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#workflow">实验流程</a></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#debian-an-introduction-to-apt-and-dpkg">Debian：<code>apt</code> 与 <code>dpkg</code> 简介</a><ul>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#apt"><code>apt</code></a></li>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#dpkg"><code>dpkg</code></a></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#getting-started">开始之前</a></li>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#exercise-1-compiling-and-packaging">练习 1：编译与打包</a><ul>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#writing-and-compiling-the-program">编写并编译程序</a></li>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#packaging-the-executable">将可执行文件打包</a></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#exercise-2-troubleshooting">练习 2：故障排查</a></li>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#exercise-3-spelunking">练习 3：深入探索（Spelunking）</a></li>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#for-hotshots">进阶挑战（For Hotshots）</a></li>
+<li><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/3/#resources">参考资源</a></li>
+</ul>
+<hr>
+<h2 id="关于本实验"><a href="#关于本实验" class="headerlink" title="关于本实验"></a>关于本实验</h2><h3 id="评分说明"><a href="#评分说明" class="headerlink" title="评分说明"></a>评分说明</h3><p>实验是 <strong>按完成情况评分</strong> 的。请将本实验视为探索的起点，而不仅仅是为了拿到一个分数。</p>
+<h3 id="实验流程"><a href="#实验流程" class="headerlink" title="实验流程"></a>实验流程</h3><p>本实验应当在你的 <strong>Linux 虚拟机</strong> 上完成，而不是在 tsunami 上完成。<br>实验的部分步骤可能需要 <strong>root 权限</strong>。</p>
+<hr>
+<h2 id="Debian：apt-与-dpkg-简介"><a href="#Debian：apt-与-dpkg-简介" class="headerlink" title="Debian：apt 与 dpkg 简介"></a>Debian：<code>apt</code> 与 <code>dpkg</code> 简介</h2><p>在本课程中，我们将主要使用 <strong>Debian</strong>。正如本周课程中所提到的，Debian 使用 <strong>apt/dpkg</strong> 作为其软件包管理系统。<br>其他 Linux 发行版会使用不同的包管理器。</p>
+<hr>
+<h3 id="apt"><a href="#apt" class="headerlink" title="apt"></a><code>apt</code></h3><p>Debian 的前端包管理器是 <strong><code>apt</code></strong>。在大多数情况下，只要你需要和包管理器打交道，<code>apt</code> 通常就是首选工具。</p>
+<p>在使用 <code>apt</code> 之前，一个良好的习惯是 <strong>先更新软件包列表</strong>，以确保包管理器可以找到并获取最新版本的软件包。可以运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt update<br></code></pre></td></tr></table></figure>
+<p>查找要安装的软件包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt search [软件包名 | 描述]<br></code></pre></td></tr></table></figure>
+<p>安装软件包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt install [软件包名]<br></code></pre></td></tr></table></figure>
+<p>移除软件包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt remove [软件包名]<br></code></pre></td></tr></table></figure>
+<p>在使用已安装的软件一段时间后，你可能会注意到它们 <strong>不会自动更新</strong>（这在其他操作系统中有时是默认行为）。<br>要更新系统中已安装的软件包，请运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt upgrade<br></code></pre></td></tr></table></figure>
+<p>或者在某些情况下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt dist-upgrade<br></code></pre></td></tr></table></figure>
+<p>通常情况下使用 <code>apt upgrade</code> 就足够了，但在某些特定场景下需要使用 <code>apt dist-upgrade</code>。<br>关于这两者的区别，可以阅读这里的说明：<br><a target="_blank" rel="noopener" href="https://askubuntu.com/questions/194651/why-use-apt-get-upgrade-instead-of-apt-get-dist-upgrade">https://askubuntu.com/questions/194651/why-use-apt-get-upgrade-instead-of-apt-get-dist-upgrade</a></p>
+<p>在某些情况下，你可能希望 <strong>精确控制要安装的软件包版本</strong>。<br>要查看可以安装的版本列表，可以运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt policy [软件包名]<br></code></pre></td></tr></table></figure>
+<p>该命令会根据优先级（pin priority）列出候选安装版本，以及系统兼容的其他版本。</p>
+<p>要为指定的目标发行版安装软件包，可以运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt -t [目标发行版] install [软件包名]<br></code></pre></td></tr></table></figure>
+<p>此外，<code>apt</code> 还有一些用于清理不再需要的依赖、彻底清除软件包的命令，这些可以通过 <code>man</code> 手册查看。</p>
+<p>⚠️ 注意：<br>由于上述命令会直接修改系统，你通常需要使用 <code>sudo</code> 来运行它们。</p>
+<hr>
+<h3 id="dpkg"><a href="#dpkg" class="headerlink" title="dpkg"></a><code>dpkg</code></h3><p><strong><code>dpkg</code></strong> 是 Debian 的 <strong>后端包管理器</strong>。<br>传统上，<code>dpkg</code> 主要用于 <strong>安装本地的软件包</strong>。<br>使用 <code>dpkg</code> 你还可以检查软件包信息，以及修复损坏的安装。</p>
+<p>安装本地软件包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">dpkg -i [软件包文件名]<br></code></pre></td></tr></table></figure>
+<p>移除系统中的软件包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">dpkg --remove [软件包名]<br></code></pre></td></tr></table></figure>
+<p>查看软件包的详细信息：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">dpkg -I [软件包文件名]<br></code></pre></td></tr></table></figure>
+<p>修复或配置所有已解包但尚未完成配置的安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">dpkg --configure -a<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="开始之前（Getting-Started）"><a href="#开始之前（Getting-Started）" class="headerlink" title="开始之前（Getting Started）"></a>开始之前（Getting Started）</h2><p>在本实验中，我们将使用：</p>
+<ul>
+<li><code>gcc</code>：用于编译源代码  </li>
+<li><code>fpm</code>：一个简单的打包工具  </li>
+</ul>
+<p>首先，使用前面介绍的命令安装以下软件：</p>
+<ul>
+<li><code>gcc</code></li>
+<li><code>make</code></li>
+<li><code>ruby-dev</code></li>
+<li><code>ruby-ffi</code></li>
+</ul>
+<p>然后检查 GCC 和 Ruby 是否已安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">gcc --version<br>ruby --version<br></code></pre></td></tr></table></figure>
+<p>接着，使用 Ruby 自带的包管理器 <code>gem</code> 安装 <code>fpm</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> gem install fpm<br></code></pre></td></tr></table></figure>
+<p>检查 <code>fpm</code> 是否安装成功：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">fpm<br></code></pre></td></tr></table></figure>
+<p>现在克隆 <code>decal-labs</code> 仓库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://github.com/0xcf/decal-labs.git<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="练习-1：编译与打包"><a href="#练习-1：编译与打包" class="headerlink" title="练习 1：编译与打包"></a>练习 1：编译与打包</h2><p>手动为 Debian 打包软件通常非常困难且容易令人沮丧，尤其是对初学者而言。<br>因此，在本课程中我们将使用一个非常实用的 Ruby 工具 —— <strong>fpm</strong>，它可以大大简化打包过程。</p>
+<p><strong>注意：</strong><br>这种方法非常适合快速打包或回移植（backport）你自己的应用程序，但并不完全符合<br><a target="_blank" rel="noopener" href="https://www.debian.org/doc/manuals/maint-guide/">Debian 新维护者指南</a> 所规定的正式标准。</p>
+<p>如果你想挑战自己，可以尝试不用 <code>fpm</code>，而是根据以下文档使用 <code>dpkg-buildpackage</code>：<br><a target="_blank" rel="noopener" href="https://www.debian.org/doc/manuals/maint-guide/build.en.html">https://www.debian.org/doc/manuals/maint-guide/build.en.html</a></p>
+<hr>
+<h3 id="编写并编译程序"><a href="#编写并编译程序" class="headerlink" title="编写并编译程序"></a>编写并编译程序</h3><p>我们将编写一个非常简单的 C 程序，名为 <strong>hellopenguin</strong>，它会输出：</p>
+<blockquote>
+<p>Hello Penguin!</p>
+</blockquote>
+<p>创建源文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">touch</span> hellopenguin.c<br></code></pre></td></tr></table></figure>
+<p>使用你喜欢的编辑器（如 <code>vim</code>、<code>emacs</code> 或 <code>nano</code>），在 <code>hellopenguin.c</code> 中写入以下内容：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span><br>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Hello Penguin!\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>编译该程序：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">gcc hellopenguin.c -o hellopenguin<br></code></pre></td></tr></table></figure>
+<p>该命令会将源文件 <code>hellopenguin.c</code> 编译为名为 <code>hellopenguin</code> 的可执行文件。</p>
+<hr>
+<h3 id="将可执行文件打包"><a href="#将可执行文件打包" class="headerlink" title="将可执行文件打包"></a>将可执行文件打包</h3><p>在 Debian 中，用户级可执行程序通常放在 <code>/usr/bin/</code> 目录下。</p>
+<p>创建目录结构：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mkdir</span> -p packpenguin/usr/bin<br></code></pre></td></tr></table></figure>
+<p>将编译好的可执行文件移动进去：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mv</span> hellopenguin packpenguin/usr/bin/<br></code></pre></td></tr></table></figure>
+<p>现在创建名为 <code>hellopenguin</code> 的 <code>.deb</code> 软件包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">fpm -s <span class="hljs-built_in">dir</span> -t deb -n hellopenguin -v 1.0~ocf1 -C packpenguin<br></code></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<ul>
+<li><code>-s dir</code>：输入源是一个目录  </li>
+<li><code>-t deb</code>：输出为 <code>.deb</code> 软件包  </li>
+<li><code>-n hellopenguin</code>：包名  </li>
+<li><code>-v 1.0~ocf1</code>：版本号  </li>
+<li><code>-C packpenguin</code>：指定打包目录  </li>
+</ul>
+<p>安装生成的软件包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> dpkg -i ./hellopenguin_1.0~ocf1_amd64.deb<br></code></pre></td></tr></table></figure>
+<blockquote>
+<p>对于 M1 用户，文件名可能是 <code>hellopenguin_1.0~ocf1_arm64.deb</code></p>
+</blockquote>
+<p>现在你应该可以直接运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hellopenguin<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="练习-2：故障排查"><a href="#练习-2：故障排查" class="headerlink" title="练习 2：故障排查"></a>练习 2：故障排查</h2><p>进入 <code>ex2</code> 目录，尝试使用 <code>dpkg</code> 安装 <code>ocfspy</code> 软件包。<br>该安装过程 <strong>应该会报错</strong>，请注意错误信息。</p>
+<p><strong>提示：</strong></p>
+<ul>
+<li>检查软件包内容以获取更多信息  </li>
+<li>生成该程序的源文件就在目录中  </li>
+<li>可以参考练习 1 的编译与打包流程  </li>
+</ul>
+<p>完成后，请回答并在 Gradescope 上提交以下问题。</p>
+<h3 id="编译与打包"><a href="#编译与打包" class="headerlink" title="编译与打包"></a>编译与打包</h3><ol>
+<li>如果我们将 <code>hellopenguin</code> 打包到 <code>/usr/share</code> 而不是 <code>/usr/bin</code>，还能从任意目录运行它吗？</li>
+<li>你对上一问的理由是什么？</li>
+</ol>
+<h3 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h3><ol>
+<li>在安装 <code>ocfspy</code> 时，缺失的是哪个软件包？</li>
+<li>修复依赖问题后，<code>ocfspy</code> 输出的密码是什么？</li>
+</ol>
+<p>完成后，你可能希望从系统中移除 <code>hellopenguin</code>、<code>ocfdocs</code> 和 <code>ocfspy</code> 以清理虚拟机环境。</p>
+<hr>
+<h2 id="练习-3：深入探索（Spelunking）"><a href="#练习-3：深入探索（Spelunking）" class="headerlink" title="练习 3：深入探索（Spelunking）"></a>练习 3：深入探索（Spelunking）</h2><p>我们将换一个角度，通过分析一个真实的软件包来了解其内部结构。</p>
+<p>请选择一个 Debian 仓库中的软件包下载并解包，例如：</p>
+<ul>
+<li><code>tmux</code></li>
+<li><code>sl</code></li>
+<li><code>tree</code></li>
+</ul>
+<p>或从以下列表中选择：<br><a target="_blank" rel="noopener" href="https://packages.debian.org/stable/">https://packages.debian.org/stable/</a></p>
+<p>⚠️ 注意：<br>本练习主要用于 <strong>学习与探索</strong>，你实际上不会通过这种方式来安装软件包。</p>
+<p>完成解包后，请在 Gradescope 上回答以下问题：</p>
+<ol>
+<li>你选择了哪个软件包？</li>
+<li>该软件包的依赖是什么？在哪个文件中可以找到？</li>
+<li>解包 <code>data.tar.gz</code> 并查看其内容。如果存在除 <code>usr/bin/</code> 和 <code>usr/share/</code> 以外的目录，请选择一个并说明其用途。</li>
+<li>你还发现了该软件包的哪一个有趣之处？</li>
+</ol>
+<p><strong>提示：</strong></p>
+<ul>
+<li>下载软件包的命令是：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">apt download &lt;软件包名&gt;<br></code></pre></td></tr></table></figure></li>
+<li>使用 <code>aunpack</code> 可能需要先安装：  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt install atool<br></code></pre></td></tr></table></figure></li>
+<li>建议选择体积较小的软件包  </li>
+<li>课程中的演示视频会非常有帮助  </li>
+</ul>
+<hr>
+<h2 id="进阶挑战（For-Hotshots）"><a href="#进阶挑战（For-Hotshots）" class="headerlink" title="进阶挑战（For Hotshots）"></a>进阶挑战（For Hotshots）</h2><p>在之前的示例中，我们都是 <strong>先编译，再打包</strong>。<br>这种方式的好处是：软件包只要运行环境相似，就能正常工作。</p>
+<p>但一旦涉及不同的硬件架构，就需要为不同系统分别编译并打包。</p>
+<p><strong>挑战：</strong></p>
+<p>创建一个新的软件包，该软件包在安装过程中：</p>
+<ol>
+<li>解压源代码  </li>
+<li>编译程序  </li>
+<li>将相关文件移动到正确位置  </li>
+<li>删除无关文件  </li>
+</ol>
+<hr>
+<h2 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h2><p>以下资源在编写本实验时非常有帮助，如果你有兴趣，可以进一步阅读：</p>
+<ul>
+<li>fpm<br><a target="_blank" rel="noopener" href="https://github.com/jordansissel/fpm/wiki">https://github.com/jordansissel/fpm/wiki</a></li>
+<li>TLDR pages（更易读的 man 手册）<br><a target="_blank" rel="noopener" href="https://tldr.sh/">https://tldr.sh/</a></li>
+<li>dpkg<br><a target="_blank" rel="noopener" href="https://linux.die.net/man/1/dpkg">https://linux.die.net/man/1/dpkg</a> 或 <code>man dpkg</code></li>
+<li>apt<br><a target="_blank" rel="noopener" href="https://linux.die.net/man/8/apt">https://linux.die.net/man/8/apt</a> 或 <code>man apt</code></li>
+<li>Debian 新维护者指南<br><a target="_blank" rel="noopener" href="https://www.debian.org/doc/manuals/maint-guide/">https://www.debian.org/doc/manuals/maint-guide/</a></li>
+</ul>
+<h2 id="一、实验目的"><a href="#一、实验目的" class="headerlink" title="一、实验目的"></a>一、实验目的</h2><p>本实验的目的是通过使用 <code>dpkg</code> 安装本地 <code>.deb</code> 软件包，理解 Debian 包管理中 <strong>依赖关系处理机制</strong>，并掌握在依赖缺失时的排错与修复流程。</p>
+<p>重点在于理解以下概念：</p>
+<ul>
+<li><code>dpkg</code> 是底层包管理工具，不会自动解决依赖</li>
+<li>依赖缺失会导致软件包处于 <em>unconfigured</em> 状态</li>
+<li>需要通过分析报错信息并手动补齐依赖来完成安装</li>
+</ul>
+<hr>
+<h2 id="二、实验过程与问题定位"><a href="#二、实验过程与问题定位" class="headerlink" title="二、实验过程与问题定位"></a>二、实验过程与问题定位</h2><h3 id="1-尝试安装-ocfspy"><a href="#1-尝试安装-ocfspy" class="headerlink" title="1. 尝试安装 ocfspy"></a>1. 尝试安装 ocfspy</h3><p>在 <code>ex2</code> 目录中，尝试使用 <code>dpkg</code> 安装 <code>ocfspy</code> 软件包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> dpkg -i ocfspy_1.0~ocf1_amd64.deb<br></code></pre></td></tr></table></figure>
+<p>安装过程中出现如下错误信息：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text">dpkg: dependency problems prevent configuration of ocfspy:<br> ocfspy depends on ocfdocs; however:<br>  Package ocfdocs is not installed.<br><br>dpkg: error processing package ocfspy (--install):<br> dependency problems - leaving unconfigured<br></code></pre></td></tr></table></figure>
+<p>由此可以确认，<code>ocfspy</code> 在安装时由于 <strong>依赖包缺失</strong> 而无法完成配置。</p>
+<hr>
+<h3 id="2-确认缺失依赖"><a href="#2-确认缺失依赖" class="headerlink" title="2. 确认缺失依赖"></a>2. 确认缺失依赖</h3><p>从 <code>dpkg</code> 的错误提示中可以直接看出：</p>
+<ul>
+<li><code>ocfspy</code> 依赖的软件包是 <code>ocfdocs</code></li>
+<li>当前系统中未安装该软件包</li>
+</ul>
+<p>因此，问题的根本原因是：  </p>
+<blockquote>
+<p><strong><code>ocfdocs</code> 软件包未安装，导致 <code>ocfspy</code> 无法完成配置</strong></p>
+</blockquote>
+<hr>
+<h2 id="三、修复依赖并完成安装"><a href="#三、修复依赖并完成安装" class="headerlink" title="三、修复依赖并完成安装"></a>三、修复依赖并完成安装</h2><h3 id="1-编译-ocfdocs-程序"><a href="#1-编译-ocfdocs-程序" class="headerlink" title="1. 编译 ocfdocs 程序"></a>1. 编译 ocfdocs 程序</h3><p>实验目录中提供了 <code>ocfdocs.c</code> 源文件，首先将其编译为可执行文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">gcc ocfdocs.c -o ocfdocs<br></code></pre></td></tr></table></figure>
+<hr>
+<h3 id="2-使用-fpm-打包-ocfdocs"><a href="#2-使用-fpm-打包-ocfdocs" class="headerlink" title="2. 使用 fpm 打包 ocfdocs"></a>2. 使用 fpm 打包 ocfdocs</h3><p>使用 <code>fpm</code> 将编译得到的可执行文件打包为 <code>.deb</code> 软件包：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">fpm -s <span class="hljs-built_in">dir</span> -t deb -n ocfdocs ./ocfdocs<br></code></pre></td></tr></table></figure>
+<p>生成的软件包为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">ocfdocs_1.0_amd64.deb<br></code></pre></td></tr></table></figure>
+<hr>
+<h3 id="3-安装-ocfdocs"><a href="#3-安装-ocfdocs" class="headerlink" title="3. 安装 ocfdocs"></a>3. 安装 ocfdocs</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> dpkg -i ocfdocs_1.0_amd64.deb<br></code></pre></td></tr></table></figure>
+<p>安装完成后，<code>ocfdocs</code> 已成功注册到系统中。</p>
+<hr>
+<h3 id="4-重新安装-ocfspy"><a href="#4-重新安装-ocfspy" class="headerlink" title="4. 重新安装 ocfspy"></a>4. 重新安装 ocfspy</h3><p>在依赖补齐后，再次安装 <code>ocfspy</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> dpkg -i ocfspy_1.0~ocf1_amd64.deb<br></code></pre></td></tr></table></figure>
+<p>此时安装顺利完成，说明依赖问题已被成功修复。</p>
+<hr>
+<h2 id="四、问题回答（Gradescope）"><a href="#四、问题回答（Gradescope）" class="headerlink" title="四、问题回答（Gradescope）"></a>四、问题回答（Gradescope）</h2><h3 id="编译与打包-1"><a href="#编译与打包-1" class="headerlink" title="编译与打包"></a>编译与打包</h3><p><strong>问题 1：</strong><br>如果将 <code>hellopenguin</code> 打包到 <code>/usr/share</code> 而不是 <code>/usr/bin</code>，是否还能从任意目录运行？</p>
+<p><strong>回答：</strong><br>通常不能直接从任意目录运行。</p>
+<hr>
+<p><strong>问题 2：</strong><br>请说明理由。</p>
+<p><strong>理由说明：</strong></p>
+<ul>
+<li>Shell 在执行命令时，会按照环境变量 <code>PATH</code> 中列出的目录顺序查找可执行文件</li>
+<li><code>/usr/bin</code> 通常包含在 <code>PATH</code> 中，用于存放用户可执行程序</li>
+<li><code>/usr/share</code> 按照 Linux 文件系统层次结构（FHS）的约定，用于存放与体系结构无关的共享数据（如文档、资源文件等），通常不在 <code>PATH</code> 中</li>
+<li>因此，将可执行文件放入 <code>/usr/share</code> 后，除非使用完整路径或手动修改 <code>PATH</code>，否则无法直接从任意目录运行</li>
+</ul>
+<hr>
+<h3 id="调试（Debugging）"><a href="#调试（Debugging）" class="headerlink" title="调试（Debugging）"></a>调试（Debugging）</h3><p><strong>问题 1：</strong><br>在安装 <code>ocfspy</code> 时，缺失的是哪个软件包？</p>
+<p><strong>回答：</strong><br>缺失的软件包是 <code>ocfdocs</code>。</p>
+<p>该结论直接来源于 <code>dpkg</code> 的错误提示信息，明确指出 <code>ocfspy</code> 依赖 <code>ocfdocs</code>，但系统中未安装该软件包。</p>
+<hr>
+<p><strong>问题 2：</strong><br>修复依赖问题后，<code>ocfspy</code> 输出的密码是什么？</p>
+<p><strong>回答：</strong><br>The password is Sinkhole.</p>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/LSAD/" class="print-no-link">#LSAD</a>
+      
+        <a href="/tags/lab/" class="print-no-link">#lab</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OCF Linux System Administration DeCal lab3</div>
+      <div>https://zjjyyds.github.io/2026/02/08/学院派/LSAD lab3/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年2月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/02/08/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20lab4/" title="OCF Linux System Administration DeCal lab4">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab4</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/29/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20lab1/" title="OCF Linux System Administration DeCal lab1">
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

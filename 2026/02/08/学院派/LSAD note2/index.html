@@ -1,0 +1,980 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Core Shell &amp; Bash Scripting（核心 Shell 与 Bash 脚本） Presented to you by and jaysa :)   使用 Vim 提升效率¶ 希望你现在已经可以比较熟练地在 vim 中编辑文件了，但你可能还是觉得自己很慢。 别担心！随着你把新的命令逐渐变成肌肉记忆，你一定会越来越快。 如果你真的非常投入学习，建议你：  每天学一个新命令。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OCF Linux System Administration DeCal note2">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/02/08/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20note2/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="Core Shell &amp; Bash Scripting（核心 Shell 与 Bash 脚本） Presented to you by and jaysa :)   使用 Vim 提升效率¶ 希望你现在已经可以比较熟练地在 vim 中编辑文件了，但你可能还是觉得自己很慢。 别担心！随着你把新的命令逐渐变成肌肉记忆，你一定会越来越快。 如果你真的非常投入学习，建议你：  每天学一个新命令。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.jaysa.net/assets/ocf-box.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/bash-cover.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/nerd-cat.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/hacker-cat.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/first-script.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/script-1.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/script-2.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/script-3.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/script-4.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/script-6.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/script-5.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/script-7.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/script-8.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/rest-of-owl.jpg">
+<meta property="og:image" content="https://blog.jaysa.net/assets/script-9.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/script-10.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/script-11.png">
+<meta property="article:published_time" content="2026-02-08T13:51:00.000Z">
+<meta property="article:modified_time" content="2026-02-08T13:15:59.421Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="LSAD">
+<meta property="article:tag" content="note">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog.jaysa.net/assets/ocf-box.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>OCF Linux System Administration DeCal note2 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OCF Linux System Administration DeCal note2"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-02-08 21:51" pubdate>
+          2026年2月8日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          14 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OCF Linux System Administration DeCal note2</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Core-Shell-amp-Bash-Scripting"><a href="#Core-Shell-amp-Bash-Scripting" class="headerlink" title="Core Shell &amp; Bash Scripting"></a>Core Shell &amp; Bash Scripting</h1><p>（核心 Shell 与 Bash 脚本）</p>
+<p>Presented to you by<br><img src="https://blog.jaysa.net/assets/ocf-box.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>and jaysa :)</p>
+<p><img src="https://blog.jaysa.net/assets/bash-cover.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<hr>
+<h2 id="使用-Vim-提升效率"><a href="#使用-Vim-提升效率" class="headerlink" title="使用 Vim 提升效率"></a>使用 Vim 提升效率</h2><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#getting-faster-with-vim" title="Permanent link">¶</a></p>
+<p>希望你现在已经可以比较熟练地在 vim 中编辑文件了，但你可能还是觉得自己<strong>很慢</strong>。</p>
+<p>别担心！<br>随着你把新的命令逐渐变成肌肉记忆，你一定会越来越快。</p>
+<p>如果你真的非常投入学习，建议你：</p>
+<blockquote>
+<p><strong>每天学一个新命令。</strong></p>
+</blockquote>
+<p>只要有机会就用它，直到它变成一种自然反应。</p>
+<p>你掌握的命令越多，当你在课堂上记笔记时，<strong>坐在你后面的那个人就会觉得你越酷。</strong></p>
+<p><img src="https://blog.jaysa.net/assets/nerd-cat.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>↑<br>你在用 VS Code 写代码时</p>
+<p><img src="https://blog.jaysa.net/assets/hacker-cat.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>↑<br>你如果使用 Vim 的样子</p>
+<p>如果你不知道接下来该学哪些命令，可以看看这篇文章：</p>
+<p>👉 <strong>Learn Vim Progressively</strong><br><a target="_blank" rel="noopener" href="https://yannesposito.com/Scratch/en/blog/Learn-Vim-Progressively/">https://yannesposito.com/Scratch/en/blog/Learn-Vim-Progressively/</a></p>
+<p>它给出了一个<strong>循序渐进学习 Vim 技巧的合理顺序</strong>。</p>
+<p>👉 <strong>今天的实验我希望你尽量坚持使用 Vim！</strong></p>
+<hr>
+<h2 id="Spotify-太烂了"><a href="#Spotify-太烂了" class="headerlink" title="Spotify 太烂了"></a>Spotify 太烂了</h2><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#spotify-sucks" title="Permanent link">¶</a></p>
+<p>说实话，如果 Spotify 没那么烂，我今天可能都不会站在这里。</p>
+<p>有一天我刚在 YouTube 看完一个视频，Spotify 就立刻给我推送了一个“精准推荐”的播客。</p>
+<p>不知道为什么，这一下彻底触发了我。</p>
+<p>于是我开始思考：</p>
+<blockquote>
+<p><strong>我能不能把对设备和软件的控制权，从这些大公司手里拿回来？</strong></p>
+</blockquote>
+<p>我们在 UC Berkeley。<br>所以我知道，你和我一样聪明，不应该被迫忍受：</p>
+<ul>
+<li>强制推荐内容</li>
+<li>桌面开始菜单里的广告快捷方式（我们甚至还花钱买了系统！）</li>
+<li>音乐品味、媒体内容完全由广告算法决定</li>
+</ul>
+<p>我希望你在这门课中学到的技能，能像当初帮助我一样：</p>
+<blockquote>
+<p><strong>让你重新掌控自己的设备和软件。</strong></p>
+</blockquote>
+<p>Bash 脚本正是其中一项非常重要、也非常基础的技能。</p>
+<hr>
+<h2 id="那我们自己做一个替代方案……"><a href="#那我们自己做一个替代方案……" class="headerlink" title="那我们自己做一个替代方案……"></a>那我们自己做一个替代方案……</h2><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#lets-make-an-alternative" title="Permanent link">¶</a></p>
+<p>卸载 Spotify 之后，我很难找到一种能接近 Spotify 使用体验的听歌方式。</p>
+<p>不过……</p>
+<p>前段时间我在家打扫房间时，翻出了一台：</p>
+<blockquote>
+<p><strong>很久以前圣诞节收到的 iPod Shuffle。</strong></p>
+</blockquote>
+<p>我研究了一下如何在 Linux 上使用 iPod Shuffle<br>（因为我没有任何苹果设备）。</p>
+<p>然后发现了一个 Python 脚本：</p>
+<blockquote>
+<p><strong>ipod-shuffle-4g</strong></p>
+</blockquote>
+<p>这正是我上周给大家展示过的那个脚本。</p>
+<p>现在我们来试着用它，把音乐上传到我的 iPod。</p>
+<p>假设我用某个“神秘的在线视频转 mp3 网站”，<br>从 YouTube 下载了一个 mp3 文件。</p>
+<p>（别 @ 我盗版问题，我这周四去看 Red Leather 现场演出给的钱<br>比 Spotify 给他的播放分成多得多。）</p>
+<p><img src="https://blog.jaysa.net/assets/first-script.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>谁能告诉我：<br>我运行每一条命令时都发生了什么？</p>
+<p>好，现在我们已经成功：</p>
+<ul>
+<li>手动下载了一个 mp3</li>
+<li>手动上传到了 iPod</li>
+</ul>
+<p>但这离“方便”还差得很远。</p>
+<p>而且我已经忘了刚刚用的命令是什么。</p>
+<hr>
+<h2 id="Bash-脚本"><a href="#Bash-脚本" class="headerlink" title="Bash 脚本"></a>Bash 脚本</h2><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#bash-scripting" title="Permanent link">¶</a></p>
+<p>那我们把刚刚那条命令保存成一个脚本吧。</p>
+<p><img src="https://blog.jaysa.net/assets/script-1.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>现在运行这个脚本：</p>
+<p><img src="https://blog.jaysa.net/assets/script-2.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>虽然在这个例子中 <code>./script.sh</code> 和 <code>bash script.sh</code> 效果一样，<br>但它们本质上是不同的：</p>
+<ul>
+<li><code>./</code>：直接执行文件</li>
+<li><code>bash</code>：把文件内容作为输入传给 bash 解释器</li>
+</ul>
+<p>一般我更推荐使用 <code>./</code>，这样你就不用记脚本是用什么语言写的。</p>
+</blockquote>
+<hr>
+<h2 id="流（Streams）"><a href="#流（Streams）" class="headerlink" title="流（Streams）"></a>流（Streams）</h2><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#streams" title="Permanent link">¶</a></p>
+<p>这样只是稍微好了一点。</p>
+<p>如果我希望：</p>
+<blockquote>
+<p><strong>在运行脚本时直接指定音乐文件路径，而不是手动 cp 到 iPod 根目录呢？</strong></p>
+</blockquote>
+<p>为此，我们需要从命令行获取用户输入。</p>
+<p>这叫：</p>
+<blockquote>
+<p><strong>STDIN（标准输入）</strong></p>
+</blockquote>
+<p>GNU 官方文档（read 命令）：</p>
+<p><a target="_blank" rel="noopener" href="https://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html#index-read">https://www.gnu.org/software/bash/manual/html_node/Bash-Builtins.html#index-read</a></p>
+<p>Bash 中还有很多操作数据流的方法，例如：</p>
+<ol>
+<li><strong>重定向</strong></li>
+</ol>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">echo <span class="hljs-string">&quot;hello&quot;</span> &gt; <span class="hljs-keyword">out</span>.txt<br></code></pre></td></tr></table></figure>
+<p>把 <code>hello</code> 写入当前目录下的新文件 <code>out.txt</code></p>
+<ol>
+<li><strong>追加</strong></li>
+</ol>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ada">echo <span class="hljs-string">&quot;hello&quot;</span> &gt;&gt; <span class="hljs-keyword">out</span>.txt<br></code></pre></td></tr></table></figure>
+<p>将内容追加到文件末尾</p>
+<ul>
+<li>这和重定向有什么区别？</li>
+</ul>
+<ol>
+<li><strong>管道</strong></li>
+</ol>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-keyword">command</span>1 | <span class="hljs-keyword">command</span>2<br></code></pre></td></tr></table></figure>
+<p>把第一个命令的输出作为第二个命令的输入<br>连接 stdout 和 stdin。</p>
+<hr>
+<h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#variables" title="Permanent link">¶</a></p>
+<p>我们还需要把输入内容保存起来。</p>
+<p>我们用一个叫做 <code>song_name</code> 的变量。</p>
+<p><img src="https://blog.jaysa.net/assets/script-3.png" srcset="/img/loading.gif" lazyload alt=""><br><img src="https://blog.jaysa.net/assets/script-4.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>你也可以用更基础的方式定义变量，例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">FOO=1<br>OUTPUT=$((FOO+<span class="hljs-number">1</span>))<br><span class="hljs-built_in">echo</span> <span class="hljs-variable">$OUTPUT</span><br></code></pre></td></tr></table></figure>
+<p>终端输出结果为：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">2<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="条件判断"><a href="#条件判断" class="headerlink" title="条件判断"></a>条件判断</h2><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#conditionals" title="Permanent link">¶</a></p>
+<p>现在我们已经可以：</p>
+<ul>
+<li>接收歌曲名称</li>
+<li>之后把它传给 Python 脚本</li>
+</ul>
+<p>另外，我会使用一个非常酷的音乐管理工具：</p>
+<blockquote>
+<p><strong>beets</strong></p>
+</blockquote>
+<p>用来管理我电脑里的音乐库。</p>
+<p><img src="https://blog.jaysa.net/assets/script-6.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://blog.jaysa.net/assets/script-5.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://blog.jaysa.net/assets/script-7.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://blog.jaysa.net/assets/script-8.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>GNU Bash 条件表达式文档：</p>
+<p><a target="_blank" rel="noopener" href="https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html">https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html</a></p>
+<h3 id="if–else-示例"><a href="#if–else-示例" class="headerlink" title="if–else 示例"></a>if–else 示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">if</span> [ <span class="hljs-string">&quot;<span class="hljs-variable">$1</span>&quot;</span> -eq 79 ];<br><span class="hljs-keyword">then</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;nice&quot;</span><br><span class="hljs-keyword">else</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;darn&quot;</span><br><span class="hljs-keyword">fi</span><br></code></pre></td></tr></table></figure>
+<h3 id="elif-示例"><a href="#elif-示例" class="headerlink" title="elif 示例"></a>elif 示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">if</span> [ <span class="hljs-string">&quot;<span class="hljs-variable">$1</span>&quot;</span> -eq 79 ];<br><span class="hljs-keyword">then</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;nice&quot;</span><br><span class="hljs-keyword">elif</span> [ <span class="hljs-string">&quot;<span class="hljs-variable">$1</span>&quot;</span> -eq 42 ];<br><span class="hljs-keyword">then</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;the answer!&quot;</span><br><span class="hljs-keyword">else</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;wat r numbers&quot;</span><br><span class="hljs-keyword">fi</span><br></code></pre></td></tr></table></figure>
+<h3 id="case-示例"><a href="#case-示例" class="headerlink" title="case 示例"></a>case 示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">read</span> -p <span class="hljs-string">&quot;are you 21?&quot;</span> ANSWER<br><span class="hljs-keyword">case</span> <span class="hljs-string">&quot;<span class="hljs-variable">$ANSWER</span>&quot;</span> <span class="hljs-keyword">in</span><br>  <span class="hljs-string">&quot;yes&quot;</span>)<br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;i give u cookie&quot;</span>;;<br>  <span class="hljs-string">&quot;no&quot;</span>)<br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;thats illegal&quot;</span>;;<br>  <span class="hljs-string">&quot;are you?&quot;</span>)<br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;lets not&quot;</span>;;<br>  *)<br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;please answer&quot;</span><br><span class="hljs-keyword">esac</span><br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="现在画剩下的猫头鹰吧"><a href="#现在画剩下的猫头鹰吧" class="headerlink" title="现在画剩下的猫头鹰吧"></a>现在画剩下的猫头鹰吧</h2><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#now-draw-the-rest-of-the-owl" title="Permanent link">¶</a></p>
+<p>现在我们用学到的内容改进脚本：</p>
+<ul>
+<li>使用 <code>yt-dlp</code> 自动下载音乐</li>
+<li>不再手动操作</li>
+</ul>
+<p><img src="https://blog.jaysa.net/assets/rest-of-owl.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://blog.jaysa.net/assets/script-9.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://blog.jaysa.net/assets/script-10.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<hr>
+<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#loops" title="Permanent link">¶</a></p>
+<p>Bash 中主要有两种循环：</p>
+<ul>
+<li><code>for</code></li>
+<li><code>while</code></li>
+</ul>
+<hr>
+<h3 id="for-循环语法"><a href="#for-循环语法" class="headerlink" title="for 循环语法"></a>for 循环语法</h3><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#for-loop-syntax" title="Permanent link">¶</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">n=0<br><span class="hljs-keyword">for</span> x <span class="hljs-keyword">in</span> &#123;1..10&#125;<br><span class="hljs-keyword">do</span><br>    n=$(<span class="hljs-built_in">expr</span> <span class="hljs-variable">$x</span> + <span class="hljs-variable">$n</span>)<br><span class="hljs-keyword">done</span><br><span class="hljs-built_in">echo</span> <span class="hljs-variable">$n</span><br></code></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">55<br></code></pre></td></tr></table></figure>
+<hr>
+<h3 id="while-循环语法"><a href="#while-循环语法" class="headerlink" title="while 循环语法"></a>while 循环语法</h3><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#while-loop-syntax" title="Permanent link">¶</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">while</span> <span class="hljs-literal">true</span><br><span class="hljs-keyword">do</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;nightmare &quot;</span><br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+<p>程序会不断输出：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">nightmare</span><br></code></pre></td></tr></table></figure>
+<p>直到用户手动终止。</p>
+<hr>
+<p>现在我们在脚本中使用 <code>while</code> 循环：</p>
+<p><img src="https://blog.jaysa.net/assets/script-11.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><code>&lt;&lt;&lt;</code> 会把整个 <code>song_path</code> 变量作为输入喂给循环。</p>
+<p>参考资料：</p>
+<ul>
+<li><p>while 逐行读取文件原理<br><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/10929453/read-a-file-line-by-line-assigning-the-value-to-a-variable">https://stackoverflow.com/questions/10929453/read-a-file-line-by-line-assigning-the-value-to-a-variable</a></p>
+</li>
+<li><p>here string（&lt;&lt;&lt;）解释<br><a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/80362/what-does-mean">https://unix.stackexchange.com/questions/80362/what-does-mean</a></p>
+</li>
+</ul>
+<blockquote>
+<p>我还使用了 Python 脚本的一个依赖：</p>
+<p><strong>mutagen</strong></p>
+<p>我通过 nix 临时安装它，用来根据音频元数据生成播放列表。</p>
+<p><code>-i</code> 参数正是用于这个目的。</p>
+<p>下周我们会详细学习包管理，如果你想了解 nix，可以来找我聊 🙂</p>
+</blockquote>
+<hr>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#functions" title="Permanent link">¶</a></p>
+<p>今天的示例里我没有使用函数，但你在实验中可能会用到。</p>
+<p>基本语法如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">function</span> <span class="hljs-function"><span class="hljs-title">greet</span></span>() &#123;<br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;hey there <span class="hljs-variable">$1</span>&quot;</span><br>&#125;<br><br>greet <span class="hljs-string">&quot;sysadmin decal&quot;</span><br></code></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">hey there sysadmin decal</span><br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="小技巧"><a href="#小技巧" class="headerlink" title="小技巧"></a>小技巧</h2><p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/16/core-shell--bash-scripting/#tips" title="Permanent link">¶</a></p>
+<ul>
+<li><p>Bash 语法真的<strong>非常奇怪</strong></p>
+<ul>
+<li>空格极其重要</li>
+<li>一定要仔细看报错信息</li>
+</ul>
+</li>
+<li><p>一如既往：</p>
+<blockquote>
+<p><strong>用 Google 走向自由</strong></p>
+</blockquote>
+</li>
+<li><p><strong>ncmpcpp!!!</strong></p>
+<ul>
+<li>终端用户界面（TUI） &gt; 图形界面（GUI）</li>
+<li>Linux 上很多工具都有 TUI 版本</li>
+<li>通常更快、更自由（FOSS）</li>
+<li>而且和 Vim 一样：</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>会让你看起来超级超级酷</strong></p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/LSAD/" class="print-no-link">#LSAD</a>
+      
+        <a href="/tags/note/" class="print-no-link">#note</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OCF Linux System Administration DeCal note2</div>
+      <div>https://zjjyyds.github.io/2026/02/08/学院派/LSAD note2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年2月8日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/02/08/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20note3/" title="OCF Linux System Administration DeCal note3">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal note3</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/02/08/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20lab4/" title="OCF Linux System Administration DeCal lab4">
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab4</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
