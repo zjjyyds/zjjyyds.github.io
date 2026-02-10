@@ -19,25 +19,25 @@
   <meta name="author" content="Jay">
   <meta name="keywords" content="">
   
-    <meta name="description" content="WSL2 网络代理一键配置指南1. 背景与原理WSL2 运行在 Hyper-V 虚拟机中，拥有独立的 IP 地址。因此，WSL2 不能直接通过 127.0.0.1 访问宿主机（Windows）上的代理软件。本配置通过自动抓取宿主机虚拟网卡 IP，实现代理的一键开关。 2. 前置准备在开始配置前，请确保 Windows 端的代理软件已完成以下设置：  允许局域网连接 (Allow LAN)：必须勾选">
+    <meta name="description" content="Networking1. 为什么需要网络 网络让多台计算机通信与共享资源成为可能  支持文件共享、远程访问、分布式服务和互联网应用  本质目标：在不同设备之间可靠地传递数据    2. 网络地址基础 MAC 地址  物理层面的设备唯一标识（如 00:14:22:01:2a:c5）  只在局域网（LAN）内使用，和硬件绑定  类比：人的身份证号    IP 地址（IPv4）  逻辑地址（如 169.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="WLS2网络配置">
-<meta property="og:url" content="https://zjjyyds.github.io/2025/12/31/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/WLS2%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:title" content="OCF Linux System Administration DeCal note5">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/02/10/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20note5/index.html">
 <meta property="og:site_name" content="大雪深埋">
-<meta property="og:description" content="WSL2 网络代理一键配置指南1. 背景与原理WSL2 运行在 Hyper-V 虚拟机中，拥有独立的 IP 地址。因此，WSL2 不能直接通过 127.0.0.1 访问宿主机（Windows）上的代理软件。本配置通过自动抓取宿主机虚拟网卡 IP，实现代理的一键开关。 2. 前置准备在开始配置前，请确保 Windows 端的代理软件已完成以下设置：  允许局域网连接 (Allow LAN)：必须勾选">
+<meta property="og:description" content="Networking1. 为什么需要网络 网络让多台计算机通信与共享资源成为可能  支持文件共享、远程访问、分布式服务和互联网应用  本质目标：在不同设备之间可靠地传递数据    2. 网络地址基础 MAC 地址  物理层面的设备唯一标识（如 00:14:22:01:2a:c5）  只在局域网（LAN）内使用，和硬件绑定  类比：人的身份证号    IP 地址（IPv4）  逻辑地址（如 169.">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-12-31T12:01:00.000Z">
-<meta property="article:modified_time" content="2025-12-31T12:22:18.374Z">
+<meta property="article:published_time" content="2026-02-10T11:20:00.000Z">
+<meta property="article:modified_time" content="2026-02-10T11:24:02.066Z">
 <meta property="article:author" content="Jay">
-<meta property="article:tag" content="WLS2">
-<meta property="article:tag" content="CS50，网络配置">
+<meta property="article:tag" content="LSAD">
+<meta property="article:tag" content="note">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>WLS2网络配置 - 大雪深埋</title>
+  <title>OCF Linux System Administration DeCal note5 - 大雪深埋</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -203,7 +203,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="WLS2网络配置"></span>
+            <span id="subtitle" data-typed-text="OCF Linux System Administration DeCal note5"></span>
           
         </div>
 
@@ -214,8 +214,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-12-31 20:01" pubdate>
-          2025年12月31日 晚上
+        <time datetime="2026-02-10 19:20" pubdate>
+          2026年2月10日 晚上
         </time>
       </span>
     
@@ -226,7 +226,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          543 字
+          544 字
         
       </span>
     
@@ -283,34 +283,163 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">WLS2网络配置</h1>
+            <h1 id="seo-header">OCF Linux System Administration DeCal note5</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="WSL2-网络代理一键配置指南"><a href="#WSL2-网络代理一键配置指南" class="headerlink" title="WSL2 网络代理一键配置指南"></a>WSL2 网络代理一键配置指南</h1><h2 id="1-背景与原理"><a href="#1-背景与原理" class="headerlink" title="1. 背景与原理"></a>1. 背景与原理</h2><p>WSL2 运行在 Hyper-V 虚拟机中，拥有独立的 IP 地址。因此，WSL2 不能直接通过 <code>127.0.0.1</code> 访问宿主机（Windows）上的代理软件。本配置通过自动抓取宿主机虚拟网卡 IP，实现代理的一键开关。</p>
-<h2 id="2-前置准备"><a href="#2-前置准备" class="headerlink" title="2. 前置准备"></a>2. 前置准备</h2><p>在开始配置前，请确保 Windows 端的代理软件已完成以下设置：</p>
-<ol>
-<li><strong>允许局域网连接 (Allow LAN)</strong>：必须勾选，否则 Windows 会拒绝来自 WSL2 的连接。</li>
-<li><strong>确认端口</strong>：确认你的代理软件监听端口（如 <code>10808</code> 或 <code>7890</code>）。</li>
-</ol>
-<hr>
-<h2 id="3-配置步骤"><a href="#3-配置步骤" class="headerlink" title="3. 配置步骤"></a>3. 配置步骤</h2><h3 id="A-修改-Bash-配置文件"><a href="#A-修改-Bash-配置文件" class="headerlink" title="A. 修改 Bash 配置文件"></a>A. 修改 Bash 配置文件</h3><p>在 WSL 终端中运行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">nano ~/.bashrc<br></code></pre></td></tr></table></figure></p>
-<h3 id="B-写入配置脚本"><a href="#B-写入配置脚本" class="headerlink" title="B. 写入配置脚本"></a>B. 写入配置脚本</h3><p>将以下代码粘贴到文件末尾。注意将 <code>10808</code> 修改为你实际的代理端口。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ---------- WSL2 Proxy Helper ----------</span><br><span class="hljs-comment"># 建议端口与 Windows 代理软件保持一致</span><br><span class="hljs-built_in">export</span> PROXY_PORT=<span class="hljs-string">&quot;10808&quot;</span><br><br><span class="hljs-keyword">function</span> <span class="hljs-function"><span class="hljs-title">proxy_on</span></span>() &#123;<br>    <span class="hljs-comment"># 1. 自动获取宿主机 IP (resolv.conf 中的 nameserver)</span><br>    <span class="hljs-built_in">export</span> host_ip=$(grep -m 1 nameserver /etc/resolv.conf | awk <span class="hljs-string">&#x27;&#123;print $2&#125;&#x27;</span>)<br>    <br>    <span class="hljs-comment"># 2. 设置环境变量 (HTTP/HTTPS/SOCKS5)</span><br>    <span class="hljs-built_in">export</span> http_proxy=<span class="hljs-string">&quot;http://<span class="hljs-variable">$&#123;host_ip&#125;</span>:<span class="hljs-variable">$&#123;PROXY_PORT&#125;</span>&quot;</span><br>    <span class="hljs-built_in">export</span> https_proxy=<span class="hljs-string">&quot;http://<span class="hljs-variable">$&#123;host_ip&#125;</span>:<span class="hljs-variable">$&#123;PROXY_PORT&#125;</span>&quot;</span><br>    <span class="hljs-built_in">export</span> ALL_PROXY=<span class="hljs-string">&quot;socks5://<span class="hljs-variable">$&#123;host_ip&#125;</span>:<span class="hljs-variable">$&#123;PROXY_PORT&#125;</span>&quot;</span><br>    <br>    <span class="hljs-comment"># 3. 同步配置 Git 代理</span><br>    git config --global http.proxy <span class="hljs-string">&quot;http://<span class="hljs-variable">$&#123;host_ip&#125;</span>:<span class="hljs-variable">$&#123;PROXY_PORT&#125;</span>&quot;</span><br>    git config --global https.proxy <span class="hljs-string">&quot;http://<span class="hljs-variable">$&#123;host_ip&#125;</span>:<span class="hljs-variable">$&#123;PROXY_PORT&#125;</span>&quot;</span><br><br>    <span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;\033[32m[√] Proxy Enabled\033[0m&quot;</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Host IP: <span class="hljs-variable">$&#123;host_ip&#125;</span>&quot;</span><br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Port: <span class="hljs-variable">$&#123;PROXY_PORT&#125;</span>&quot;</span><br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-function"><span class="hljs-title">proxy_off</span></span>() &#123;<br>    <span class="hljs-comment"># 1. 取消环境变量</span><br>    <span class="hljs-built_in">unset</span> http_proxy<br>    <span class="hljs-built_in">unset</span> https_proxy<br>    <span class="hljs-built_in">unset</span> ALL_PROXY<br>    <br>    <span class="hljs-comment"># 2. 取消 Git 代理</span><br>    git config --global --<span class="hljs-built_in">unset</span> http.proxy<br>    git config --global --<span class="hljs-built_in">unset</span> https.proxy<br><br>    <span class="hljs-built_in">echo</span> -e <span class="hljs-string">&quot;\033[31m[×] Proxy Disabled\033[0m&quot;</span><br>&#125;<br><br><span class="hljs-keyword">function</span> <span class="hljs-function"><span class="hljs-title">proxy_test</span></span>() &#123;<br>    <span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Testing connection to Google...&quot;</span><br>    curl -I https://www.google.com<br>&#125;<br><span class="hljs-comment"># --------------------------------------</span><br></code></pre></td></tr></table></figure>
-<h3 id="C-使配置生效"><a href="#C-使配置生效" class="headerlink" title="C. 使配置生效"></a>C. 使配置生效</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> ~/.bashrc<br></code></pre></td></tr></table></figure>
-<hr>
-<h2 id="4-使用指南"><a href="#4-使用指南" class="headerlink" title="4. 使用指南"></a>4. 使用指南</h2><ul>
-<li><strong>开启代理</strong>：输入 <code>proxy_on</code>。适用于 <code>apt update</code>、<code>git clone</code>、<code>pip install</code> 等。</li>
-<li><strong>关闭代理</strong>：输入 <code>proxy_off</code>。</li>
-<li><strong>检查状态</strong>：输入 <code>proxy_test</code>。</li>
+                <h2 id="Networking"><a href="#Networking" class="headerlink" title="Networking"></a>Networking</h2><h3 id="1-为什么需要网络"><a href="#1-为什么需要网络" class="headerlink" title="1. 为什么需要网络"></a>1. 为什么需要网络</h3><ul>
+<li><p>网络让<strong>多台计算机通信与共享资源</strong>成为可能</p>
+</li>
+<li><p>支持文件共享、远程访问、分布式服务和互联网应用</p>
+</li>
+<li><p>本质目标：<strong>在不同设备之间可靠地传递数据</strong></p>
+</li>
 </ul>
 <hr>
-<h2 id="5-常见问题排查"><a href="#5-常见问题排查" class="headerlink" title="5. 常见问题排查"></a>5. 常见问题排查</h2><h3 id="Q-proxy-on-后依然连接超时-Timeout-？"><a href="#Q-proxy-on-后依然连接超时-Timeout-？" class="headerlink" title="Q: proxy_on 后依然连接超时 (Timeout)？"></a>Q: proxy_on 后依然连接超时 (Timeout)？</h3><ol>
-<li><strong>检查 Windows 防火墙</strong>：以管理员身份在 Windows PowerShell 运行以下命令，允许来自 WSL 的流量：<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-built_in">New-NetFirewallRule</span> <span class="hljs-literal">-DisplayName</span> <span class="hljs-string">&quot;WSL&quot;</span> <span class="hljs-literal">-Direction</span> Inbound <span class="hljs-literal">-InterfaceAlias</span> <span class="hljs-string">&quot;vEthernet (WSL)&quot;</span> <span class="hljs-literal">-Action</span> Allow<br></code></pre></td></tr></table></figure></li>
-<li><strong>检查代理软件</strong>：确保开启了 “Allow LAN”。</li>
+<h3 id="2-网络地址基础"><a href="#2-网络地址基础" class="headerlink" title="2. 网络地址基础"></a>2. 网络地址基础</h3><ul>
+<li><p><strong>MAC 地址</strong></p>
+<ul>
+<li><p>物理层面的设备唯一标识（如 <code>00:14:22:01:2a:c5</code>）</p>
+</li>
+<li><p>只在<strong>局域网（LAN）</strong>内使用，和硬件绑定</p>
+</li>
+<li><p>类比：人的身份证号</p>
+</li>
+</ul>
+</li>
+<li><p><strong>IP 地址（IPv4）</strong></p>
+<ul>
+<li><p>逻辑地址（如 <code>169.229.226.164</code>），可配置、可变化</p>
+</li>
+<li><p>用于跨网络通信</p>
+</li>
+<li><p>类比：家庭住址</p>
+</li>
+</ul>
+</li>
+<li><p><strong>DNS</strong></p>
+<ul>
+<li><p>将<strong>人类可读域名 → IP 地址</strong></p>
+</li>
+<li><p>访问网站的第一步（如 <code>example.com → IP</code>）</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="3-子网与-IPv6（概念了解）"><a href="#3-子网与-IPv6（概念了解）" class="headerlink" title="3. 子网与 IPv6（概念了解）"></a>3. 子网与 IPv6（概念了解）</h3><ul>
+<li><p><strong>子网（Subnet）</strong></p>
+<ul>
+<li><p>使用 CIDR 表示法，如 <code>192.168.1.0/24</code></p>
+</li>
+<li><p><code>/24</code> 表示网络前缀长度，其余为主机位</p>
+</li>
+</ul>
+</li>
+<li><p><strong>IPv6</strong></p>
+<ul>
+<li><p>128 位地址，解决 IPv4 地址耗尽问题</p>
+</li>
+<li><p>数量极其庞大，长期替代方案</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="4-TCP-IP-四层模型（重点）"><a href="#4-TCP-IP-四层模型（重点）" class="headerlink" title="4. TCP/IP 四层模型（重点）"></a>4. TCP/IP 四层模型（重点）</h3><blockquote>
+<p>网络通信的核心抽象模型</p>
+</blockquote>
+<ol>
+<li><p><strong>Link（链路层）</strong></p>
+<ul>
+<li><p>使用 MAC 地址通信</p>
+</li>
+<li><p>局域网内通过交换机转发</p>
+</li>
+<li><p>ARP：IP → MAC</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Internet（网络层）</strong></p>
+<ul>
+<li><p>使用 IP 地址进行<strong>跨网络路由</strong></p>
+</li>
+<li><p>数据经过路由器转发</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Transport（传输层）</strong></p>
+<ul>
+<li><p>提供端到端通信机制</p>
+</li>
+<li><p>处理丢包、顺序、可靠性</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Application（应用层）</strong></p>
+<ul>
+<li><p>面向用户的协议与服务</p>
+</li>
+<li><p>如文件传输、网页、邮件、消息系统</p>
+</li>
+</ul>
+</li>
 </ol>
-<h3 id="Q-为什么-ping-google-com-不通？"><a href="#Q-为什么-ping-google-com-不通？" class="headerlink" title="Q: 为什么 ping google.com 不通？"></a>Q: 为什么 ping google.com 不通？</h3><p><code>ping</code> 使用的是 <strong>ICMP 协议</strong>，而大多数应用层代理只转发 <strong>TCP/UDP</strong>。请以 <code>curl -I https://www.google.com</code> 的结果为准。</p>
+<hr>
+<h3 id="5-传输层协议对比"><a href="#5-传输层协议对比" class="headerlink" title="5. 传输层协议对比"></a>5. 传输层协议对比</h3><ul>
+<li><p><strong>TCP</strong></p>
+<ul>
+<li><p>面向连接、可靠、保证顺序</p>
+</li>
+<li><p>通过 ACK 确认机制确保数据完整</p>
+</li>
+<li><p>适合网页、文件传输</p>
+</li>
+</ul>
+</li>
+<li><p><strong>UDP</strong></p>
+<ul>
+<li><p>无连接、不保证可靠性</p>
+</li>
+<li><p>速度快，允许丢包</p>
+</li>
+<li><p>适合音视频、游戏</p>
+</li>
+</ul>
+</li>
+<li><p><strong>ICMP</strong></p>
+<ul>
+<li><p>不传输业务数据</p>
+</li>
+<li><p>用于错误报告和诊断（如 <code>ping</code>）</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="6-常见命令（理解用途即可）"><a href="#6-常见命令（理解用途即可）" class="headerlink" title="6. 常见命令（理解用途即可）"></a>6. 常见命令（理解用途即可）</h3><ul>
+<li><p><code>ip a</code>：查看本机网络接口、IP、MAC</p>
+</li>
+<li><p><code>ping</code>：检测连通性（ICMP）</p>
+</li>
+<li><p><code>traceroute</code>：查看数据包经过的路由路径</p>
+</li>
+<li><p><code>arp</code> / <code>nmap</code>：局域网设备发现与映射</p>
+</li>
+</ul>
+<hr>
+<h3 id="7-总体理解"><a href="#7-总体理解" class="headerlink" title="7. 总体理解"></a>7. 总体理解</h3><ul>
+<li><p>网络是一个<strong>分层协作系统</strong></p>
+</li>
+<li><p>每一层只关心自己的职责</p>
+</li>
+<li><p>上层依赖下层，但不关心实现细节</p>
+</li>
+<li><p>这是互联网可扩展、可维护的关键原因</p>
+</li>
+</ul>
+<hr>
 
                 
               </div>
@@ -329,7 +458,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="category-chain-item">环境配置</a>
+  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
   
   
 
@@ -344,9 +473,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/WLS2/" class="print-no-link">#WLS2</a>
+        <a href="/tags/LSAD/" class="print-no-link">#LSAD</a>
       
-        <a href="/tags/CS50%EF%BC%8C%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/" class="print-no-link">#CS50，网络配置</a>
+        <a href="/tags/note/" class="print-no-link">#note</a>
       
     </div>
   
@@ -358,8 +487,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>WLS2网络配置</div>
-      <div>https://zjjyyds.github.io/2025/12/31/环境配置/WLS2网络配置/</div>
+      <div>OCF Linux System Administration DeCal note5</div>
+      <div>https://zjjyyds.github.io/2026/02/10/学院派/LSAD note5/</div>
     </div>
     <div class="license-meta">
       
@@ -371,7 +500,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年12月31日</div>
+          <div>2026年2月10日</div>
         </div>
       
       
@@ -403,9 +532,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/01/01/%E5%AD%A6%E9%99%A2%E6%B4%BE/CS50X%20project0%20Degrees/" title="CS50 AI project0 Degrees">
+                      <a href="/2026/02/10/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20lab5/" title="OCF Linux System Administration DeCal lab5">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">CS50 AI project0 Degrees</span>
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab5</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -413,8 +542,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/12/31/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/WSL2%E9%85%8D%E7%BD%AE/" title="WLS2和Python配置">
-                        <span class="hidden-mobile">WLS2和Python配置</span>
+                      <a href="/2026/02/08/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20note4/" title="OCF Linux System Administration DeCal note4">
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal note4</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
