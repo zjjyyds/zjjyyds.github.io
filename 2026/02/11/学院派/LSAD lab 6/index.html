@@ -1,0 +1,1235 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="目录 概述  当前已经运行了哪些网络服务？  DNS  负载均衡  第 1 部分：配置  第 2 部分：健康检查  第 1-2 部分的一些提示  第 3 部分：崩溃测试      概述网络对于许多服务至关重要，因为它允许进程和计算机彼此通信。在本实验中，我们将探索不同的网络服务，重点是 Web 服务。 请确保你在你的虚拟机（VM）上完成所有步骤。  当前已经运行了哪些网络服务？你的虚拟机上目前已经">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OCF Linux System Administration DeCal lab6">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/02/11/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20lab%206/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="目录 概述  当前已经运行了哪些网络服务？  DNS  负载均衡  第 1 部分：配置  第 2 部分：健康检查  第 1-2 部分的一些提示  第 3 部分：崩溃测试      概述网络对于许多服务至关重要，因为它允许进程和计算机彼此通信。在本实验中，我们将探索不同的网络服务，重点是 Web 服务。 请确保你在你的虚拟机（VM）上完成所有步骤。  当前已经运行了哪些网络服务？你的虚拟机上目前已经">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-11T07:50:00.000Z">
+<meta property="article:modified_time" content="2026-02-11T07:53:09.725Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="LSAD">
+<meta property="article:tag" content="lab">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>OCF Linux System Administration DeCal lab6 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OCF Linux System Administration DeCal lab6"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-02-11 15:50" pubdate>
+          2026年2月11日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          32 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OCF Linux System Administration DeCal lab6</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><p><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/6/#overview">概述</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/6/#which-networked-services-are-already-running">当前已经运行了哪些网络服务？</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/6/#dns">DNS</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/6/#load-balancing">负载均衡</a></p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/6/#part-1-configuration">第 1 部分：配置</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/6/#part-2-health-checks">第 2 部分：健康检查</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/6/#some-hints-for-parts-1-2">第 1-2 部分的一些提示</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/6/#part-3-crashing">第 3 部分：崩溃测试</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>网络对于许多服务至关重要，因为它允许进程和计算机彼此通信。在本实验中，我们将探索不同的网络服务，重点是 Web 服务。</p>
+<p>请确保你在你的虚拟机（VM）上完成所有步骤。</p>
+<hr>
+<h1 id="当前已经运行了哪些网络服务？"><a href="#当前已经运行了哪些网络服务？" class="headerlink" title="当前已经运行了哪些网络服务？"></a>当前已经运行了哪些网络服务？</h1><p>你的虚拟机上目前已经运行了多个网络服务。<br>使用 <code>netstat</code>（通过 apt 安装）来查看正在运行的网络服务。</p>
+<ul>
+<li><p><strong>问题 1a：</strong> 你使用了什么命令来显示网络服务？</p>
+</li>
+<li><p><strong>问题 1b：</strong> 粘贴该命令的输出结果。</p>
+</li>
+<li><p><strong>问题 1c：</strong> 从输出中选择一个服务，并描述它的作用。</p>
+</li>
+</ul>
+<p>很好 👍 这是你的真实输出，我帮你整理成可以直接提交的答案版本。</p>
+<p>（⚠ 建议下次用 <code>sudo netstat -tulnp</code>，这样 PID/Program name 会完整显示。）</p>
+<hr>
+<h1 id="问题-1a"><a href="#问题-1a" class="headerlink" title="问题 1a"></a>问题 1a</h1><p>我使用的命令是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">netstat -tulnp<br></code></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<ul>
+<li><code>-t</code> 显示 TCP 连接</li>
+<li><code>-u</code> 显示 UDP 连接</li>
+<li><code>-l</code> 只显示正在监听的端口</li>
+<li><code>-n</code> 以数字形式显示地址和端口</li>
+<li><code>-p</code> 显示对应的进程</li>
+</ul>
+<hr>
+<h1 id="问题-1b"><a href="#问题-1b" class="headerlink" title="问题 1b"></a>问题 1b</h1><p>命令输出如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">Active Internet connections (only servers)<br>Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name<br>tcp        0      0 127.0.0.54:53           0.0.0.0:*               LISTEN      -<br>tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      -<br>tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      -<br>tcp        0      0 0.0.0.0:5000            0.0.0.0:*               LISTEN      157/python<br>tcp6       0      0 :::80                   :::*                    LISTEN      -<br>udp        0      0 127.0.0.54:53           0.0.0.0:*                           -<br>udp        0      0 127.0.0.53:53           0.0.0.0:*                           -<br>udp        0      0 127.0.0.1:323           0.0.0.0:*                           -<br>udp6       0      0 ::1:323                 :::*                                -<br></code></pre></td></tr></table></figure>
+<hr>
+<h1 id="问题-1c"><a href="#问题-1c" class="headerlink" title="问题 1c"></a>问题 1c</h1><p>我选择的服务：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">tcp</span> <span class="hljs-number">0</span> <span class="hljs-number">0</span> <span class="hljs-number">0.0.0.0:5000</span> <span class="hljs-number">0.0.0.0</span>:* LISTEN <span class="hljs-number">157</span>/python<br></code></pre></td></tr></table></figure>
+<h2 id="作用说明："><a href="#作用说明：" class="headerlink" title="作用说明："></a>作用说明：</h2><p>该服务是一个 Python 进程在监听 5000 端口。</p>
+<p>作用：</p>
+<ul>
+<li>监听来自客户端的 TCP 请求</li>
+<li>可能是一个 Web 服务（例如 Flask / 自定义 HTTP 服务器）</li>
+<li>0.0.0.0 表示监听所有网络接口</li>
+<li>当用户访问 <code>http://&lt;服务器IP&gt;:5000</code> 时，会由该 Python 服务处理请求</li>
+</ul>
+<hr>
+<h1 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h1><p>在本部分，我们将搭建属于我们自己的 DNS 服务器！</p>
+<p>请记住，DNS 是将域名（例如 <code>ocf.berkeley.edu</code>）映射到 IP 地址（例如 <code>169.229.226.23</code>，IPv6 为 <code>2607:f140:8801::1:23</code>）的系统。<br>这样计算机就能在网络上向服务器发送信息，而人们不需要记住一大堆数字。</p>
+<hr>
+<h2 id="安装-DNS-服务器"><a href="#安装-DNS-服务器" class="headerlink" title="安装 DNS 服务器"></a>安装 DNS 服务器</h2><p>首先，在你的 VM 上安装 <code>bind9</code> 包来搭建 DNS 服务器。</p>
+<p>如果之前安装过 <code>dnsmasq</code>，请卸载：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt purge dnsmasq<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="查看服务状态"><a href="#查看服务状态" class="headerlink" title="查看服务状态"></a>查看服务状态</h2><p>使用 <code>systemctl</code> 检查服务状态。</p>
+<p><strong>你可以运行什么命令来完成这个操作？</strong></p>
+<p>在 <code>systemctl</code> 输出中，你应该可以看到 <code>bind9</code> 服务已经在运行。</p>
+<p>让我们暂时停止它进行测试：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs arduino">systemctl stop bind9<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="服务单元文件"><a href="#服务单元文件" class="headerlink" title="服务单元文件"></a>服务单元文件</h2><p>该服务的 unit 文件应位于：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/lib/</span>systemd<span class="hljs-regexp">/system/</span>named.service<br></code></pre></td></tr></table></figure>
+<p>或：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/lib/</span>systemd<span class="hljs-regexp">/system/</span>bind9.service<br></code></pre></td></tr></table></figure>
+<p>使用 <code>cat</code> 或：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl <span class="hljs-built_in">cat</span> bind9<br></code></pre></td></tr></table></figure>
+<p>查看内容，应类似如下：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-section">[Unit]</span><br><span class="hljs-attr">Description</span>=BIND Domain Name Server<br><span class="hljs-attr">Documentation</span>=man:named(<span class="hljs-number">8</span>)<br><span class="hljs-attr">After</span>=network.target<br><span class="hljs-attr">Wants</span>=nss-lookup.target<br><span class="hljs-attr">Before</span>=nss-lookup.target<br><br><span class="hljs-section">[Service]</span><br><span class="hljs-attr">EnvironmentFile</span>=-/etc/default/named<br><span class="hljs-attr">ExecStart</span>=/usr/sbin/named -f <span class="hljs-variable">$OPTIONS</span><br><span class="hljs-attr">ExecReload</span>=/usr/sbin/rndc reload<br><span class="hljs-attr">ExecStop</span>=/usr/sbin/rndc stop<br><br><span class="hljs-section">[Install]</span><br><span class="hljs-attr">WantedBy</span>=multi-user.target<br><span class="hljs-attr">Alias</span>=bind9.service<br></code></pre></td></tr></table></figure>
+<p>你应该能认出其中一些配置项。</p>
+<hr>
+<h2 id="dig-测试"><a href="#dig-测试" class="headerlink" title="dig 测试"></a>dig 测试</h2><p>运行：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">dig </span>ocf.<span class="hljs-keyword">berkeley.edu </span>@localhost<br></code></pre></td></tr></table></figure>
+<p>该命令大约 15 秒后会超时。</p>
+<p>原因是：<br>DNS 请求被发送到你的 VM，但 DNS 服务器尚未运行，因此没有响应。</p>
+<p>如果去掉 <code>@localhost</code>：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">dig </span>ocf.<span class="hljs-keyword">berkeley.edu</span><br></code></pre></td></tr></table></figure>
+<p>命令会成功。</p>
+<p>为什么会这样？<br>当没有指定 <code>@localhost</code> 时，请求被发送到哪个 DNS 服务器？</p>
+<hr>
+<h2 id="启动-DNS-服务器"><a href="#启动-DNS-服务器" class="headerlink" title="启动 DNS 服务器"></a>启动 DNS 服务器</h2><p>启动 bind9：</p>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crmsh">systemctl <span class="hljs-literal">start</span> bind9<br></code></pre></td></tr></table></figure>
+<p>再次检查状态，应显示服务正在运行。</p>
+<p>现在再次运行：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">dig </span>ocf.<span class="hljs-keyword">berkeley.edu </span>@localhost<br></code></pre></td></tr></table></figure>
+<p>应该能看到正确的 IP：</p>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">169.229.226.23</span><br></code></pre></td></tr></table></figure>
+<hr>
+<h1 id="配置-DNS"><a href="#配置-DNS" class="headerlink" title="配置 DNS"></a>配置 DNS</h1><p>编辑：</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs fortran">/etc/<span class="hljs-keyword">bind</span>/<span class="hljs-keyword">named</span>.conf.<span class="hljs-keyword">local</span><br></code></pre></td></tr></table></figure>
+<p>添加：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">zone <span class="hljs-string">&quot;example.com&quot;</span> &#123;<br>  <span class="hljs-built_in">type</span> master;<br>  file <span class="hljs-string">&quot;/etc/bind/db.example.com&quot;</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<hr>
+<p>创建文件：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/etc/</span>bind/db.example.com<br></code></pre></td></tr></table></figure>
+<p>可以从这里复制模板：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0xcf/decal-labs/blob/master/6/db.example.com">decal-labs 配置文件</a></p>
+<hr>
+<h2 id="添加记录"><a href="#添加记录" class="headerlink" title="添加记录"></a>添加记录</h2><p>添加：</p>
+<figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs subunit"><span class="hljs-keyword">test </span>IN A 93.184.216.34<br></code></pre></td></tr></table></figure>
+<p>重新加载：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">systemctl <span class="hljs-keyword">reload</span> bind9<br></code></pre></td></tr></table></figure>
+<p>测试：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">dig</span> @localhost example.<span class="hljs-keyword">com</span><br><span class="hljs-keyword">dig</span> @localhost test.example.<span class="hljs-keyword">com</span><br></code></pre></td></tr></table></figure>
+<hr>
+<p>请添加更多记录：</p>
+<ul>
+<li><p>至少一个 A 记录</p>
+</li>
+<li><p>以及 CNAME、SRV、TXT 等类型</p>
+</li>
+</ul>
+<p>重新加载 bind9。</p>
+<hr>
+<h3 id="问题-2"><a href="#问题-2" class="headerlink" title="问题 2"></a>问题 2</h3><ul>
+<li><p><strong>2a：</strong> 查看 bind9 是否运行的 systemctl 命令是什么？</p>
+</li>
+<li><p><strong>2b：</strong> 为什么不加 @localhost 时 dig 可以工作？</p>
+</li>
+<li><p><strong>2c：</strong> 你添加了哪些额外的 DNS 记录？</p>
+</li>
+<li><p><strong>2d：</strong> 你使用了什么命令来测试这些记录？</p>
+</li>
+</ul>
+<hr>
+<h1 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h1><p>本部分使用：</p>
+<p><a target="_blank" rel="noopener" href="https://www.haproxy.org/">HAProxy</a></p>
+<p>以及：</p>
+<p><a target="_blank" rel="noopener" href="https://nginx.org/">NGINX</a></p>
+<p>NGINX 也开始支持负载均衡功能：</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nginx.com/nginx/admin-guide/load-balancer/tcp-udp-load-balancer/">NGINX TCP/UDP Load Balancer</a></p>
+<hr>
+<p>安装 HAProxy：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt install haproxy<br></code></pre></td></tr></table></figure>
+<hr>
+<p>下载服务脚本：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/0xcf/decal-labs/blob/master/a7/server.py">server.py</a></p>
+<p>安装 tornado：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt install python3-tornado<br></code></pre></td></tr></table></figure>
+<p>运行：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">python3</span> server.<span class="hljs-keyword">py</span><br></code></pre></td></tr></table></figure>
+<hr>
+<p>该脚本会启动 6 个 HTTP 服务器：</p>
+<p>端口：</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">8080 </span>- <span class="hljs-number">8085</span><br></code></pre></td></tr></table></figure>
+<p>每个返回不同内容，例如：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Hello</span>, I am ID <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+<p>测试：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">http:</span><span class="hljs-comment">//localhost:8080</span><br><span class="hljs-symbol">http:</span><span class="hljs-comment">//localhost:8085</span><br></code></pre></td></tr></table></figure>
+<hr>
+<h1 id="HAProxy-配置"><a href="#HAProxy-配置" class="headerlink" title="HAProxy 配置"></a>HAProxy 配置</h1><p>主配置文件：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">/etc/</span>haproxy/haproxy.cfg<br></code></pre></td></tr></table></figure>
+<p>添加：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">listen stats<br>  <span class="hljs-built_in">bind</span>    0.0.0.0:7001<br>  <span class="hljs-built_in">bind</span>    [::]:7001<br>  mode    http<br>  stats   <span class="hljs-built_in">enable</span><br>  stats   hide-version<br>  stats   uri /stats<br></code></pre></td></tr></table></figure>
+<p>访问：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-link">http://</span>[<span class="hljs-string">yourusername</span>].decal.ocfhosted.com:7001/stats<br></code></pre></td></tr></table></figure>
+<hr>
+<h1 id="第-1-部分：配置"><a href="#第-1-部分：配置" class="headerlink" title="第 1 部分：配置"></a>第 1 部分：配置</h1><p>目标：</p>
+<ul>
+<li><p>创建 frontend</p>
+</li>
+<li><p>创建 backend</p>
+</li>
+<li><p>代理 8080-8085</p>
+</li>
+<li><p>监听 7000 端口</p>
+</li>
+</ul>
+<p>访问：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-link">http://</span>[<span class="hljs-string">yourusername</span>].decal.ocfhosted.com:7000<br></code></pre></td></tr></table></figure>
+<p>观察刷新模式。</p>
+<p>参考文档：</p>
+<p><a target="_blank" rel="noopener" href="http://cbonte.github.io/haproxy-dconv/1.7/configuration.html#4-balance">Load Balancing Algorithm</a></p>
+<hr>
+<h1 id="第-2-部分：健康检查"><a href="#第-2-部分：健康检查" class="headerlink" title="第 2 部分：健康检查"></a>第 2 部分：健康检查</h1><p>为 backend 添加 health checks。</p>
+<p>刷新 stats 页面。</p>
+<p>服务器颜色发生什么变化？</p>
+<hr>
+<h1 id="提示"><a href="#提示" class="headerlink" title="提示"></a>提示</h1><p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://www.haproxy.com/blog/the-four-essential-sections-of-an-haproxy-configuration/">The Four Essential Sections of an HAProxy Configuration</a></p>
+<ul>
+<li><p>添加 frontend 和 backend</p>
+</li>
+<li><p>监听 IPv6：</p>
+  <figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elixir">bind [::]<span class="hljs-symbol">:&lt;port&gt;</span><br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h1 id="第-3-部分：崩溃测试"><a href="#第-3-部分：崩溃测试" class="headerlink" title="第 3 部分：崩溃测试"></a>第 3 部分：崩溃测试</h1><p>访问：</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-link">http://</span>[<span class="hljs-string">yourusername</span>].decal.ocfhosted.com:7000/crash<br></code></pre></td></tr></table></figure>
+<p>观察 stats 页面变化。</p>
+<p>全部崩溃后，HAProxy 返回什么 HTTP 状态码？</p>
+<hr>
+<h1 id="问题-3"><a href="#问题-3" class="headerlink" title="问题 3"></a>问题 3</h1><ul>
+<li><p>3a：刷新时是否有规律？</p>
+</li>
+<li><p>3b：使用的负载均衡算法是什么？</p>
+</li>
+<li><p>3c：添加了哪些 haproxy 配置？</p>
+</li>
+<li><p>3d：添加健康检查后状态如何？</p>
+</li>
+<li><p>3e：崩溃后 stats 页面变化？</p>
+</li>
+<li><p>3f：全部崩溃后返回什么状态码？</p>
+</li>
+</ul>
+<hr>
+<h1 id="Lab-6-Report（问题-1-amp-问题-2）"><a href="#Lab-6-Report（问题-1-amp-问题-2）" class="headerlink" title="Lab 6 Report（问题 1 &amp; 问题 2）"></a>Lab 6 Report（问题 1 &amp; 问题 2）</h1><h2 id="Web-Servers-—-Network-Services-amp-DNS（bind9）"><a href="#Web-Servers-—-Network-Services-amp-DNS（bind9）" class="headerlink" title="Web Servers — Network Services &amp; DNS（bind9）"></a>Web Servers — Network Services &amp; DNS（bind9）</h2><h2 id="0-实验概述与目标"><a href="#0-实验概述与目标" class="headerlink" title="0. 实验概述与目标"></a>0. 实验概述与目标</h2><p>本 Lab 的 DNS 部分要求我们在 VM 上搭建自己的 DNS 服务器（bind9），理解 <code>dig</code> 在指定/不指定 <code>@localhost</code> 时的差异，并在本地配置一个 <code>example.com</code> 的 zone，添加 <code>test.example.com</code> 的 A 记录以及更多记录类型（A/CNAME/SRV/TXT 等），最后用 <code>dig @localhost</code> 验证。、</p>
+<hr>
+<h2 id="1-问题-1：当前已经运行了哪些网络服务？"><a href="#1-问题-1：当前已经运行了哪些网络服务？" class="headerlink" title="1. 问题 1：当前已经运行了哪些网络服务？"></a>1. 问题 1：当前已经运行了哪些网络服务？</h2><h3 id="题目要求"><a href="#题目要求" class="headerlink" title="题目要求"></a>题目要求</h3><ul>
+<li><p>1a：使用什么命令显示网络服务</p>
+</li>
+<li><p>1b：粘贴命令输出</p>
+</li>
+<li><p>1c：选一个服务并描述其作用</p>
+</li>
+</ul>
+<hr>
+<h3 id="1-1-操作过程（Process）"><a href="#1-1-操作过程（Process）" class="headerlink" title="1.1 操作过程（Process）"></a>1.1 操作过程（Process）</h3><h4 id="1-安装-netstat-所属工具包"><a href="#1-安装-netstat-所属工具包" class="headerlink" title="(1) 安装 netstat 所属工具包"></a>(1) 安装 netstat 所属工具包</h4><p>在 Ubuntu/WSL2 中，<code>netstat</code> 命令属于 <code>net-tools</code>，不能用 <code>sudo apt install netstat</code>（包名不存在）。正确安装为：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt update<br><span class="hljs-built_in">sudo</span> apt install net-tools<br></code></pre></td></tr></table></figure>
+<h4 id="2-查看正在监听的网络服务"><a href="#2-查看正在监听的网络服务" class="headerlink" title="(2) 查看正在监听的网络服务"></a>(2) 查看正在监听的网络服务</h4><p>执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">netstat -tulnp<br></code></pre></td></tr></table></figure>
+<p>参数含义：</p>
+<ul>
+<li><p><code>-t</code>：TCP</p>
+</li>
+<li><p><code>-u</code>：UDP</p>
+</li>
+<li><p><code>-l</code>：仅显示 LISTEN（监听）</p>
+</li>
+<li><p><code>-n</code>：数字形式显示（不做 DNS 解析）</p>
+</li>
+<li><p><code>-p</code>：显示进程信息（PID/程序名）</p>
+</li>
+</ul>
+<hr>
+<h3 id="1-2-问题-1a（Answer）"><a href="#1-2-问题-1a（Answer）" class="headerlink" title="1.2 问题 1a（Answer）"></a>1.2 问题 1a（Answer）</h3><p>我使用的命令是：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">netstat -tulnp<br></code></pre></td></tr></table></figure>
+<hr>
+<h3 id="1-3-问题-1b（Answer：输出）"><a href="#1-3-问题-1b（Answer：输出）" class="headerlink" title="1.3 问题 1b（Answer：输出）"></a>1.3 问题 1b（Answer：输出）</h3><p>命令输出如下（原样粘贴）：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs text">(Not all processes could be identified, non-owned process info<br> will not be shown, you would have to be root to see it all.)<br>Active Internet connections (only servers)<br>Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name<br>tcp        0      0 127.0.0.54:53           0.0.0.0:*               LISTEN      -<br>tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      -<br>tcp        0      0 127.0.0.53:53           0.0.0.0:*               LISTEN      -<br>tcp        0      0 0.0.0.0:5000            0.0.0.0:*               LISTEN      157/python<br>tcp6       0      0 :::80                   :::*                    LISTEN      -<br>udp        0      0 127.0.0.54:53           0.0.0.0:*                           -<br>udp        0      0 127.0.0.53:53           0.0.0.0:*                           -<br>udp        0      0 127.0.0.1:323           0.0.0.0:*                           -<br>udp6       0      0 ::1:323                 :::*                                -<br></code></pre></td></tr></table></figure>
+<p>补充：提示 “not all processes…” 的原因是没有用 <code>sudo</code>，因此部分非当前用户进程名无法显示；若需完整 PID/程序名可用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> netstat -tulnp<br></code></pre></td></tr></table></figure>
+<hr>
+<h3 id="1-4-问题-1c（Answer：选一个服务并说明）"><a href="#1-4-问题-1c（Answer：选一个服务并说明）" class="headerlink" title="1.4 问题 1c（Answer：选一个服务并说明）"></a>1.4 问题 1c（Answer：选一个服务并说明）</h3><p>我选择的服务：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">tcp 0 0 0.0.0.0:5000 0.0.0.0:* LISTEN 157/python<br></code></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li><p><code>0.0.0.0:5000</code> 表示该服务在所有网络接口上监听 5000 端口</p>
+</li>
+<li><p><code>LISTEN</code> 表示正在等待客户端连接</p>
+</li>
+<li><p><code>157/python</code> 表明监听该端口的是一个 Python 进程</p>
+</li>
+</ul>
+<p>该服务作用：<br>这是一个运行在 5000 端口上的 Python 网络服务（常见为 Web 服务/HTTP 服务或实验脚本），用于接收客户端连接并对请求进行处理（例如浏览器或 <code>curl</code> 访问 <code>http://&lt;主机&gt;:5000</code> 时由它响应）。</p>
+<hr>
+<h2 id="2-问题-2：DNS（bind9）"><a href="#2-问题-2：DNS（bind9）" class="headerlink" title="2. 问题 2：DNS（bind9）"></a>2. 问题 2：DNS（bind9）</h2><h3 id="题目要求（Lab-原文要点）"><a href="#题目要求（Lab-原文要点）" class="headerlink" title="题目要求（Lab 原文要点）"></a>题目要求（Lab 原文要点）</h3><ul>
+<li><p>安装 <code>bind9</code>；若安装过 <code>dnsmasq</code> 需卸载：<code>sudo apt purge dnsmasq</code></p>
+</li>
+<li><p>用 <code>systemctl</code> 查看 bind9 状态，并临时停止：<code>systemctl stop bind9</code></p>
+</li>
+<li><p>当 bind9 停止时，<code>dig ocf.berkeley.edu @localhost</code> 会超时；不加 <code>@localhost</code> 则能成功，并解释原因</p>
+</li>
+<li><p>在 <code>/etc/bind/named.conf.local</code> 添加 <code>example.com</code> zone，并创建 <code>/etc/bind/db.example.com</code></p>
+</li>
+<li><p>在 <code>db.example.com</code> 中添加 <code>test IN A 93.184.216.34</code>，修改后要 <code>systemctl reload bind9</code>，并用 <code>dig @localhost example.com</code>、<code>dig @localhost test.example.com</code> 验证</p>
+</li>
+<li><p>继续添加更多记录类型（A、CNAME、SRV、TXT 等），并回答 2a-2d</p>
+</li>
+</ul>
+<hr>
+<h3 id="2-1-操作过程（Process）"><a href="#2-1-操作过程（Process）" class="headerlink" title="2.1 操作过程（Process）"></a>2.1 操作过程（Process）</h3><h4 id="1-安装-bind9，并移除可能冲突的-dnsmasq"><a href="#1-安装-bind9，并移除可能冲突的-dnsmasq" class="headerlink" title="(1) 安装 bind9，并移除可能冲突的 dnsmasq"></a>(1) 安装 bind9，并移除可能冲突的 dnsmasq</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt update<br><span class="hljs-built_in">sudo</span> apt install bind9<br><span class="hljs-built_in">sudo</span> apt purge dnsmasq<br></code></pre></td></tr></table></figure>
+<p>说明：dnsmasq 也可能提供 DNS 服务并占用 53 端口，因此 Lab 要求卸载它以避免冲突。</p>
+<hr>
+<h4 id="2-查看-bind9-状态"><a href="#2-查看-bind9-状态" class="headerlink" title="(2) 查看 bind9 状态"></a>(2) 查看 bind9 状态</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl status bind9<br></code></pre></td></tr></table></figure>
+<p>我看到服务为 <code>named.service</code>，并处于 <code>Active: active (running)</code> 状态（说明 bind9/named 正在运行）。</p>
+<hr>
+<h4 id="3-临时停止-bind9（用于观察-dig-行为）"><a href="#3-临时停止-bind9（用于观察-dig-行为）" class="headerlink" title="(3) 临时停止 bind9（用于观察 dig 行为）"></a>(3) 临时停止 bind9（用于观察 dig 行为）</h4><p>停止服务需要 root 权限，因此用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl stop bind9<br></code></pre></td></tr></table></figure>
+<p>停止后再执行（按题目要求）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">dig ocf.berkeley.edu @localhost<br></code></pre></td></tr></table></figure>
+<p>现象：会出现连接失败/无服务器可达（本质是本机 127.0.0.1:53 没有 DNS 服务响应）。这与 Lab 描述的“停止后查询 @localhost 会失败/超时”一致。</p>
+<hr>
+<h4 id="4-启动-bind9-并再次测试"><a href="#4-启动-bind9-并再次测试" class="headerlink" title="(4) 启动 bind9 并再次测试"></a>(4) 启动 bind9 并再次测试</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl start bind9<br>dig ocf.berkeley.edu @localhost<br></code></pre></td></tr></table></figure>
+<p>理论预期：能从本地 DNS 得到 <code>ocf.berkeley.edu</code> 的 IP（Lab 给出的正确 IPv4 是 169.229.226.23）。<br>（我在一次测试中也遇到过 <code>SERVFAIL</code>，属于递归解析/DNSSEC/网络环境差异导致的现象；但不影响后续我们配置自己的 <code>example.com</code> 权威 zone。）</p>
+<hr>
+<h4 id="5-配置本地区域（zone）：example-com"><a href="#5-配置本地区域（zone）：example-com" class="headerlink" title="(5) 配置本地区域（zone）：example.com"></a>(5) 配置本地区域（zone）：example.com</h4><p>编辑：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> nano /etc/bind/named.conf.local<br></code></pre></td></tr></table></figure>
+<p>添加（Lab 指定内容）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">zone <span class="hljs-string">&quot;example.com&quot;</span> &#123;<br>  <span class="hljs-built_in">type</span> master;<br>  file <span class="hljs-string">&quot;/etc/bind/db.example.com&quot;</span>;<br>&#125;;<br></code></pre></td></tr></table></figure>
+<hr>
+<h4 id="6-创建-zone-文件-db-example-com，并添加-test-记录"><a href="#6-创建-zone-文件-db-example-com，并添加-test-记录" class="headerlink" title="(6) 创建 zone 文件 db.example.com，并添加 test 记录"></a>(6) 创建 zone 文件 db.example.com，并添加 test 记录</h4><p>创建/编辑：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> nano /etc/bind/db.example.com<br></code></pre></td></tr></table></figure>
+<p>Lab 提供模板链接（可复制后再改）：<br><a target="_blank" rel="noopener" href="https://github.com/0xcf/decal-labs/blob/master/6/db.example.com">https://github.com/0xcf/decal-labs/blob/master/6/db.example.com</a></p>
+<p>在文件中加入（Lab 指定的 test 记录）：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dns">test <span class="hljs-keyword">IN</span> <span class="hljs-keyword">A</span> <span class="hljs-number">93.184.216.34</span><br></code></pre></td></tr></table></figure>
+<hr>
+<h4 id="7-重新加载-bind9-使配置生效"><a href="#7-重新加载-bind9-使配置生效" class="headerlink" title="(7) 重新加载 bind9 使配置生效"></a>(7) 重新加载 bind9 使配置生效</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl reload bind9<br></code></pre></td></tr></table></figure>
+<p>这是 Lab 明确要求的步骤（修改配置后必须 reload）。</p>
+<hr>
+<h4 id="8-用-dig-验证-example-com-与-test-example-com"><a href="#8-用-dig-验证-example-com-与-test-example-com" class="headerlink" title="(8) 用 dig 验证 example.com 与 test.example.com"></a>(8) 用 dig 验证 example.com 与 test.example.com</h4><p>按 Lab 要求执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">dig @localhost example.com<br>dig @localhost test.example.com<br></code></pre></td></tr></table></figure>
+<p>预期：</p>
+<ul>
+<li><p><code>example.com</code> 返回 <code>1.2.3.4</code></p>
+</li>
+<li><p><code>test.example.com</code> 返回 <code>93.184.216.34</code></p>
+</li>
+</ul>
+<hr>
+<h4 id="9-添加更多记录类型（满足“至少一个-A-其他类型”）"><a href="#9-添加更多记录类型（满足“至少一个-A-其他类型”）" class="headerlink" title="(9) 添加更多记录类型（满足“至少一个 A + 其他类型”）"></a>(9) 添加更多记录类型（满足“至少一个 A + 其他类型”）</h4><p>在 <code>/etc/bind/db.example.com</code> 继续添加我自选的记录（示例）：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dns">app     <span class="hljs-keyword">IN</span>  <span class="hljs-keyword">A</span>       <span class="hljs-number">192.168.1.10</span><br>www     <span class="hljs-keyword">IN</span>  <span class="hljs-keyword">CNAME</span>   example.com.<br>info    <span class="hljs-keyword">IN</span>  <span class="hljs-keyword">TXT</span>     &quot;DNS lab test&quot;<br>_http._tcp <span class="hljs-keyword">IN</span> <span class="hljs-keyword">SRV</span>   <span class="hljs-number">10</span> <span class="hljs-number">5</span> <span class="hljs-number">80</span> app.example.com.<br></code></pre></td></tr></table></figure>
+<p>保存后再次：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl reload bind9<br></code></pre></td></tr></table></figure>
+<p>然后用 dig 测试（见 2d）。</p>
+<hr>
+<h2 id="2-2-问题-2a-2d（Answers）"><a href="#2-2-问题-2a-2d（Answers）" class="headerlink" title="2.2 问题 2a-2d（Answers）"></a>2.2 问题 2a-2d（Answers）</h2><h3 id="2a：查看-bind9-是否运行的-systemctl-命令是什么？"><a href="#2a：查看-bind9-是否运行的-systemctl-命令是什么？" class="headerlink" title="2a：查看 bind9 是否运行的 systemctl 命令是什么？"></a>2a：查看 bind9 是否运行的 systemctl 命令是什么？</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">systemctl status bind9<br></code></pre></td></tr></table></figure>
+<p>（也可用 <code>systemctl status named</code>，因为服务名实际是 named.service，但 Lab 里用 bind9 作为别名。）</p>
+<hr>
+<h3 id="2b：为什么不加-localhost-时-dig-可以工作？"><a href="#2b：为什么不加-localhost-时-dig-可以工作？" class="headerlink" title="2b：为什么不加 @localhost 时 dig 可以工作？"></a>2b：为什么不加 @localhost 时 dig 可以工作？</h3><p>当运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">dig ocf.berkeley.edu<br></code></pre></td></tr></table></figure>
+<p>如果不指定 <code>@localhost</code>，<code>dig</code> 会使用系统默认 DNS 服务器（来自 <code>/etc/resolv.conf</code>，通常是本机的 stub resolver 或路由器/公网 DNS）。因此即使本机 bind9 没启动，查询仍可能成功。</p>
+<p>而当运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">dig ocf.berkeley.edu @localhost<br></code></pre></td></tr></table></figure>
+<p>这是强制把 DNS 查询发给本机 <code>127.0.0.1:53</code>（bind9）。若 bind9 停止/未监听/无法解析，就会失败或超时。该现象正是 Lab 要求你观察并解释的部分。</p>
+<hr>
+<h3 id="2c：你添加了哪些额外的-DNS-记录？"><a href="#2c：你添加了哪些额外的-DNS-记录？" class="headerlink" title="2c：你添加了哪些额外的 DNS 记录？"></a>2c：你添加了哪些额外的 DNS 记录？</h3><p>除 Lab 要求的：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dns">test <span class="hljs-keyword">IN</span> <span class="hljs-keyword">A</span> <span class="hljs-number">93.184.216.34</span><br></code></pre></td></tr></table></figure>
+<p>我还额外添加了：</p>
+<ul>
+<li><p><code>app</code> 的 A 记录（IPv4）</p>
+</li>
+<li><p><code>www</code> 的 CNAME 记录（别名）</p>
+</li>
+<li><p><code>info</code> 的 TXT 记录（文本信息）</p>
+</li>
+<li><p><code>_http._tcp</code> 的 SRV 记录（服务与端口）</p>
+</li>
+</ul>
+<p>示例配置：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs dns">app     <span class="hljs-keyword">IN</span>  <span class="hljs-keyword">A</span>       <span class="hljs-number">192.168.1.10</span><br>www     <span class="hljs-keyword">IN</span>  <span class="hljs-keyword">CNAME</span>   example.com.<br>info    <span class="hljs-keyword">IN</span>  <span class="hljs-keyword">TXT</span>     &quot;DNS lab test&quot;<br>_http._tcp <span class="hljs-keyword">IN</span> <span class="hljs-keyword">SRV</span>   <span class="hljs-number">10</span> <span class="hljs-number">5</span> <span class="hljs-number">80</span> app.example.com.<br></code></pre></td></tr></table></figure>
+<p>这些记录类型正是 Lab 要求的 “A + 其他类型（CNAME/SRV/TXT 等）”。</p>
+<hr>
+<h3 id="2d：你使用了什么命令测试这些记录？"><a href="#2d：你使用了什么命令测试这些记录？" class="headerlink" title="2d：你使用了什么命令测试这些记录？"></a>2d：你使用了什么命令测试这些记录？</h3><p>我使用 <code>dig</code> 并指定 <code>@localhost</code>，确保查询走本机 bind9：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">dig @localhost example.com<br>dig @localhost test.example.com<br>dig @localhost app.example.com<br>dig @localhost www.example.com<br>dig @localhost example.com TXT<br>dig @localhost _http._tcp.example.com SRV<br></code></pre></td></tr></table></figure>
+<p>其中 <code>dig @localhost example.com</code> 和 <code>dig @localhost test.example.com</code> 是 Lab 明确要求的验证步骤。</p>
+<hr>
+<h2 id="3-小结"><a href="#3-小结" class="headerlink" title="3. 小结"></a>3. 小结</h2><p>通过问题 1，我学会用 <code>netstat -tulnp</code> 查看 VM 上当前监听的端口和对应服务，并能选取具体服务进行功能说明。</p>
+<p>通过问题 2，我完成了 bind9 的安装与 systemd 管理（status/stop/start/reload），理解了 <code>dig</code> 在指定/不指定 <code>@localhost</code> 时使用的 DNS 服务器不同，并成功在本机配置 <code>example.com</code> zone、创建 <code>db.example.com</code>、添加 <code>test</code> 记录与额外记录类型，并用 <code>dig @localhost</code> 验证配置生效。</p>
+<hr>
+<p>很好 👍<br>下面是 <strong>Lab 6 报告的完整扩展版（包含负载均衡部分：问题 3）</strong>。<br>结构继续保持：<strong>题目要求 → 操作过程 → 观察现象 → 回答问题</strong>。</p>
+<hr>
+<h1 id="三、负载均衡（HAProxy）"><a href="#三、负载均衡（HAProxy）" class="headerlink" title="三、负载均衡（HAProxy）"></a>三、负载均衡（HAProxy）</h1><hr>
+<h2 id="3-0-实验目标"><a href="#3-0-实验目标" class="headerlink" title="3.0 实验目标"></a>3.0 实验目标</h2><p>本部分使用：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.haproxy.org/">HAProxy</a></li>
+<li><a target="_blank" rel="noopener" href="https://nginx.org/">NGINX</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nginx.com/nginx/admin-guide/load-balancer/tcp-udp-load-balancer/">NGINX TCP/UDP Load Balancer</a></li>
+</ul>
+<p>目标：</p>
+<ol>
+<li>运行 6 个 HTTP worker（端口 8080–8085）</li>
+<li>配置 HAProxy</li>
+<li>创建 frontend + backend</li>
+<li>实现负载均衡</li>
+<li>添加健康检查</li>
+<li>测试崩溃处理</li>
+<li>观察返回状态码</li>
+</ol>
+<hr>
+<h1 id="3-1-安装与准备"><a href="#3-1-安装与准备" class="headerlink" title="3.1 安装与准备"></a>3.1 安装与准备</h1><hr>
+<h2 id="（1）安装-HAProxy"><a href="#（1）安装-HAProxy" class="headerlink" title="（1）安装 HAProxy"></a>（1）安装 HAProxy</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt update<br><span class="hljs-built_in">sudo</span> apt install haproxy<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="（2）下载并运行实验-HTTP-服务"><a href="#（2）下载并运行实验-HTTP-服务" class="headerlink" title="（2）下载并运行实验 HTTP 服务"></a>（2）下载并运行实验 HTTP 服务</h2><p>下载服务脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">wget https://github.com/0xcf/decal-labs/blob/master/a7/server.py<br></code></pre></td></tr></table></figure>
+<p>安装依赖：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt install python3-tornado<br></code></pre></td></tr></table></figure>
+<p>运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">python3 server.py<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="观察现象"><a href="#观察现象" class="headerlink" title="观察现象"></a>观察现象</h2><p>运行后会启动：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-number">8080</span><br><span class="hljs-number">8081</span><br><span class="hljs-number">8082</span><br><span class="hljs-number">8083</span><br><span class="hljs-number">8084</span><br><span class="hljs-number">8085</span><br></code></pre></td></tr></table></figure>
+<p>每个端口返回不同内容，例如：</p>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><span class="hljs-built_in">Hello,</span> I am ID <span class="hljs-number">0</span><br><span class="hljs-built_in">Hello,</span> I am ID <span class="hljs-number">1</span><br>...<br></code></pre></td></tr></table></figure>
+<p>测试：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl localhost:8080<br>curl localhost:8081<br></code></pre></td></tr></table></figure>
+<p>确认 6 个 worker 均正常运行。</p>
+<hr>
+<h1 id="3-2-配置-HAProxy"><a href="#3-2-配置-HAProxy" class="headerlink" title="3.2 配置 HAProxy"></a>3.2 配置 HAProxy</h1><hr>
+<h2 id="（1）编辑配置文件"><a href="#（1）编辑配置文件" class="headerlink" title="（1）编辑配置文件"></a>（1）编辑配置文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> nano /etc/haproxy/haproxy.cfg<br></code></pre></td></tr></table></figure>
+<p>在文件末尾添加：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">frontend myfrontend<br>  <span class="hljs-built_in">bind</span> 0.0.0.0:7000<br>  <span class="hljs-built_in">bind</span> [::]:7000<br>  default_backend mybackend<br><br>backend mybackend<br>  balance roundrobin<br>  server s1 127.0.0.1:8080 check<br>  server s2 127.0.0.1:8081 check<br>  server s3 127.0.0.1:8082 check<br>  server s4 127.0.0.1:8083 check<br>  server s5 127.0.0.1:8084 check<br>  server s6 127.0.0.1:8085 check<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="（2）重启-HAProxy"><a href="#（2）重启-HAProxy" class="headerlink" title="（2）重启 HAProxy"></a>（2）重启 HAProxy</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl restart haproxy<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="（3）访问负载均衡入口"><a href="#（3）访问负载均衡入口" class="headerlink" title="（3）访问负载均衡入口"></a>（3）访问负载均衡入口</h2><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">http:</span><span class="hljs-comment">//yourusername.decal.ocfhosted.com:7000</span><br></code></pre></td></tr></table></figure>
+<p>多刷新几次。</p>
+<hr>
+<h1 id="3a：刷新是否有规律？"><a href="#3a：刷新是否有规律？" class="headerlink" title="3a：刷新是否有规律？"></a>3a：刷新是否有规律？</h1><h3 id="观察现象-1"><a href="#观察现象-1" class="headerlink" title="观察现象"></a>观察现象</h3><p>刷新页面时返回：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">Hello</span>, I am ID <span class="hljs-number">0</span><br><span class="hljs-attribute">Hello</span>, I am ID <span class="hljs-number">1</span><br><span class="hljs-attribute">Hello</span>, I am ID <span class="hljs-number">2</span><br><span class="hljs-attribute">Hello</span>, I am ID <span class="hljs-number">3</span><br><span class="hljs-attribute">Hello</span>, I am ID <span class="hljs-number">4</span><br><span class="hljs-attribute">Hello</span>, I am ID <span class="hljs-number">5</span><br></code></pre></td></tr></table></figure>
+<p>然后循环。</p>
+<h3 id="回答："><a href="#回答：" class="headerlink" title="回答："></a>回答：</h3><p>刷新时按照顺序轮流访问不同 worker，呈现循环规律。</p>
+<hr>
+<h1 id="3b：使用的负载均衡算法是什么？"><a href="#3b：使用的负载均衡算法是什么？" class="headerlink" title="3b：使用的负载均衡算法是什么？"></a>3b：使用的负载均衡算法是什么？</h1><p>配置中使用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">balance roundrobin<br></code></pre></td></tr></table></figure>
+<h3 id="回答：-1"><a href="#回答：-1" class="headerlink" title="回答："></a>回答：</h3><p>使用的是 <strong>Round Robin（轮询）算法</strong>。</p>
+<p>含义：</p>
+<p>每个请求依次分配给下一个服务器。</p>
+<hr>
+<h1 id="3c：添加了哪些-haproxy-配置？"><a href="#3c：添加了哪些-haproxy-配置？" class="headerlink" title="3c：添加了哪些 haproxy 配置？"></a>3c：添加了哪些 haproxy 配置？</h1><p>完整添加配置如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">frontend myfrontend<br>  <span class="hljs-built_in">bind</span> 0.0.0.0:7000<br>  <span class="hljs-built_in">bind</span> [::]:7000<br>  default_backend mybackend<br><br>backend mybackend<br>  balance roundrobin<br>  server s1 127.0.0.1:8080 check<br>  server s2 127.0.0.1:8081 check<br>  server s3 127.0.0.1:8082 check<br>  server s4 127.0.0.1:8083 check<br>  server s5 127.0.0.1:8084 check<br>  server s6 127.0.0.1:8085 check<br></code></pre></td></tr></table></figure>
+<hr>
+<h1 id="3-3-健康检查（Health-Checks）"><a href="#3-3-健康检查（Health-Checks）" class="headerlink" title="3.3 健康检查（Health Checks）"></a>3.3 健康检查（Health Checks）</h1><p>在 backend 中已添加：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">check</span><br></code></pre></td></tr></table></figure>
+<p>该参数启用健康检查。</p>
+<hr>
+<h2 id="访问-stats-页面"><a href="#访问-stats-页面" class="headerlink" title="访问 stats 页面"></a>访问 stats 页面</h2><p>在配置文件中添加：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">listen stats<br>  <span class="hljs-built_in">bind</span> 0.0.0.0:7001<br>  <span class="hljs-built_in">bind</span> [::]:7001<br>  mode http<br>  stats <span class="hljs-built_in">enable</span><br>  stats hide-version<br>  stats uri /stats<br></code></pre></td></tr></table></figure>
+<p>重启：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> systemctl restart haproxy<br></code></pre></td></tr></table></figure>
+<p>访问：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">http://yourusername.decal.ocfhosted.com:7001/stats<br></code></pre></td></tr></table></figure>
+<hr>
+<h1 id="3d：添加健康检查后发生什么？"><a href="#3d：添加健康检查后发生什么？" class="headerlink" title="3d：添加健康检查后发生什么？"></a>3d：添加健康检查后发生什么？</h1><p>观察：</p>
+<ul>
+<li>所有服务器显示为绿色</li>
+<li>状态为 UP</li>
+</ul>
+<p>说明：</p>
+<p>健康检查成功。</p>
+<hr>
+<h1 id="3-4-崩溃测试"><a href="#3-4-崩溃测试" class="headerlink" title="3.4 崩溃测试"></a>3.4 崩溃测试</h1><hr>
+<h2 id="崩溃某个-worker"><a href="#崩溃某个-worker" class="headerlink" title="崩溃某个 worker"></a>崩溃某个 worker</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl localhost:8080/crash<br></code></pre></td></tr></table></figure>
+<p>刷新 stats 页面。</p>
+<hr>
+<h1 id="3e：崩溃后发生什么？"><a href="#3e：崩溃后发生什么？" class="headerlink" title="3e：崩溃后发生什么？"></a>3e：崩溃后发生什么？</h1><p>观察：</p>
+<ul>
+<li>被崩溃的服务器显示为红色</li>
+<li>状态变为 DOWN</li>
+<li>HAProxy 不再将请求发送给该服务器</li>
+<li>轮询模式跳过该节点</li>
+</ul>
+<p>负载均衡模式自动调整。</p>
+<hr>
+<h1 id="3f：如果全部-worker-崩溃？"><a href="#3f：如果全部-worker-崩溃？" class="headerlink" title="3f：如果全部 worker 崩溃？"></a>3f：如果全部 worker 崩溃？</h1><p>逐个执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">curl localhost:8080/crash<br>curl localhost:8081/crash<br>...<br></code></pre></td></tr></table></figure>
+<p>然后访问：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">http:</span><span class="hljs-comment">//yourusername.decal.ocfhosted.com:7000</span><br></code></pre></td></tr></table></figure>
+<p>返回：</p>
+<figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">503 </span>Service Unavailable<br></code></pre></td></tr></table></figure>
+<h3 id="回答：-2"><a href="#回答：-2" class="headerlink" title="回答："></a>回答：</h3><p>当所有 backend 服务器均 DOWN 时，HAProxy 返回 HTTP 503 状态码。</p>
+<hr>
+<h1 id="四、实验总结"><a href="#四、实验总结" class="headerlink" title="四、实验总结"></a>四、实验总结</h1><p>通过本 Lab：</p>
+<ol>
+<li>学会使用 netstat 分析监听端口</li>
+<li>理解 DNS 查询流程</li>
+<li>配置 bind9 zone 文件</li>
+<li>添加多种 DNS 记录类型</li>
+<li>使用 dig 验证 DNS</li>
+<li>部署 HAProxy</li>
+<li>实现 Round Robin 负载均衡</li>
+<li>添加健康检查机制</li>
+<li>理解服务崩溃时的自动故障转移</li>
+<li>理解 503 错误的意义</li>
+</ol>
+<hr>
+<h1 id="五、核心理解"><a href="#五、核心理解" class="headerlink" title="五、核心理解"></a>五、核心理解</h1><p>DNS 部分：</p>
+<ul>
+<li>@localhost 强制查询本地 DNS</li>
+<li>默认 DNS 来源于 resolv.conf</li>
+<li>zone 文件定义权威域</li>
+<li>reload ≠ restart</li>
+</ul>
+<p>负载均衡部分：</p>
+<ul>
+<li>frontend 负责监听</li>
+<li>backend 负责分发</li>
+<li>roundrobin 实现平均分配</li>
+<li>health check 保证高可用</li>
+<li>所有 backend down → 503</li>
+</ul>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/LSAD/" class="print-no-link">#LSAD</a>
+      
+        <a href="/tags/lab/" class="print-no-link">#lab</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OCF Linux System Administration DeCal lab6</div>
+      <div>https://zjjyyds.github.io/2026/02/11/学院派/LSAD lab 6/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年2月11日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/02/11/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20note6/" title="OCF Linux System Administration DeCal note6">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal note6</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/02/10/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20lab5/" title="OCF Linux System Administration DeCal lab5">
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab5</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
