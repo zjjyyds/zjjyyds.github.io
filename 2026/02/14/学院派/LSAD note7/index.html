@@ -1,0 +1,1490 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0. 这节课到底在讲什么（全局地图）这份 PPT 的主线是：  安全为什么重要（现实动机）  安全怎么思考（基本原则 + 威胁模型）  安全要达成什么目标（CIA + 可用性）  每个目标怎么做（加密 &#x2F; 哈希 &#x2F; 签名 &#x2F; 运维措施）  落到系统里最常见的安全机制（UNIX 权限&#x2F;所有权）  网络上怎么建立信任（证书、信任链、HTTPS）  现代企业怎么做访问控制（BeyondCorp &#x2F; Ze">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OCF Linux System Administration DeCal note7">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/02/14/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20note7/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="0. 这节课到底在讲什么（全局地图）这份 PPT 的主线是：  安全为什么重要（现实动机）  安全怎么思考（基本原则 + 威胁模型）  安全要达成什么目标（CIA + 可用性）  每个目标怎么做（加密 &#x2F; 哈希 &#x2F; 签名 &#x2F; 运维措施）  落到系统里最常见的安全机制（UNIX 权限&#x2F;所有权）  网络上怎么建立信任（证书、信任链、HTTPS）  现代企业怎么做访问控制（BeyondCorp &#x2F; Ze">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-14T15:20:00.000Z">
+<meta property="article:modified_time" content="2026-02-14T15:22:18.377Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="LSAD">
+<meta property="article:tag" content="note">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>OCF Linux System Administration DeCal note7 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OCF Linux System Administration DeCal note7"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-02-14 23:20" pubdate>
+          2026年2月14日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          35 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OCF Linux System Administration DeCal note7</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="0-这节课到底在讲什么（全局地图）"><a href="#0-这节课到底在讲什么（全局地图）" class="headerlink" title="0. 这节课到底在讲什么（全局地图）"></a>0. 这节课到底在讲什么（全局地图）</h2><p>这份 PPT 的主线是：</p>
+<ol>
+<li><p><strong>安全为什么重要</strong>（现实动机）</p>
+</li>
+<li><p><strong>安全怎么思考</strong>（基本原则 + 威胁模型）</p>
+</li>
+<li><p><strong>安全要达成什么目标</strong>（CIA + 可用性）</p>
+</li>
+<li><p><strong>每个目标怎么做</strong>（加密 / 哈希 / 签名 / 运维措施）</p>
+</li>
+<li><p><strong>落到系统里最常见的安全机制</strong>（UNIX 权限/所有权）</p>
+</li>
+<li><p><strong>网络上怎么建立信任</strong>（证书、信任链、HTTPS）</p>
+</li>
+<li><p><strong>现代企业怎么做访问控制</strong>（BeyondCorp / Zero Trust）</p>
+</li>
+</ol>
+<blockquote>
+<p>对应 PPT 的结构：Security Basics → Goals → File Security → Certificates/HTTPS → Zero Trust</p>
+</blockquote>
+<hr>
+<h2 id="1-为什么要学安全（Why-do-we-care-）"><a href="#1-为什么要学安全（Why-do-we-care-）" class="headerlink" title="1. 为什么要学安全（Why do we care?）"></a>1. 为什么要学安全（Why do we care?）</h2><h3 id="1-1-现实世界的“安全”不是玄学，是事故"><a href="#1-1-现实世界的“安全”不是玄学，是事故" class="headerlink" title="1.1 现实世界的“安全”不是玄学，是事故"></a>1.1 现实世界的“安全”不是玄学，是事故</h3><p>PPT举了几个典型场景：医院勒索软件、金融机构泄露。</p>
+<ul>
+<li><p><strong>医院被勒索软件攻击</strong></p>
+<ul>
+<li><p>勒索软件 = 攻击者加密你的关键数据/系统，然后要赎金才给解密</p>
+</li>
+<li><p>影响不是“钱”，而是：</p>
+<ul>
+<li><p>挂号系统瘫痪</p>
+</li>
+<li><p>检验结果系统不可用</p>
+</li>
+<li><p>医疗设备依赖网络系统</p>
+</li>
+</ul>
+</li>
+<li><p>本质是打击 <strong>Availability（可用性）</strong> + <strong>Integrity（完整性）</strong>（有时还会偷数据打击机密性）</p>
+</li>
+</ul>
+</li>
+<li><p><strong>金融机构/征信机构泄露（Equifax / First American Financial）</strong></p>
+<ul>
+<li><p>典型泄露内容：身份证号、地址、工作信息、信用记录</p>
+</li>
+<li><p>结果：</p>
+<ul>
+<li><p>直接财产损失（诈骗/盗刷）</p>
+</li>
+<li><p>长期身份风险（你无法“换一个身份证号”）</p>
+</li>
+</ul>
+</li>
+<li><p>本质是 <strong>Confidentiality（机密性）</strong>破坏</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-2-对个人：隐私-职业稳定"><a href="#1-2-对个人：隐私-职业稳定" class="headerlink" title="1.2 对个人：隐私 + 职业稳定"></a>1.2 对个人：隐私 + 职业稳定</h3><ul>
+<li><p>你自己作为用户：账号密码、照片、通讯录、定位信息、支付记录</p>
+</li>
+<li><p>你作为开发者/运维：你写的系统一旦出事故，你可能要背锅（“Job security!”）</p>
+</li>
+</ul>
+<h3 id="1-3-对行业：安全岗位增长快"><a href="#1-3-对行业：安全岗位增长快" class="headerlink" title="1.3 对行业：安全岗位增长快"></a>1.3 对行业：安全岗位增长快</h3><p>PPT提到 2022–2032 预测 33% 增长。<br>你可以理解成：</p>
+<ul>
+<li><p>系统越来越复杂、联网越来越广</p>
+</li>
+<li><p>攻击面越来越大</p>
+</li>
+<li><p>安全是“必须投入的成本”</p>
+</li>
+</ul>
+<hr>
+<h2 id="2-安全基本原则（Basic-Principles）——每一条都讲透"><a href="#2-安全基本原则（Basic-Principles）——每一条都讲透" class="headerlink" title="2. 安全基本原则（Basic Principles）——每一条都讲透"></a>2. 安全基本原则（Basic Principles）——每一条都讲透</h2><p>PPT列了五条，并强调：<strong>最重要：Threat Model（威胁模型）</strong></p>
+<hr>
+<h3 id="2-1-Security-is-economics（安全是经济学-资源分配）"><a href="#2-1-Security-is-economics（安全是经济学-资源分配）" class="headerlink" title="2.1 Security is economics（安全是经济学 / 资源分配）"></a>2.1 Security is economics（安全是经济学 / 资源分配）</h3><p><strong>核心意思：安全不是“开关”，是“投入-收益”问题。</strong></p>
+<ul>
+<li><p>你永远不可能做到“绝对安全”</p>
+</li>
+<li><p>安全措施会消耗：</p>
+<ul>
+<li><p>开发成本（加密、审计、权限系统）</p>
+</li>
+<li><p>性能成本（加密/校验/多因子）</p>
+</li>
+<li><p>用户体验成本（更难登录、更麻烦操作）</p>
+</li>
+<li><p>运维成本（监控、备份、演练）</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>所以你要做的是：</p>
+<ul>
+<li><p>明确最重要的资产</p>
+</li>
+<li><p>把资源投入到“风险最大/损失最大”的地方</p>
+</li>
+</ul>
+<p><strong>例子：</strong></p>
+<ul>
+<li><p>个人博客：可能不需要上硬件安全模块（HSM）</p>
+</li>
+<li><p>银行系统：必须投入极高成本（审计、合规、密钥管理、双人审批、隔离环境）</p>
+</li>
+</ul>
+<hr>
+<h3 id="2-2-Least-privilege（最小权限原则）"><a href="#2-2-Least-privilege（最小权限原则）" class="headerlink" title="2.2 Least privilege（最小权限原则）"></a>2.2 Least privilege（最小权限原则）</h3><p><strong>定义：只给完成任务所必须的最少权限。</strong></p>
+<p>为什么重要？</p>
+<ul>
+<li><p>权限越大，误操作/被盗用的后果越大</p>
+</li>
+<li><p>攻击者拿到一个账号后，能做的事取决于权限范围<br>  =&gt; 权限越小，攻击者收益越小</p>
+</li>
+</ul>
+<p><strong>例子1：Linux 文件</strong></p>
+<ul>
+<li><p>你把私钥 <code>~/.ssh/id_rsa</code> 设成 <code>chmod 644</code>（别人可读）</p>
+<ul>
+<li><p>同机器上其他用户直接读走你的私钥</p>
+</li>
+<li><p>等于“把你家钥匙复印件贴在门上”</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>例子2：数据库账号</strong></p>
+<ul>
+<li><p>Web 服务只需要 <code>SELECT</code> 某些表</p>
+</li>
+<li><p>你却给了 <code>DROP TABLE</code> 权限<br>  =&gt; SQL 注入直接“删库跑路”</p>
+</li>
+</ul>
+<p><strong>例子3：云权限</strong></p>
+<ul>
+<li><p>某个 CI/CD 只需要读镜像仓库</p>
+</li>
+<li><p>给了管理员权限<br>  =&gt; 一旦 token 泄露，云资源全被挖矿</p>
+</li>
+</ul>
+<hr>
+<h3 id="2-3-Defense-in-depth（纵深防御：层层防护）"><a href="#2-3-Defense-in-depth（纵深防御：层层防护）" class="headerlink" title="2.3 Defense in depth（纵深防御：层层防护）"></a>2.3 Defense in depth（纵深防御：层层防护）</h3><p><strong>定义：不要依赖单一防线；即便一层破了，还有下一层。</strong></p>
+<p>为什么必要？</p>
+<ul>
+<li><p>单点防御的假设是“这层永远不会破”</p>
+</li>
+<li><p>现实是：总会破（0day、配置错误、人为失误）</p>
+</li>
+</ul>
+<p><strong>常见分层：</strong></p>
+<ul>
+<li><p>网络层：防火墙/WAF、分段</p>
+</li>
+<li><p>应用层：鉴权、权限控制、输入校验</p>
+</li>
+<li><p>数据层：加密、最小权限</p>
+</li>
+<li><p>运维层：监控告警、审计日志</p>
+</li>
+<li><p>组织层：制度、培训、应急响应</p>
+</li>
+</ul>
+<p><strong>例子：</strong></p>
+<ul>
+<li><p>你的网站防 SQL 注入（输入校验）是第一层</p>
+</li>
+<li><p>即使 SQL 注入成功，数据库账号也应该是只读（第二层）</p>
+</li>
+<li><p>即使数据库读到了数据，敏感字段应该加密（第三层）</p>
+</li>
+<li><p>即使密文泄露，密钥应在 KMS/HSM，不在代码里（第四层）</p>
+</li>
+</ul>
+<hr>
+<h3 id="2-4-Complete-mediation（完全仲裁-持续认证）"><a href="#2-4-Complete-mediation（完全仲裁-持续认证）" class="headerlink" title="2.4 Complete mediation（完全仲裁/持续认证）"></a>2.4 Complete mediation（完全仲裁/持续认证）</h3><p>PPT解释：continuous authentication（持续认证）。</p>
+<p><strong>定义：每次访问资源都要检查权限，而不是“登录一次就永远放行”。</strong></p>
+<p>为什么重要？</p>
+<ul>
+<li><p>权限可能变化（员工离职、角色调整）</p>
+</li>
+<li><p>会话可能被劫持（cookie 被偷）</p>
+</li>
+<li><p>攻击可能发生在登录之后（内部横向移动）</p>
+</li>
+</ul>
+<p><strong>例子：</strong></p>
+<ul>
+<li><p>你登录公司系统后，半小时后被 HR 取消权限</p>
+</li>
+<li><p>如果系统只在登录时检查，你仍能继续操作<br>  → 完全仲裁要求：每次关键请求都要做权限判断</p>
+</li>
+</ul>
+<p><strong>现实实现方式：</strong></p>
+<ul>
+<li><p>API 每次请求携带 token（JWT/Session）</p>
+</li>
+<li><p>服务端每次验证 token + 查权限</p>
+</li>
+<li><p>对高风险操作要求重新验证（输密码/短信/硬件 key）</p>
+</li>
+</ul>
+<hr>
+<h3 id="2-5-Accounting-for-human-factors（考虑人为因素）"><a href="#2-5-Accounting-for-human-factors（考虑人为因素）" class="headerlink" title="2.5 Accounting for human factors（考虑人为因素）"></a>2.5 Accounting for human factors（考虑人为因素）</h3><p>PPT说：errors（错误）。</p>
+<p><strong>核心：人会犯错，系统必须设计得“犯错也不至于爆炸”。</strong></p>
+<p>常见人为错误：</p>
+<ul>
+<li><p>把密钥提交到 GitHub</p>
+</li>
+<li><p>把对象存储桶设成 public</p>
+</li>
+<li><p>把权限 chmod 成 777</p>
+</li>
+<li><p>把生产数据库当测试库删数据</p>
+</li>
+<li><p>点击钓鱼邮件</p>
+</li>
+</ul>
+<p>安全设计如何“容错”：</p>
+<ul>
+<li><p>默认安全（secure by default）</p>
+</li>
+<li><p>自动扫描泄露（secret scanning）</p>
+</li>
+<li><p>权限最小化 + 逐级审批</p>
+</li>
+<li><p>高风险操作二次确认</p>
+</li>
+<li><p>审计日志 + 告警</p>
+</li>
+</ul>
+<hr>
+<h3 id="⭐-2-6-最重要：Threat-Model（威胁模型）"><a href="#⭐-2-6-最重要：Threat-Model（威胁模型）" class="headerlink" title="⭐ 2.6 最重要：Threat Model（威胁模型）"></a>⭐ 2.6 最重要：Threat Model（威胁模型）</h3><p>PPT强调：Most important: know your threat model。</p>
+<p>威胁模型要回答 4 个问题（非常常用）：</p>
+<ol>
+<li><p><strong>资产（Assets）</strong>：你要保护什么？</p>
+<ul>
+<li><p>个人：照片、聊天记录、密码、银行卡</p>
+</li>
+<li><p>公司：用户数据、源代码、密钥、资金、可用性</p>
+</li>
+</ul>
+</li>
+<li><p><strong>攻击者（Adversary）</strong>：谁会攻击你？</p>
+<ul>
+<li>路人黑客、竞争对手、有组织犯罪、国家级</li>
+</ul>
+</li>
+<li><p><strong>能力（Capabilities）</strong>：攻击者能做什么？</p>
+<ul>
+<li><p>能否物理接触机器？</p>
+</li>
+<li><p>是否能监听网络？</p>
+</li>
+<li><p>是否能社工/钓鱼？</p>
+</li>
+<li><p>是否能买 0day？</p>
+</li>
+</ul>
+</li>
+<li><p><strong>后果（Impact）</strong>：被攻破损失多大？</p>
+<ul>
+<li>金钱、隐私、信誉、法律责任、生命安全</li>
+</ul>
+</li>
+</ol>
+<p><strong>为什么它是最重要？</strong><br>因为所有安全措施都是“对威胁的回应”，没有威胁模型就会出现：</p>
+<ul>
+<li><p>过度安全（浪费钱/性能/体验）</p>
+</li>
+<li><p>安全错位（防了不重要的，重要的没防）</p>
+</li>
+</ul>
+<hr>
+<h2 id="3-安全目标（Security-Goals）四件套：CIA-A（可用性）"><a href="#3-安全目标（Security-Goals）四件套：CIA-A（可用性）" class="headerlink" title="3. 安全目标（Security Goals）四件套：CIA + A（可用性）"></a>3. 安全目标（Security Goals）四件套：CIA + A（可用性）</h2><p>PPT列：Confidentiality / Integrity / Authenticity / Availability。</p>
+<p>我按“定义 → 典型攻击 → 常用手段 → 例子”给你展开。</p>
+<hr>
+<h2 id="4-Confidentiality（机密性）——加密体系讲透"><a href="#4-Confidentiality（机密性）——加密体系讲透" class="headerlink" title="4. Confidentiality（机密性）——加密体系讲透"></a>4. Confidentiality（机密性）——加密体系讲透</h2><h3 id="4-1-基本概念：明文、密文、密钥"><a href="#4-1-基本概念：明文、密文、密钥" class="headerlink" title="4.1 基本概念：明文、密文、密钥"></a>4.1 基本概念：明文、密文、密钥</h3><p>PPT定义：plaintext、ciphertext、key。</p>
+<ul>
+<li><p><strong>明文 Plaintext</strong>：你要保护的原始数据</p>
+</li>
+<li><p><strong>密文 Ciphertext</strong>：看起来像乱码的结果（攻击者看到的）</p>
+</li>
+<li><p><strong>密钥 Key</strong>：加密/解密必须知道的秘密</p>
+</li>
+</ul>
+<blockquote>
+<p>加密的目标不是“让它看起来复杂”，而是：<strong>没有密钥就无法恢复明文</strong>。</p>
+</blockquote>
+<hr>
+<h3 id="4-2-对称加密（Symmetric-Crypto）"><a href="#4-2-对称加密（Symmetric-Crypto）" class="headerlink" title="4.2 对称加密（Symmetric Crypto）"></a>4.2 对称加密（Symmetric Crypto）</h3><p>PPT：同一个 key 用来加密和解密。</p>
+<p><strong>优点：</strong></p>
+<ul>
+<li><p>快（适合大量数据：硬盘加密、传文件）</p>
+</li>
+<li><p>实现成熟（AES、ChaCha20）</p>
+</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li><p>密钥怎么给对方？（密钥分发问题）</p>
+<ul>
+<li>如果你用明文把 key 发过去，攻击者截获就完了</li>
+</ul>
+</li>
+</ul>
+<p><strong>典型场景：</strong></p>
+<ul>
+<li><p>磁盘加密（你输入密码→派生密钥→解密硬盘）</p>
+</li>
+<li><p>VPN 传输数据最终也是对称加密</p>
+</li>
+</ul>
+<hr>
+<h3 id="4-3-非对称加密（Asymmetric-Public-Key）"><a href="#4-3-非对称加密（Asymmetric-Public-Key）" class="headerlink" title="4.3 非对称加密（Asymmetric / Public Key）"></a>4.3 非对称加密（Asymmetric / Public Key）</h3><p>PPT：公钥加密，私钥解密；公钥可分发，私钥必须保密。</p>
+<p><strong>优点：</strong></p>
+<ul>
+<li><p>解决“密钥分发”问题</p>
+<ul>
+<li><p>你把公钥公开，任何人都可以给你发加密信息</p>
+</li>
+<li><p>只有你有私钥能解</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>慢（不适合直接加密大文件）</li>
+</ul>
+<p><strong>经典用法：</strong></p>
+<ul>
+<li><p><strong>混合加密（现实 HTTPS 就是这么干）</strong></p>
+<ol>
+<li><p>用非对称加密协商一个临时对称密钥（session key）</p>
+</li>
+<li><p>大量数据用对称加密传输（快）</p>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h3 id="4-4-PPT提到-age-demo（你可以当作“加密工具实例”）"><a href="#4-4-PPT提到-age-demo（你可以当作“加密工具实例”）" class="headerlink" title="4.4 PPT提到 age demo（你可以当作“加密工具实例”）"></a>4.4 PPT提到 <code>age</code> demo（你可以当作“加密工具实例”）</h3><p>PPT有 “Quick demo with <code>age</code>”。<br>你不需要记工具细节，但要理解：</p>
+<ul>
+<li><p><code>age</code> 是现代文件加密工具</p>
+</li>
+<li><p>支持公钥加密、对称加密</p>
+</li>
+<li><p>用它演示“密文不可读、密钥可恢复”</p>
+</li>
+</ul>
+<hr>
+<h2 id="5-Integrity（完整性）——哈希-校验-密码存储"><a href="#5-Integrity（完整性）——哈希-校验-密码存储" class="headerlink" title="5. Integrity（完整性）——哈希 / 校验 / 密码存储"></a>5. Integrity（完整性）——哈希 / 校验 / 密码存储</h2><h3 id="5-1-哈希函数是什么"><a href="#5-1-哈希函数是什么" class="headerlink" title="5.1 哈希函数是什么"></a>5.1 哈希函数是什么</h3><p>PPT：任意长度数据 → 固定长度 bit 字符串（hash）；像“摘要”。</p>
+<p><strong>核心直觉：</strong></p>
+<ul>
+<li><p>哈希像“指纹”</p>
+</li>
+<li><p>你改了一个字符，指纹都变了</p>
+</li>
+</ul>
+<hr>
+<h3 id="5-2-密码学哈希的关键性质（你做题常考）"><a href="#5-2-密码学哈希的关键性质（你做题常考）" class="headerlink" title="5.2 密码学哈希的关键性质（你做题常考）"></a>5.2 密码学哈希的关键性质（你做题常考）</h3><p>PPT说：“很难找到两个输入有相同 hash”。<br>再加上后面“很难从 hash 反推输入”。</p>
+<p>整理成三条（考试常见）：</p>
+<ol>
+<li><p><strong>抗碰撞（Collision resistance）</strong><br> 找到 <code>x != y</code> 但 <code>hash(x)=hash(y)</code> 很难</p>
+</li>
+<li><p><strong>抗二次原像（Second preimage resistance）</strong><br> 给定 x，很难找 y≠x 使得 hash(y)=hash(x)</p>
+</li>
+<li><p><strong>单向性（Preimage resistance）</strong><br> 给定 h，很难找 x 使得 hash(x)=h（不可逆）</p>
+</li>
+</ol>
+<hr>
+<h3 id="5-3-Hash-based-MAC（消息认证码）与校验下载"><a href="#5-3-Hash-based-MAC（消息认证码）与校验下载" class="headerlink" title="5.3 Hash-based MAC（消息认证码）与校验下载"></a>5.3 Hash-based MAC（消息认证码）与校验下载</h3><p>PPT：</p>
+<ul>
+<li><p>MAC：给消息打 hash tag，收件人重新 hash 比对即可发现篡改</p>
+</li>
+<li><p>Checksums：下载文件后算 hash 与官方提供的 hash 比，不必逐位比对</p>
+</li>
+</ul>
+<p><strong>你要记住：</strong></p>
+<ul>
+<li><p><strong>hash 可以检测篡改</strong></p>
+</li>
+<li><p>但 <strong>hash 本身不证明“是谁发的”</strong>（认证不够）</p>
+</li>
+</ul>
+<hr>
+<h3 id="5-4-密码存储为什么存-hash-不存明文"><a href="#5-4-密码存储为什么存-hash-不存明文" class="headerlink" title="5.4 密码存储为什么存 hash 不存明文"></a>5.4 密码存储为什么存 hash 不存明文</h3><p>PPT：服务器被攻破时，泄露的是 hash；密码无法从 hash 恢复。</p>
+<p><strong>这里要补一个现实关键点（很重要）：</strong></p>
+<ul>
+<li><p>真实系统不会直接 <code>hash(password)</code></p>
+</li>
+<li><p>会加 <strong>salt</strong>，并使用慢哈希（bcrypt/scrypt/Argon2）</p>
+<ul>
+<li><p>防彩虹表</p>
+</li>
+<li><p>防 GPU 暴力破解</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>（PPT没写 salt，但你写报告/答题提一句会更专业。）</p>
+<hr>
+<h3 id="5-5-sha256sum-demo-的意义"><a href="#5-5-sha256sum-demo-的意义" class="headerlink" title="5.5 sha256sum demo 的意义"></a>5.5 <code>sha256sum</code> demo 的意义</h3><p>PPT：用 <code>sha256sum</code> 验证下载的 ISO 等。<br>你理解成：</p>
+<ul>
+<li><p>你下载 Ubuntu ISO</p>
+</li>
+<li><p>官网给你一个 sha256 值</p>
+</li>
+<li><p>你本地算出来对比</p>
+</li>
+<li><p>一样 =&gt; 没被镜像站/中间人篡改</p>
+</li>
+</ul>
+<hr>
+<h2 id="6-Authentication-Authenticity（认证-真实性）——数字签名"><a href="#6-Authentication-Authenticity（认证-真实性）——数字签名" class="headerlink" title="6. Authentication / Authenticity（认证/真实性）——数字签名"></a>6. Authentication / Authenticity（认证/真实性）——数字签名</h2><p>PPT标题写 Authentication，目标写 Authenticity（本质就是“证明来源”）。</p>
+<h3 id="6-1-签名是什么"><a href="#6-1-签名是什么" class="headerlink" title="6.1 签名是什么"></a>6.1 签名是什么</h3><p>PPT：用私钥签名，公钥验证。</p>
+<ul>
+<li><p><strong>签名生成：</strong> <code>file + private_key -&gt; signature</code></p>
+</li>
+<li><p><strong>签名验证：</strong> <code>signature + public_key -&gt; verify</code></p>
+</li>
+</ul>
+<p><strong>为什么能证明来源？</strong></p>
+<ul>
+<li><p>私钥必须保密</p>
+</li>
+<li><p>只有拥有私钥的人才能生成能被公钥验证通过的签名<br>  ⇒ 验证通过 = “确实是私钥持有人签的”</p>
+</li>
+</ul>
+<h3 id="6-2-签名还能顺便保证完整性"><a href="#6-2-签名还能顺便保证完整性" class="headerlink" title="6.2 签名还能顺便保证完整性"></a>6.2 签名还能顺便保证完整性</h3><p>因为签名通常是对文件的 hash 做签名：</p>
+<ul>
+<li>文件变了 → hash 变了 → 签名验证失败</li>
+</ul>
+<p>所以签名 = <strong>来源证明 + 防篡改</strong></p>
+<h3 id="6-3-ssh-demo-的意义"><a href="#6-3-ssh-demo-的意义" class="headerlink" title="6.3 ssh demo 的意义"></a>6.3 <code>ssh</code> demo 的意义</h3><p>PPT：Demo with <code>ssh</code>。<br>SSH 登录时：</p>
+<ul>
+<li><p>你用私钥证明“你是你”</p>
+</li>
+<li><p>服务器用公钥验证</p>
+</li>
+<li><p>同时服务器也会让你验证“服务器真的是那台服务器”（known_hosts）</p>
+</li>
+</ul>
+<hr>
+<h2 id="7-Availability（可用性）——运维安全非常常考"><a href="#7-Availability（可用性）——运维安全非常常考" class="headerlink" title="7. Availability（可用性）——运维安全非常常考"></a>7. Availability（可用性）——运维安全非常常考</h2><p>PPT列：Filtering、Load balancers、Redundancies、Backups。</p>
+<p>我给你展开成“攻击 → 对策”。</p>
+<h3 id="7-1-常见打可用性的攻击"><a href="#7-1-常见打可用性的攻击" class="headerlink" title="7.1 常见打可用性的攻击"></a>7.1 常见打可用性的攻击</h3><ul>
+<li><p>DDoS：海量请求把服务打崩</p>
+</li>
+<li><p>勒索软件：数据被加密导致业务不可用</p>
+</li>
+<li><p>单点故障：某个组件挂了全挂（数据库、网关）</p>
+</li>
+<li><p>人为误操作：删库、误配置、发布失败</p>
+</li>
+</ul>
+<h3 id="7-2-Filtering（过滤）"><a href="#7-2-Filtering（过滤）" class="headerlink" title="7.2 Filtering（过滤）"></a>7.2 Filtering（过滤）</h3><p>目标：让恶意流量 <strong>到不了核心服务</strong></p>
+<ul>
+<li><p>WAF（Web Application Firewall）</p>
+</li>
+<li><p>rate limit（限流）</p>
+</li>
+<li><p>黑名单/信誉系统</p>
+</li>
+<li><p>验证码/挑战（防机器人）</p>
+</li>
+</ul>
+<h3 id="7-3-Load-Balancer（负载均衡）"><a href="#7-3-Load-Balancer（负载均衡）" class="headerlink" title="7.3 Load Balancer（负载均衡）"></a>7.3 Load Balancer（负载均衡）</h3><p>目标：把流量分给多台机器</p>
+<ul>
+<li><p>避免单台过载</p>
+</li>
+<li><p>支持横向扩展（scale out）</p>
+</li>
+</ul>
+<h3 id="7-4-Redundancy（冗余）"><a href="#7-4-Redundancy（冗余）" class="headerlink" title="7.4 Redundancy（冗余）"></a>7.4 Redundancy（冗余）</h3><p>目标：某个组件挂了还能顶上</p>
+<ul>
+<li><p>多副本服务</p>
+</li>
+<li><p>主从数据库</p>
+</li>
+<li><p>多可用区部署</p>
+</li>
+</ul>
+<h3 id="7-5-Backups（备份）"><a href="#7-5-Backups（备份）" class="headerlink" title="7.5 Backups（备份）"></a>7.5 Backups（备份）</h3><p>目标：系统挂了能恢复到最近状态</p>
+<ul>
+<li><p>全量备份 + 增量备份</p>
+</li>
+<li><p>定期演练恢复（否则备份等于没有）</p>
+</li>
+<li><p>防勒索：备份要隔离（不可直接被覆盖/加密）</p>
+</li>
+</ul>
+<hr>
+<h2 id="8-File-Security：UNIX-权限与所有权（这块你实验-面试超常用）"><a href="#8-File-Security：UNIX-权限与所有权（这块你实验-面试超常用）" class="headerlink" title="8. File Security：UNIX 权限与所有权（这块你实验/面试超常用）"></a>8. File Security：UNIX 权限与所有权（这块你实验/面试超常用）</h2><p>PPT从“UNIX 多用户”讲到权限模型与 chown/chmod。</p>
+<h3 id="8-1-为什么需要权限"><a href="#8-1-为什么需要权限" class="headerlink" title="8.1 为什么需要权限"></a>8.1 为什么需要权限</h3><ul>
+<li><p>多用户机器上，别人也能登录</p>
+</li>
+<li><p>你有敏感文件（比如私钥）</p>
+</li>
+<li><p>你希望只有你能读/改它</p>
+</li>
+</ul>
+<hr>
+<h3 id="8-2-三类“所有者”"><a href="#8-2-三类“所有者”" class="headerlink" title="8.2 三类“所有者”"></a>8.2 三类“所有者”</h3><p>PPT：user / group / others。</p>
+<ul>
+<li><p><strong>owning user</strong>：文件属于谁</p>
+</li>
+<li><p><strong>owning group</strong>：文件属于哪个组</p>
+</li>
+<li><p><strong>others</strong>：除了以上两类的所有人</p>
+</li>
+</ul>
+<hr>
+<h3 id="8-3-三种权限-r-w-x-到底意味着什么（很多人只会背字母）"><a href="#8-3-三种权限-r-w-x-到底意味着什么（很多人只会背字母）" class="headerlink" title="8.3 三种权限 r/w/x 到底意味着什么（很多人只会背字母）"></a>8.3 三种权限 r/w/x 到底意味着什么（很多人只会背字母）</h3><p>PPT展示 read/write/execute。</p>
+<h4 id="对“普通文件”："><a href="#对“普通文件”：" class="headerlink" title="对“普通文件”："></a>对“普通文件”：</h4><ul>
+<li><p><code>r</code>：能读文件内容（cat、less）</p>
+</li>
+<li><p><code>w</code>：能修改内容（写入/覆盖）</p>
+</li>
+<li><p><code>x</code>：能执行（把它当程序跑）</p>
+</li>
+</ul>
+<h4 id="对“目录”："><a href="#对“目录”：" class="headerlink" title="对“目录”："></a>对“目录”：</h4><ul>
+<li><p><code>r</code>：能列出目录里的文件名（ls）</p>
+</li>
+<li><p><code>w</code>：能在目录里创建/删除/重命名文件（前提通常还要 x）</p>
+</li>
+<li><p><code>x</code>：能进入目录（cd），能访问目录中已知名字的文件</p>
+</li>
+</ul>
+<p><strong>目录的 x 超关键：</strong></p>
+<ul>
+<li><p>没有 x，你连 cd 都进不去</p>
+</li>
+<li><p>有 r 没 x，你能看到名字但进不去/访问不了</p>
+</li>
+</ul>
+<hr>
+<h3 id="8-4-ls-l-那串字符怎么读"><a href="#8-4-ls-l-那串字符怎么读" class="headerlink" title="8.4 ls -l 那串字符怎么读"></a>8.4 <code>ls -l</code> 那串字符怎么读</h3><p>PPT提 <code>ls -l to see permissions</code>。</p>
+<p>示例：<code>drwxr-xr--</code></p>
+<ul>
+<li><p>第 1 位：<code>d</code> 目录，<code>-</code> 文件</p>
+</li>
+<li><p>后 9 位：三组三位</p>
+<ul>
+<li><p>user：<code>rwx</code></p>
+</li>
+<li><p>group：<code>r-x</code></p>
+</li>
+<li><p>others：<code>r--</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="8-5-改所有者：chown"><a href="#8-5-改所有者：chown" class="headerlink" title="8.5 改所有者：chown"></a>8.5 改所有者：<code>chown</code></h3><p>PPT给格式：<code>[sudo] chown [-R] newuser:newgroup [FILES]</code></p>
+<ul>
+<li><p><code>sudo</code>：改所有权一般需要管理员权限</p>
+</li>
+<li><p><code>-R</code>：递归（目录下所有文件一起改）</p>
+</li>
+<li><p><code>newuser:newgroup</code>：</p>
+<ul>
+<li><p><code>newuser</code> 变更拥有者</p>
+</li>
+<li><p><code>newgroup</code> 变更所属组</p>
+</li>
+<li><p>你也可以只改 user 或只改 group（具体写法不同系统略有差异）</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>典型场景：</strong></p>
+<ul>
+<li>你从 root 创建了一个文件，普通用户读不了<br>  → <code>sudo chown yourname:yourgroup file</code></li>
+</ul>
+<hr>
+<h3 id="8-6-改权限：chmod"><a href="#8-6-改权限：chmod" class="headerlink" title="8.6 改权限：chmod"></a>8.6 改权限：<code>chmod</code></h3><p>PPT给格式：<code>[sudo] chmod [-R] [permissions] [FILES]</code></p>
+<p>两种常见写法：</p>
+<h4 id="写法A：符号法（好理解）"><a href="#写法A：符号法（好理解）" class="headerlink" title="写法A：符号法（好理解）"></a>写法A：符号法（好理解）</h4><ul>
+<li><p><code>chmod o+r file</code>：others 增加读</p>
+</li>
+<li><p><code>chmod g-w file</code>：group 去掉写</p>
+</li>
+<li><p><code>chmod u+x script.sh</code>：user 增加可执行</p>
+</li>
+</ul>
+<h4 id="写法B：数字法（常用在运维）"><a href="#写法B：数字法（常用在运维）" class="headerlink" title="写法B：数字法（常用在运维）"></a>写法B：数字法（常用在运维）</h4><ul>
+<li><p><code>chmod 600 private_key</code></p>
+<ul>
+<li><p>user：rw-</p>
+</li>
+<li><p>group：—-</p>
+</li>
+<li><p>others：—-</p>
+</li>
+</ul>
+</li>
+<li><p><code>chmod 644 file</code></p>
+<ul>
+<li><p>user：rw-</p>
+</li>
+<li><p>group：r—</p>
+</li>
+<li><p>others：r—</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="8-7-“为什么重要？”——私钥权限错误的后果"><a href="#8-7-“为什么重要？”——私钥权限错误的后果" class="headerlink" title="8.7 “为什么重要？”——私钥权限错误的后果"></a>8.7 “为什么重要？”——私钥权限错误的后果</h3><p>PPT问：如果你把私钥设成这种权限会怎样？</p>
+<p>你可以直接写成一句话的结论：</p>
+<ul>
+<li>私钥如果对 group/others 可读<br>  ⇒ 同机其他用户能复制你的私钥<br>  ⇒ 可以伪装你登录服务器<br>  ⇒ 相当于“身份被盗用”</li>
+</ul>
+<p>所以现实 SSH 会直接拒绝：</p>
+<ul>
+<li>私钥权限过宽时，ssh 会提示 “Permissions are too open” 并拒绝使用</li>
+</ul>
+<hr>
+<h2 id="9-签名与证书（Certificates）——解决“公钥到底信不信”的问题"><a href="#9-签名与证书（Certificates）——解决“公钥到底信不信”的问题" class="headerlink" title="9. 签名与证书（Certificates）——解决“公钥到底信不信”的问题"></a>9. 签名与证书（Certificates）——解决“公钥到底信不信”的问题</h2><p>PPT提出关键疑问：<br>“我给你一个公钥，说它是银行的，你怎么验证？”</p>
+<h3 id="9-1-问题本质：公钥容易被冒充"><a href="#9-1-问题本质：公钥容易被冒充" class="headerlink" title="9.1 问题本质：公钥容易被冒充"></a>9.1 问题本质：公钥容易被冒充</h3><ul>
+<li><p>数字签名能证明“签名者拥有某私钥”</p>
+</li>
+<li><p>但你不知道这个公钥是否真属于银行</p>
+</li>
+<li><p>攻击者可以：</p>
+<ul>
+<li><p>给你一个“假银行公钥”</p>
+</li>
+<li><p>你用它加密/验证，就被中间人接管</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>这就是 <strong>信任引导（bootstrapping trust）</strong> 的难题。</p>
+<hr>
+<h3 id="9-2-证书是什么"><a href="#9-2-证书是什么" class="headerlink" title="9.2 证书是什么"></a>9.2 证书是什么</h3><p>PPT：证书 = 被签名的消息，表示“信任某公钥”。</p>
+<p>通俗版：</p>
+<ul>
+<li><p>证书就像“身份证/营业执照”</p>
+</li>
+<li><p>它把：</p>
+<ul>
+<li><p>“某个域名/组织”</p>
+</li>
+<li><p>和 “某个公钥”</p>
+</li>
+<li><p>绑定在一起</p>
+</li>
+</ul>
+</li>
+<li><p>并且由一个你信任的机构签名</p>
+</li>
+</ul>
+<hr>
+<h3 id="9-3-根证书与信任链（Chain-of-Trust）"><a href="#9-3-根证书与信任链（Chain-of-Trust）" class="headerlink" title="9.3 根证书与信任链（Chain of Trust）"></a>9.3 根证书与信任链（Chain of Trust）</h3><p>PPT：OS 内置 root certificates；证书是链式签名，链到 root 就算可信。</p>
+<p>你可以这样理解：</p>
+<ul>
+<li><p>你的电脑/手机系统里，预装了一堆“可信 CA 的公钥”（根证书）</p>
+</li>
+<li><p>网站证书通常不是根证书直接签的，而是：</p>
+<ul>
+<li>网站证书 ← 中间 CA ← 根 CA</li>
+</ul>
+</li>
+<li><p>浏览器验证：</p>
+<ol>
+<li><p>网站证书签名是否有效</p>
+</li>
+<li><p>证书链是否能一路追溯到某个系统内置根证书</p>
+</li>
+<li><p>域名是否匹配</p>
+</li>
+<li><p>是否过期/吊销</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>PPT也提醒：不是完美系统（wosign/diginotar 事件）。<br>结论：CA 体系靠“信任 + 监管 + 撤销机制”维持，但也会翻车。</p>
+<hr>
+<h2 id="10-HTTPS-SSL-certificate（这页虽然短，但你要会解释）"><a href="#10-HTTPS-SSL-certificate（这页虽然短，但你要会解释）" class="headerlink" title="10. HTTPS / SSL certificate（这页虽然短，但你要会解释）"></a>10. HTTPS / SSL certificate（这页虽然短，但你要会解释）</h2><p>PPT一句话：HTTPS：加密 HTTP 请求，公开验证。</p>
+<p><strong>你要会完整解释：HTTPS 解决了两个问题</strong></p>
+<ol>
+<li><p><strong>机密性</strong>：内容不被窃听（加密传输）</p>
+</li>
+<li><p><strong>真实性</strong>：你连的真的是目标网站（证书验证）</p>
+</li>
+</ol>
+<p><strong>（补充你写报告会更强）TLS 握手直觉：</strong></p>
+<ul>
+<li><p>浏览器拿到网站证书 → 用系统根证书验证它可信</p>
+</li>
+<li><p>验证通过 → 协商出会话密钥（session key）</p>
+</li>
+<li><p>后续数据用对称加密传输（快）</p>
+</li>
+</ul>
+<hr>
+<h2 id="11-BeyondCorp-amp-Zero-Trust（零信任）——现代访问控制理念"><a href="#11-BeyondCorp-amp-Zero-Trust（零信任）——现代访问控制理念" class="headerlink" title="11. BeyondCorp &amp; Zero Trust（零信任）——现代访问控制理念"></a>11. BeyondCorp &amp; Zero Trust（零信任）——现代访问控制理念</h2><p>PPT要点：传统“内网 + 防火墙”不行了；远程办公、云服务、网络应用。</p>
+<h3 id="11-1-传统模型（Perimeter-Intranet）"><a href="#11-1-传统模型（Perimeter-Intranet）" class="headerlink" title="11.1 传统模型（Perimeter / Intranet）"></a>11.1 传统模型（Perimeter / Intranet）</h3><ul>
+<li><p>假设：</p>
+<ul>
+<li><p>公司内网是可信的</p>
+</li>
+<li><p>外网是不可信的</p>
+</li>
+</ul>
+</li>
+<li><p>做法：</p>
+<ul>
+<li><p>内网给很多权限</p>
+</li>
+<li><p>外网靠 VPN/防火墙挡</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>问题：</strong></p>
+<ul>
+<li><p>员工远程办公：人不在内网</p>
+</li>
+<li><p>服务上云：资源不在“公司机房内网”</p>
+</li>
+<li><p>内网一旦被入侵：横向移动非常容易（攻击者像进了城）</p>
+</li>
+</ul>
+<hr>
+<h3 id="11-2-零信任模型（Zero-Trust）"><a href="#11-2-零信任模型（Zero-Trust）" class="headerlink" title="11.2 零信任模型（Zero Trust）"></a>11.2 零信任模型（Zero Trust）</h3><p>PPT：动态策略、更细粒度控制；根据用户+设备+其他启发式。</p>
+<p>核心思想（很关键）：</p>
+<ul>
+<li><p><strong>不要因为“在内网”就信任</strong></p>
+</li>
+<li><p>每次访问都基于：</p>
+<ul>
+<li><p>用户身份（是谁）</p>
+</li>
+<li><p>设备状态（是否合规、有无补丁、是否加密）</p>
+</li>
+<li><p>环境（地点、时间、风险评分）</p>
+</li>
+<li><p>行为（是否异常）</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>你可以一句话记：</p>
+<blockquote>
+<p><strong>Never trust, always verify</strong>（从不默认信任，永远持续验证）</p>
+</blockquote>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/LSAD/" class="print-no-link">#LSAD</a>
+      
+        <a href="/tags/note/" class="print-no-link">#note</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OCF Linux System Administration DeCal note7</div>
+      <div>https://zjjyyds.github.io/2026/02/14/学院派/LSAD note7/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年2月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/02/14/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20lab7/" title="OCF Linux System Administration DeCal lab7">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab7</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/02/11/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD%20note6/" title="OCF Linux System Administration DeCal note6">
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal note6</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
