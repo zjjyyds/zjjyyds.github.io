@@ -1,0 +1,947 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Shell（命令行解释器）¶Shell 是一种命令行界面（CLI），用于与计算机进行交互。 常见的 shell 包括：  bash   zsh   fish     提示：如果你不知道自己正在使用 zsh 还是 bash，可以运行echo $0  基本命令结构： 123[command] [flags] [arguments]  示例：ls -a ~&#x2F; ls：列出目录内容 -a：不忽略以 .">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OCF Linux System Administration DeCal note1">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/01/28/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD/LSAD%20note1/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="Shell（命令行解释器）¶Shell 是一种命令行界面（CLI），用于与计算机进行交互。 常见的 shell 包括：  bash   zsh   fish     提示：如果你不知道自己正在使用 zsh 还是 bash，可以运行echo $0  基本命令结构： 123[command] [flags] [arguments]  示例：ls -a ~&#x2F; ls：列出目录内容 -a：不忽略以 .">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://blog.jaysa.net/assets/ocf-box.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/linuxtm.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/xkcd.png">
+<meta property="og:image" content="https://blog.jaysa.net/assets/history-of-unix.svg">
+<meta property="og:image" content="https://blog.jaysa.net/assets/happy-feet.jpg">
+<meta property="og:image" content="https://blog.jaysa.net/assets/go-to-jail.jpg">
+<meta property="og:image" content="https://blog.jaysa.net/assets/go-to-jail.jpg">
+<meta property="og:image" content="https://blog.jaysa.net/assets/happy-feet-sponsorware.jpg">
+<meta property="og:image" content="https://blog.jaysa.net/assets/happy-feet-mongodb.jpg">
+<meta property="article:published_time" content="2026-01-28T12:48:00.000Z">
+<meta property="article:modified_time" content="2026-01-28T12:54:37.148Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="LSAD">
+<meta property="article:tag" content="note">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog.jaysa.net/assets/ocf-box.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>OCF Linux System Administration DeCal note1 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OCF Linux System Administration DeCal note1"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-28 20:48" pubdate>
+          2026年1月28日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.9k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          16 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OCF Linux System Administration DeCal note1</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p><img src="https://blog.jaysa.net/assets/ocf-box.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p><img src="https://blog.jaysa.net/assets/linuxtm.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<h2 id="Shell（命令行解释器）¶"><a href="#Shell（命令行解释器）¶" class="headerlink" title="Shell（命令行解释器）¶"></a>Shell（命令行解释器）<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#the-shell" title="Permanent link">¶</a></h2><p>Shell 是一种<strong>命令行界面（CLI）</strong>，用于与计算机进行交互。</p>
+<p>常见的 shell 包括：</p>
+<ul>
+<li>bash  </li>
+<li>zsh  </li>
+<li>fish  </li>
+</ul>
+<blockquote>
+<p>提示：如果你不知道自己正在使用 zsh 还是 bash，可以运行<br><code>echo $0</code></p>
+</blockquote>
+<p>基本命令结构：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs css"><br><span class="hljs-selector-attr">[command]</span> <span class="hljs-selector-attr">[flags]</span> <span class="hljs-selector-attr">[arguments]</span><br><br></code></pre></td></tr></table></figure>
+<ul>
+<li>示例：<code>ls -a ~/</code><ul>
+<li><code>ls</code>：列出目录内容</li>
+<li><code>-a</code>：不忽略以 <code>.</code> 开头的文件</li>
+<li><code>~/</code>：你当前用户的主目录</li>
+</ul>
+</li>
+</ul>
+<p>常见的 shell 命令：</p>
+<ul>
+<li><code>cd</code> —— 切换目录  </li>
+<li><code>ls</code> —— 列出目录内容  </li>
+<li><code>cat</code> —— 拼接并输出文件内容  </li>
+<li><code>head</code> —— 读取前 10 行  </li>
+<li><code>less</code> —— 阅读较大的文件  </li>
+<li><code>mv</code> —— 移动  </li>
+<li><code>cp</code> —— 复制  </li>
+<li><code>rm</code> —— 删除文件  </li>
+</ul>
+<p>还有非常多的命令……</p>
+<p>如果你不知道某个操作对应的命令，可以直接搜索：</p>
+<blockquote>
+<p>“how to <em>_</em> linux”</p>
+</blockquote>
+<p>例如：</p>
+<ul>
+<li>我想解压一个文件  </li>
+<li>搜索：“how to unzip a file linux”  </li>
+<li>查看 Stack Overflow  </li>
+<li>发现要使用 <code>unzip</code> 命令  </li>
+<li>结果发现系统还没安装 unzip  </li>
+<li>用你发行版的包管理器安装  </li>
+<li>成功 🎉  </li>
+</ul>
+<p>上面提到的这些常见命令属于：</p>
+<blockquote>
+<p><strong>GNU Core Utilities（GNU 核心工具集）</strong></p>
+</blockquote>
+<hr>
+<h3 id="文本编辑器"><a href="#文本编辑器" class="headerlink" title="文本编辑器"></a>文本编辑器</h3><ul>
+<li>Vim  </li>
+<li>Nano  </li>
+<li>Emacs  </li>
+</ul>
+<p><img src="https://blog.jaysa.net/assets/xkcd.png" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>你将在今天的实验中学到更多内容。</p>
+<hr>
+<h2 id="Linux-是如何诞生的？¶"><a href="#Linux-是如何诞生的？¶" class="headerlink" title="Linux 是如何诞生的？¶"></a>Linux 是如何诞生的？<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#how-did-linux-come-to-be" title="Permanent link">¶</a></h2><p><strong>GNU/Linux</strong>：</p>
+<ul>
+<li>Linux 是操作系统的 <strong>内核（kernel）</strong></li>
+<li>GNU 是其他关键软件（例如 GNU Coreutils）</li>
+</ul>
+<p><img src="https://blog.jaysa.net/assets/history-of-unix.svg" srcset="/img/loading.gif" lazyload alt=""></p>
+<hr>
+<h2 id="许可证（Licenses）¶"><a href="#许可证（Licenses）¶" class="headerlink" title="许可证（Licenses）¶"></a>许可证（Licenses）<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#licenses" title="Permanent link">¶</a></h2><p>你在看别人的代码时，发现了一个奇怪的文件：</p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><br><span class="hljs-attribute">LICENSE</span><br><br></code></pre></td></tr></table></figure>
+<p>例如：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nims11/IPod-Shuffle-4g">github.com/nims11/IPod-Shuffle-4g</a></p>
+<p>或者：</p>
+<p>你在 GitHub 上新建仓库时，看到了：</p>
+<blockquote>
+<p>“Choose a license（选择许可证）”</p>
+</blockquote>
+<hr>
+<h2 id="自由软件-vs-开源软件¶"><a href="#自由软件-vs-开源软件¶" class="headerlink" title="自由软件 vs 开源软件¶"></a>自由软件 vs 开源软件<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#free-vs-open-source" title="Permanent link">¶</a></h2><hr>
+<h3 id="自由软件（Free-Software）¶"><a href="#自由软件（Free-Software）¶" class="headerlink" title="自由软件（Free Software）¶"></a>自由软件（Free Software）<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#free-software" title="Permanent link">¶</a></h3><p>Richard Stallman（GNU 软件开发者、自由软件基金会创始人）</p>
+<p>——如果你在 61c 课程中使用过 gcc，<br>或者用过 <code>ls</code>、<code>cd</code> 命令，<br>那你就用过他写的软件。</p>
+<p>他这个人有点……古怪。</p>
+<p>这是他的网站：</p>
+<p><a target="_blank" rel="noopener" href="https://stallman.org/">stallman.org</a></p>
+<p>自由软件允许用户：</p>
+<ol>
+<li>运行软件  </li>
+<li>修改软件  </li>
+<li>重新分发软件  </li>
+<li>分发修改后的软件  </li>
+</ol>
+<p>相关演讲：</p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Ag1AKIl_2GM">Free Software, Free Society TED Talk</a></p>
+<p>为了推广这一理念，诞生了 <strong>GPL 许可证</strong>。</p>
+<hr>
+<h2 id="GNU-通用公共许可证（GPL）¶"><a href="#GNU-通用公共许可证（GPL）¶" class="headerlink" title="GNU 通用公共许可证（GPL）¶"></a>GNU 通用公共许可证（GPL）<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#gnu-general-public-license-gpl" title="Permanent link">¶</a></h2><blockquote>
+<p><strong>“病毒式许可证（Viral license）”</strong>  </p>
+<p>Copyleft 许可证有时被称为“病毒许可证”，<br>因为任何衍生作品都必须同样是自由软件。  </p>
+<p>这意味着该许可证会像病毒一样传播。  </p>
+<p>这可能会让一些人不愿意在自己的项目中使用你的代码，<br>从而削弱你作品的传播效果。</p>
+<p><strong>“你”</strong>：<br>一个狂热的 copyleft 支持者，<br>有时也被称为<br>“很难相处的人”<br>和<br>“在派对上一定超级有趣的人”。</p>
+</blockquote>
+<p>那如果我根本不在乎 copyleft，<br>也不在乎别人怎么用我的代码呢？</p>
+<hr>
+<h2 id="MIT-许可证¶"><a href="#MIT-许可证¶" class="headerlink" title="MIT 许可证¶"></a>MIT 许可证<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#mit-license" title="Permanent link">¶</a></h2><blockquote>
+<p>MIT License</p>
+<p>Copyright (c) [year] [fullname]</p>
+<p>特此免费授予任何获得本软件及其相关文档文件（以下简称“软件”）副本的人无限制使用本软件的权利，包括但不限于使用、复制、修改、合并、发布、分发、再授权和/或销售软件副本的权利，并允许被授予软件的人这样做，但须满足以下条件：</p>
+<p>上述版权声明和本许可声明应包含在软件的所有副本或重要部分中。</p>
+<p>本软件按“原样”提供，不提供任何形式的担保，包括但不限于对适销性、特定用途适用性及非侵权性的担保。在任何情况下，作者或版权持有人均不对任何索赔、损害或其他责任负责，无论是在合同、侵权或其他行为中产生的，还是由于软件或软件的使用或其他交易引起的。</p>
+</blockquote>
+<p>真正的自由。</p>
+<p>Live, laugh, kumbaya.</p>
+<blockquote>
+<p><strong>“绿帽许可证（Cuck license）”</strong>  </p>
+<p>宽松许可证有时被称为“绿帽许可证”，<br>因为你冒着被大公司拿走你的成果、<br>然后闭源变成专有软件的风险。</p>
+<p>他们会把你的水装进 AWS 的瓶子里，<br>再卖给你的朋友、家人和二次元老婆。</p>
+<p>你被绿了。</p>
+</blockquote>
+<p>相关讨论：</p>
+<p><a target="_blank" rel="noopener" href="https://news.ycombinator.com/item?id=37383680">hacker news post w/ gentoo wiki article</a></p>
+<hr>
+<h2 id="BSD-和其他许可证呢？¶"><a href="#BSD-和其他许可证呢？¶" class="headerlink" title="BSD 和其他许可证呢？¶"></a>BSD 和其他许可证呢？<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#what-about-bsd-and-other-licenses" title="Permanent link">¶</a></h2><p>时间不够讲。</p>
+<p>如果你感到困惑，或者想了解更多选择，请查看：</p>
+<p><a target="_blank" rel="noopener" href="https://choosealicense.com/">choosealicense.com</a></p>
+<hr>
+<h2 id="Jaysa，我为什么要关心这些许可证？我只是想做点酷东西。¶"><a href="#Jaysa，我为什么要关心这些许可证？我只是想做点酷东西。¶" class="headerlink" title="Jaysa，我为什么要关心这些许可证？我只是想做点酷东西。¶"></a>Jaysa，我为什么要关心这些许可证？我只是想做点酷东西。<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#jaysa-why-should-i-bother-with-all-this-license-stuff-i-just-wanna-make-cool-things" title="Permanent link">¶</a></h2><p>我认为：你在很多方面都很穷。</p>
+<p>P.S.<br>如果这不是真的，欢迎前往：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/ocf.io/donate">ocf.io/donate</a></p>
+<p>把你所有的钱都捐给我们吧，求你了 👉👈</p>
+<hr>
+<h2 id="1-——-你穷到根本不用担心公司抄袭你呕心沥血做的个人项目。¶"><a href="#1-——-你穷到根本不用担心公司抄袭你呕心沥血做的个人项目。¶" class="headerlink" title="1 —— 你穷到根本不用担心公司抄袭你呕心沥血做的个人项目。¶"></a>1 —— 你穷到根本不用担心公司抄袭你呕心沥血做的个人项目。<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#1-you-are-too-broke-to-have-a-company-rip-off-your-personal-projects-that-you-poured-your-blood-sweat-and-tears-into" title="Permanent link">¶</a></h2><p>案例参考：</p>
+<p><a target="_blank" rel="noopener" href="https://www.techpowerup.com/238677/minix-creator-andrew-tanenbaum-sends-open-letter-to-intel-over-minix-drama">MINIX 作者与 Intel IME 芯片事件</a></p>
+<hr>
+<h2 id="2-——-你现在也穷到没资格被解雇或被起诉。¶"><a href="#2-——-你现在也穷到没资格被解雇或被起诉。¶" class="headerlink" title="2 —— 你现在也穷到没资格被解雇或被起诉。¶"></a>2 —— 你现在也穷到没资格被解雇或被起诉。<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#2-you-are-too-broke-to-get-fired-or-sued-right-now" title="Permanent link">¶</a></h2><p>今年仍在持续发展的案例：</p>
+<blockquote>
+<p>“现代智能电视内置的软件会追踪用户的观看习惯，以便在电视屏幕上投放定向广告。</p>
+<p>软件自由保护组织（SFC）购买了一台 Vizio 电视，希望开发一个可自定义、不会追踪用户的开源操作系统版本。</p>
+<p>该电视运行的是 Linux，而 Linux 在法律上要求制造商必须公开允许用户修改系统的源代码。</p>
+<p>当 SFC 要求 Vizio 提供完整对应源代码（CCS）时，Vizio 拒绝了。</p>
+<p>SFC 随后在橙县高等法院起诉了 Vizio，以获取这份必要信息。”</p>
+<p>—— <a target="_blank" rel="noopener" href="https://sfconservancy.org/copyleft-compliance/vizio.html">Software Freedom Conservancy</a></p>
+</blockquote>
+<p>现在，让我们回到那个 iPod shuffle 的 Python 脚本：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nims11/IPod-Shuffle-4g">github.com/nims11/IPod-Shuffle-4g</a></p>
+<hr>
+<h2 id="示例¶"><a href="#示例¶" class="headerlink" title="示例¶"></a>示例<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#examples" title="Permanent link">¶</a></h2><hr>
+<h3 id="情况一¶"><a href="#情况一¶" class="headerlink" title="情况一¶"></a>情况一<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#situation-1" title="Permanent link">¶</a></h3><p>我在为 ncmpcpp（一个终端音乐播放器）开发的插件中使用了该脚本。</p>
+<p>我将插件以 <strong>GPLv3</strong> 发布，而不是 GPLv2。</p>
+<p><strong>我们是 GNU + OK！！！</strong><br><img src="https://blog.jaysa.net/assets/happy-feet.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
+<blockquote>
+<p>“本程序是自由软件；你可以根据自由软件基金会发布的 GNU 通用公共许可证重新分发和/或修改它；许可证版本为第 2 版，或（由你选择）任何更新版本。”</p>
+<p>—— <a target="_blank" rel="noopener" href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt">GPL 2.0</a></p>
+</blockquote>
+<hr>
+<h3 id="情况一-·-第二部分¶"><a href="#情况一-·-第二部分¶" class="headerlink" title="情况一 · 第二部分¶"></a>情况一 · 第二部分<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#situation-1-part-2" title="Permanent link">¶</a></h3><p>我开始怀旧了……</p>
+<p>我把许可证换成了 GPLv1，<br>因为老东西就是好。</p>
+<p><strong>我们要进监狱了！！！</strong><br><img src="https://blog.jaysa.net/assets/go-to-jail.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我在插件中使用该脚本，<br>却用 GPLv3 发布了它，而不是 GPLv2。</p>
+<hr>
+<h3 id="情况二¶"><a href="#情况二¶" class="headerlink" title="情况二¶"></a>情况二<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#situation-2" title="Permanent link">¶</a></h3><p>我 fork 了 ipod-shuffle-4g 仓库，<br>并修改它以支持更老版本的 iPod shuffle。</p>
+<p>我把代码发布到了 GitHub，<br>但<strong>忘记加许可证</strong>。</p>
+<p><strong>我们又要回监狱了！！！</strong><br><img src="https://blog.jaysa.net/assets/go-to-jail.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>我分发了一个修改后的版本（公开发布），<br>但它没有使用 GPL 兼容许可证。</p>
+<p>此时 copyleft / “病毒式” 特性就生效了。</p>
+<hr>
+<h3 id="情况三¶"><a href="#情况三¶" class="headerlink" title="情况三¶"></a>情况三<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#situation-3" title="Permanent link">¶</a></h3><p>我用 MIT 许可证创建了一个开源软件。</p>
+<p>但我需要钱。</p>
+<p>而且没人赞助我，<br>因为我的代码“显然没有 Linux 内核那么重要”。</p>
+<p>于是：</p>
+<p>我创建了一个私有 fork，<br>包含额外功能，<br>只有赞助者才能访问。</p>
+<p><strong>我们是赞助软件（Sponsorware）！！！</strong><br><img src="https://blog.jaysa.net/assets/happy-feet-sponsorware.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>这是专有软件，<br>因为用户只拥有自由 #1（使用权）。</p>
+<p>参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://squidfunk.github.io/mkdocs-material/insiders/license/#fair-use-policy">mkdocs material 的许可证</a>  </li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Open-core_model"><em>Open-core</em> 模式</a></li>
+</ul>
+<hr>
+<h3 id="情况四¶"><a href="#情况四¶" class="headerlink" title="情况四¶"></a>情况四<a target="_blank" rel="noopener" href="https://blog.jaysa.net/2025/09/09/intro-to-linux-and-foss/#situation-4" title="Permanent link">¶</a></h3><p>我用 <strong>AGPL</strong> 许可证写了一个很酷的数据库软件。</p>
+<blockquote>
+<p>“GNU Affero 通用公共许可证要求网络服务器的运营者向服务器用户提供其正在运行的修改版本的源代码。</p>
+<p>因此，在公共服务器上使用修改后的版本，就等同于向公众开放源代码。”</p>
+</blockquote>
+<p>我的软件很棒，大家都很喜欢！</p>
+<p>但大厂找到了漏洞。</p>
+<p>有人从咨询俱乐部毕业后，<br>为 Amazon / Google Cloud / Azure 想出了一个绝妙点子：</p>
+<blockquote>
+<p>把我的软件托管在他们的平台上，然后收费。</p>
+</blockquote>
+<p>我被 <strong>SaaS（软件即服务）</strong> 背刺了。</p>
+<p><strong>我们是 MongoDB！！！</strong><br><img src="https://blog.jaysa.net/assets/happy-feet-mongodb.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
+<p>因此后来诞生了：</p>
+<p><strong>Server Side Public License（SSPL）</strong></p>
+<p>在 SSPL 下：</p>
+<p>云服务商必须开源用户运行 MongoDB 所需的全部软件与 API。</p>
+<p>详情：</p>
+<p><a target="_blank" rel="noopener" href="https://www.mongodb.com/legal/licensing/server-side-public-license">www.mongodb.com/legal/licensing/server-side-public-license</a></p>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/LSAD/" class="print-no-link">#LSAD</a>
+      
+        <a href="/tags/note/" class="print-no-link">#note</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OCF Linux System Administration DeCal note1</div>
+      <div>https://zjjyyds.github.io/2026/01/28/学院派/LSAD/LSAD note1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/01/29/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD/LSAD%20lab1/" title="OCF Linux System Administration DeCal lab1">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab1</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/27/Leetcode/Floyd/" title="Floyd模板">
+                        <span class="hidden-mobile">Floyd模板</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

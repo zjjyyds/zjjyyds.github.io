@@ -1,0 +1,2135 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="📘 Version Control &amp; Backups（Lecture 8）系统笔记（原文内嵌详细补充版） 一、为什么需要版本控制（Version Control）1️⃣ 核心作用版本控制（VC &#x2F; VCS）的本质目标：  跟踪代码变化  知道「谁」在「什么时候」改了「什么」   📌补充：  “谁”：commit 里有 author&#x2F;committer（用户名+邮箱）。  “什么时候”">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OCF Linux System Administration DeCal note8">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/02/15/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD/LSAD%20note8/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="📘 Version Control &amp; Backups（Lecture 8）系统笔记（原文内嵌详细补充版） 一、为什么需要版本控制（Version Control）1️⃣ 核心作用版本控制（VC &#x2F; VCS）的本质目标：  跟踪代码变化  知道「谁」在「什么时候」改了「什么」   📌补充：  “谁”：commit 里有 author&#x2F;committer（用户名+邮箱）。  “什么时候”">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-15T15:50:00.000Z">
+<meta property="article:modified_time" content="2026-02-15T15:50:18.361Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="LSAD">
+<meta property="article:tag" content="note">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>OCF Linux System Administration DeCal note8 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OCF Linux System Administration DeCal note8"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-02-15 23:50" pubdate>
+          2026年2月15日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          48 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OCF Linux System Administration DeCal note8</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="📘-Version-Control-amp-Backups（Lecture-8）系统笔记（原文内嵌详细补充版）"><a href="#📘-Version-Control-amp-Backups（Lecture-8）系统笔记（原文内嵌详细补充版）" class="headerlink" title="📘 Version Control &amp; Backups（Lecture 8）系统笔记（原文内嵌详细补充版）"></a>📘 Version Control &amp; Backups（Lecture 8）系统笔记（原文内嵌详细补充版）</h1><hr>
+<h2 id="一、为什么需要版本控制（Version-Control）"><a href="#一、为什么需要版本控制（Version-Control）" class="headerlink" title="一、为什么需要版本控制（Version Control）"></a>一、为什么需要版本控制（Version Control）</h2><h3 id="1️⃣-核心作用"><a href="#1️⃣-核心作用" class="headerlink" title="1️⃣ 核心作用"></a>1️⃣ 核心作用</h3><p>版本控制（VC / VCS）的本质目标：</p>
+<ol>
+<li><p><strong>跟踪代码变化</strong></p>
+<ul>
+<li><p>知道「谁」在「什么时候」改了「什么」</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>“谁”：commit 里有 author/committer（用户名+邮箱）。</p>
+</li>
+<li><p>“什么时候”：commit timestamp。</p>
+</li>
+<li><p>“改了什么”：diff（行级变化）、文件增删改。</p>
+</li>
+<li><p><strong>应用场景</strong>：线上 bug 出现时追责不是目的，真正目的是快速定位“引入 bug 的提交”。</p>
+</li>
+<li><p><strong>考试爱问</strong>：如何查看谁改的？→ <code>git log</code> / <code>git blame &lt;file&gt;</code>。</p>
+</li>
+</ul>
+</li>
+<li><p>可以回滚到任意历史版本</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>“回滚”有两种常见含义：</p>
+<ol>
+<li><p><strong>回到过去某个版本</strong>（checkout/restore）：临时查看旧版本，不一定产生新提交。</p>
+</li>
+<li><p><strong>撤销某个提交的影响</strong>（revert）：产生一个“反向提交”，更安全（团队常用）。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>常用指令</strong>：</p>
+<ul>
+<li><p><code>git log --oneline</code> 找到 commit</p>
+</li>
+<li><p><code>git checkout &lt;hash&gt;</code>（进入“分离 HEAD”，只看不改）</p>
+</li>
+<li><p><code>git revert &lt;hash&gt;</code>（安全撤销，推荐）</p>
+</li>
+<li><p><code>git reset --hard &lt;hash&gt;</code>（危险，会改历史，慎用）</p>
+</li>
+</ul>
+</li>
+<li><p><strong>应用场景</strong>：线上事故快速回退：更推荐 <code>git revert</code> 或用 release/tag 回滚。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>多人协作</strong></p>
+<ul>
+<li><p>多个人同时改代码</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>核心矛盾：同一份代码，多个开发者并行修改。</p>
+</li>
+<li><p>Git 的解决方式：每个人本地都有完整仓库，最后通过合并（merge/rebase）把历史汇总。</p>
+</li>
+</ul>
+</li>
+<li><p>自动合并不同人的修改</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>Git 合并的是<strong>提交历史（commits）</strong>，并最终合并到文件层面。</p>
+</li>
+<li><p>能自动合并的前提：修改发生在不同文件或同文件不同区域。</p>
+</li>
+<li><p><strong>常见指令</strong>：<code>git merge</code>、<code>git pull</code>（默认=fetch+merge）。</p>
+</li>
+</ul>
+</li>
+<li><p>冲突可控、可解决</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>“可控”= Git 不会瞎合并，遇到冲突会停下来让你决定。</p>
+</li>
+<li><p>“可解决”= 冲突标记 + 手动改 + add + commit。</p>
+</li>
+<li><p><strong>考试爱考</strong>：冲突标记长什么样、解决三步是什么（你后面已经写了）。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>安全地开发新功能</strong></p>
+<ul>
+<li><p>在不影响主线（production）的情况下</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>主线= <code>main/master</code> 通常对应可部署版本。</p>
+</li>
+<li><p>你在主线上直接乱改，会让大家拉到不稳定代码。</p>
+</li>
+<li><p>所以要用分支隔离风险。</p>
+</li>
+</ul>
+</li>
+<li><p>创建新分支测试功能</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>分支是“指针”，创建成本几乎为 0，所以鼓励大胆试验。</p>
+</li>
+<li><p><strong>典型流程</strong>：<code>git checkout -b feature-x</code> → 开发 → PR → merge 回主线。</p>
+</li>
+<li><p><strong>考试爱问</strong>：为什么 Git 分支轻量？→ 只是指针，不是复制整个目录。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="2️⃣-常见版本控制系统（VCS）"><a href="#2️⃣-常见版本控制系统（VCS）" class="headerlink" title="2️⃣ 常见版本控制系统（VCS）"></a>2️⃣ 常见版本控制系统（VCS）</h3><ul>
+<li><p>Git（主流、事实标准）</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>Git 是<strong>分布式版本控制（DVCS）</strong>。</p>
+</li>
+<li><p>“事实标准”指生态最强：GitHub/GitLab/CI 工具链几乎围绕 Git。</p>
+</li>
+</ul>
+</li>
+<li><p>Mercurial</p>
+</li>
+<li><p>Subversion（SVN）</p>
+</li>
+<li><p>Perforce</p>
+</li>
+<li><p>Bazaar</p>
+<p>  📌补充（考试对比角度）：</p>
+<ul>
+<li><p>SVN：集中式（中央服务器权威），分支相对笨重；但某些企业老系统仍在用。</p>
+</li>
+<li><p>Perforce：大规模二进制资产/游戏开发常见。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>⚠️ <strong>重要区分</strong>：</p>
+<blockquote>
+<p><strong>Git ≠ GitHub</strong></p>
+</blockquote>
+<ul>
+<li><p>Git：版本控制工具（本地就能用）</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>你不联网也能：commit、branch、diff、log。</p>
+</li>
+<li><p>本质：<code>.git/</code> 目录里保存了历史和对象数据库。</p>
+</li>
+</ul>
+</li>
+<li><p>GitHub：托管 Git 仓库的云平台</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>GitHub 提供：远程仓库、PR、issue、actions、权限管理等。</p>
+</li>
+<li><p>远程平台还有 GitLab、Bitbucket。</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="二、Git-是什么-amp-为什么它牛"><a href="#二、Git-是什么-amp-为什么它牛" class="headerlink" title="二、Git 是什么 &amp; 为什么它牛"></a>二、Git 是什么 &amp; 为什么它牛</h2><h3 id="1️⃣-Git-的背景"><a href="#1️⃣-Git-的背景" class="headerlink" title="1️⃣ Git 的背景"></a>1️⃣ Git 的背景</h3><ul>
+<li><p>2005 年，Linus Torvalds 为 Linux 内核开发</p>
+<p>  📌补充：</p>
+<ul>
+<li>Linux 内核协作规模极大，需要高性能和强一致性方案。</li>
+</ul>
+</li>
+<li><p>因 BitKeeper 停止免费授权而诞生</p>
+</li>
+<li><p>最初 2–3 个月就完成第一版</p>
+</li>
+<li><p>名字来源：Linus 的自嘲（英式俚语里 Git = 讨厌的人）</p>
+<p>  📌补充：</p>
+<ul>
+<li>考试一般不考八卦，但可能考：<strong>Git 设计为适配大规模协作</strong>。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2️⃣-Git-的设计哲学"><a href="#2️⃣-Git-的设计哲学" class="headerlink" title="2️⃣ Git 的设计哲学"></a>2️⃣ Git 的设计哲学</h3><h4 id="🔧-Plumbing-amp-Porcelain"><a href="#🔧-Plumbing-amp-Porcelain" class="headerlink" title="🔧 Plumbing &amp; Porcelain"></a>🔧 Plumbing &amp; Porcelain</h4><ul>
+<li><p><strong>Plumbing（底层原语）</strong></p>
+<ul>
+<li><p>面向脚本</p>
+<p>  📌补充：</p>
+<ul>
+<li>适合自动化/组合命令，不强调“好用”。</li>
+</ul>
+</li>
+<li><p>如对象存储、树结构</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>例如底层对象：blob/tree/commit/tag（你后面讲了）。</p>
+</li>
+<li><p>底层命令例子：<code>git cat-file</code>、<code>git hash-object</code>、<code>git update-ref</code>（了解即可）。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Porcelain（高层命令）</strong></p>
+<ul>
+<li><p>面向用户</p>
+<p>  📌补充：</p>
+<ul>
+<li>更符合人类习惯，默认行为更安全。</li>
+</ul>
+</li>
+<li><p>如 <code>git add</code> / <code>git commit</code></p>
+<p>  📌补充：</p>
+<ul>
+<li><p><code>git add</code> = 选择哪些改动进入下一次快照</p>
+</li>
+<li><p><code>git commit</code> = 固化快照为一个 commit 节点</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>👉 我们日常用的都是 porcelain</p>
+<p>📌补充：</p>
+<ul>
+<li>考试常问：“为什么说 Git 像工具箱？”→ 因为底层可组合。</li>
+</ul>
+<hr>
+<h3 id="3️⃣-Git-的三大“杀手级特性”"><a href="#3️⃣-Git-的三大“杀手级特性”" class="headerlink" title="3️⃣ Git 的三大“杀手级特性”"></a>3️⃣ Git 的三大“杀手级特性”</h3><h4 id="✅（1）快"><a href="#✅（1）快" class="headerlink" title="✅（1）快"></a>✅（1）快</h4><ul>
+<li><p>几乎所有操作都在<strong>本地</strong></p>
+<p>  📌补充：</p>
+<ul>
+<li><p><code>git log/diff/status/branch/commit</code> 都是读写本地 <code>.git/</code> 数据库。</p>
+</li>
+<li><p>只有 <code>fetch/pull/push/clone</code> 才需要网络。</p>
+</li>
+</ul>
+</li>
+<li><p>不依赖网络</p>
+</li>
+<li><p>离线也能：</p>
+<ul>
+<li><p>看历史</p>
+<p>  📌补充：<code>git log --oneline --graph --decorate --all</code></p>
+</li>
+<li><p>diff</p>
+<p>  📌补充：</p>
+<ul>
+<li><p><code>git diff</code>（工作区 vs 暂存区）</p>
+</li>
+<li><p><code>git diff --staged</code>（暂存区 vs 上次提交）</p>
+</li>
+<li><p><code>git diff &lt;a&gt; &lt;b&gt;</code>（任意两个版本）</p>
+</li>
+</ul>
+</li>
+<li><p>checkout</p>
+<p>  📌补充：</p>
+<ul>
+<li><p><code>git checkout &lt;branch&gt;</code> 切分支</p>
+</li>
+<li><p><code>git checkout &lt;hash&gt;</code> 查看旧提交（会进入分离 HEAD）</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="✅（2）有完整性（Integrity）"><a href="#✅（2）有完整性（Integrity）" class="headerlink" title="✅（2）有完整性（Integrity）"></a>✅（2）有完整性（Integrity）</h4><ul>
+<li><p>所有对象用 <strong>SHA-1 哈希</strong></p>
+<p>  📌补充：</p>
+<ul>
+<li><p>每个对象内容→算 hash→作为 ID。</p>
+</li>
+<li><p>任何一位变化，hash 都会完全不同（雪崩效应）。</p>
+</li>
+<li><p>所以 Git 对象天然防篡改/防损坏（至少能检测）。</p>
+</li>
+</ul>
+</li>
+<li><p>任意修改都会被检测</p>
+</li>
+<li><p>能防止：</p>
+<ul>
+<li><p>传输损坏</p>
+</li>
+<li><p>文件被偷偷改</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li>常见说法：Git 更像“内容寻址存储（content-addressed storage）”。</li>
+</ul>
+<h4 id="✅（3）存的是“快照”，不是“差异”"><a href="#✅（3）存的是“快照”，不是“差异”" class="headerlink" title="✅（3）存的是“快照”，不是“差异”"></a>✅（3）存的是“快照”，不是“差异”</h4><ul>
+<li><p>每次 commit：</p>
+<ul>
+<li><p>保存<strong>整个项目状态</strong></p>
+<p>  📌补充：</p>
+<ul>
+<li><p>逻辑上是“完整快照”，但物理存储会复用旧对象，所以不一定真的重复占空间。</p>
+</li>
+<li><p>好处：切换版本快、历史结构清晰。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>底层通过对象复用节省空间</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>未改的文件对应 blob 会被复用（指针复用）。</p>
+</li>
+<li><p>packfile 压缩也会让历史更省空间（进阶了解）。</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="三、Git-内部原理（非常重要，考试爱考）"><a href="#三、Git-内部原理（非常重要，考试爱考）" class="headerlink" title="三、Git 内部原理（非常重要，考试爱考）"></a>三、Git 内部原理（非常重要，考试爱考）</h2><h3 id="1️⃣-Git-的数据模型"><a href="#1️⃣-Git-的数据模型" class="headerlink" title="1️⃣ Git 的数据模型"></a>1️⃣ Git 的数据模型</h3><p>Git 用的是一个：</p>
+<blockquote>
+<p><strong>有向无环图（DAG, Directed Acyclic Graph）</strong></p>
+</blockquote>
+<p>📌补充：</p>
+<ul>
+<li><p>“有向”= commit 指向 parent（从新指向旧）</p>
+</li>
+<li><p>“无环”= 不可能出现某个提交把自己当祖先（时间线不闭环）</p>
+</li>
+<li><p>“图”= 支持分叉（branch）与汇合（merge）</p>
+</li>
+<li><p>每个节点：一次 <strong>commit</strong></p>
+<p>  📌补充：</p>
+<ul>
+<li>commit 节点记录：tree + parent(s) + message + author/date 等元数据。</li>
+</ul>
+</li>
+<li><p>每个 commit 指向：</p>
+<ul>
+<li><p>它的父 commit</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>普通提交：1 个 parent</p>
+</li>
+<li><p>merge 提交：2 个 parent（或更多）</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>没有环（不能回到未来）</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>你可以用下面命令直观看 DAG：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --oneline --graph --decorate --all<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="2️⃣-Git-的三种核心对象"><a href="#2️⃣-Git-的三种核心对象" class="headerlink" title="2️⃣ Git 的三种核心对象"></a>2️⃣ Git 的三种核心对象</h3><h4 id="🧱-Blob（文件）"><a href="#🧱-Blob（文件）" class="headerlink" title="🧱 Blob（文件）"></a>🧱 Blob（文件）</h4><ul>
+<li><p>文件内容</p>
+</li>
+<li><p>不包含文件名</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>“不含文件名”= blob 只负责内容；名字属于 tree（目录结构）。</p>
+</li>
+<li><p>这也是为什么 Git 能复用内容相同的文件对象（不同路径也可以指向同 blob）。</p>
+</li>
+</ul>
+<h4 id="🌳-Tree（目录）"><a href="#🌳-Tree（目录）" class="headerlink" title="🌳 Tree（目录）"></a>🌳 Tree（目录）</h4><ul>
+<li><p>目录结构</p>
+</li>
+<li><p>指向 blob 或其他 tree</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>tree 像“目录清单”：记录（文件名 → blobID）或（子目录名 → treeID）。</p>
+</li>
+<li><p>所以：<strong>文件名/路径信息在 tree 里</strong>。</p>
+</li>
+</ul>
+<h4 id="📌-Commit"><a href="#📌-Commit" class="headerlink" title="📌 Commit"></a>📌 Commit</h4><ul>
+<li><p>指向一个 tree（项目快照）</p>
+</li>
+<li><p>包含：</p>
+<ul>
+<li><p>作者</p>
+</li>
+<li><p>时间</p>
+</li>
+<li><p>commit message</p>
+</li>
+<li><p>父 commit</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>commit 的 tree 指针 = “那一刻项目根目录长什么样”。</p>
+</li>
+<li><p>所以 <code>checkout</code> 某个 commit，本质是把 HEAD 指向它，并把工作区还原为它的 tree。</p>
+</li>
+</ul>
+<hr>
+<h3 id="3️⃣-分支-amp-HEAD（高频考点）"><a href="#3️⃣-分支-amp-HEAD（高频考点）" class="headerlink" title="3️⃣ 分支 &amp; HEAD（高频考点）"></a>3️⃣ 分支 &amp; HEAD（高频考点）</h3><ul>
+<li><p><strong>Branch</strong></p>
+<ul>
+<li><p>只是一个指针</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>分支名本质是 <code>.git/refs/heads/&lt;branch&gt;</code> 里的一个 commit hash。</p>
+</li>
+<li><p>所以创建分支几乎零成本。</p>
+</li>
+</ul>
+</li>
+<li><p>指向某个 commit</p>
+</li>
+<li><p>默认分支：<code>master</code> / <code>main</code></p>
+<p>  📌补充：</p>
+<ul>
+<li>现在很多仓库默认是 <code>main</code>，但概念相同。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>HEAD</strong></p>
+<ul>
+<li><p>指向你当前所在的分支</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>通常 HEAD 里存的是 <code>ref: refs/heads/master</code> 这种“引用”。</p>
+</li>
+<li><p>如果你 <code>checkout &lt;hash&gt;</code>，HEAD 会变成直接指向某个 commit（分离 HEAD）。</p>
+</li>
+</ul>
+</li>
+<li><p>HEAD → branch → commit</p>
+<p>  📌补充（考点句式）：</p>
+<ul>
+<li><p><strong>提交发生时</strong>：当前分支指针会往前移动到新 commit；HEAD 跟着它。</p>
+</li>
+<li><p>所以“当前分支”其实就是“HEAD 指向的分支”。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>👉 分支 ≠ 复制一份代码<br>👉 分支 = 指针（非常轻量）</p>
+<p>📌补充：</p>
+<ul>
+<li><p>验证命令：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">git branch -vv<br>git show -s --oneline HEAD<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="四、Git-是分布式的（Distributed）"><a href="#四、Git-是分布式的（Distributed）" class="headerlink" title="四、Git 是分布式的（Distributed）"></a>四、Git 是分布式的（Distributed）</h2><ul>
+<li><p>每个 clone：</p>
+<ul>
+<li><p>都是一个<strong>完整仓库</strong></p>
+<p>  📌补充：</p>
+<ul>
+<li><p>“完整”= 带全历史、全对象。</p>
+</li>
+<li><p>所以离线也能看 log/diff。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>每个人都能：</p>
+<ul>
+<li><p>独立提交</p>
+</li>
+<li><p>独立分支</p>
+</li>
+</ul>
+</li>
+<li><p>再通过 push / pull 同步</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>真正需要网络的是“交换对象”：<code>fetch/push</code>。</p>
+</li>
+<li><p>pull 只是“拉下来并合并/变基”的快捷组合。</p>
+</li>
+</ul>
+<p>📌 好处：</p>
+<ul>
+<li><p>不怕服务器挂</p>
+</li>
+<li><p>本地就是备份</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>注意：本地是“版本历史备份”，但不是完整灾难备份（因为你电脑也会坏）。</p>
+</li>
+<li><p>所以你后面备份章节才重要：Git 不能替代 3-2-1。</p>
+</li>
+</ul>
+<hr>
+<h2 id="五、文件状态模型（非常重要）"><a href="#五、文件状态模型（非常重要）" class="headerlink" title="五、文件状态模型（非常重要）"></a>五、文件状态模型（非常重要）</h2><h3 id="1️⃣-四种状态"><a href="#1️⃣-四种状态" class="headerlink" title="1️⃣ 四种状态"></a>1️⃣ 四种状态</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Untracked</td>
+<td>Git 不知道的文件</td>
+</tr>
+<tr>
+<td>Unmodified</td>
+<td>和上次 commit 一样</td>
+</tr>
+<tr>
+<td>Modified</td>
+<td>改了但没暂存</td>
+</tr>
+<tr>
+<td>Staged</td>
+<td>已加入下次 commit</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>📌补充（把表变成“动作模型”）：</p>
+<ul>
+<li><p>Untracked → <code>git add</code> → Staged</p>
+</li>
+<li><p>Modified → <code>git add</code> → Staged</p>
+</li>
+<li><p>Staged → <code>git commit</code> → Unmodified</p>
+</li>
+<li><p>Unmodified → 编辑文件 → Modified</p>
+</li>
+</ul>
+<hr>
+<h3 id="2️⃣-Tracked-vs-Untracked"><a href="#2️⃣-Tracked-vs-Untracked" class="headerlink" title="2️⃣ Tracked vs Untracked"></a>2️⃣ Tracked vs Untracked</h3><ul>
+<li><p><strong>Tracked</strong></p>
+<ul>
+<li><p>在 Git 管理之下</p>
+</li>
+<li><p>可能是：</p>
+<ul>
+<li><p>unmodified</p>
+</li>
+<li><p>modified</p>
+</li>
+<li><p>staged</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>“tracked”并不等于“没改”，而是“Git 已经认识它”。</p>
+</li>
+<li><p>一旦某文件被 add 并提交过，它就成 tracked（除非你删除并提交删除）。</p>
+</li>
+<li><p><strong>Untracked</strong></p>
+<ul>
+<li><p>新文件</p>
+</li>
+<li><p>常通过 <code>.gitignore</code> 忽略</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p><code>.gitignore</code> 只对“未被跟踪的文件”有效。</p>
+</li>
+<li><p>如果一个文件已经 tracked，你再写进 <code>.gitignore</code>，它仍然会被追踪；需要 <code>git rm --cached &lt;file&gt;</code> 才能停止追踪（保留工作区文件）。</p>
+</li>
+</ul>
+<hr>
+<h3 id="3️⃣-常用命令"><a href="#3️⃣-常用命令" class="headerlink" title="3️⃣ 常用命令"></a>3️⃣ 常用命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git status<br></code></pre></td></tr></table></figure>
+<p>👉 一切状态问题，先 <code>git status</code></p>
+<p>📌补充（git status 的输出你要会读）：</p>
+<ul>
+<li><p>“Changes not staged for commit” = Modified（还没 add）</p>
+</li>
+<li><p>“Changes to be committed” = Staged（已经 add）</p>
+</li>
+<li><p>“Untracked files” = Untracked</p>
+</li>
+<li><p>同时它会提示你下一步可用命令（考试非常友好）。</p>
+</li>
+</ul>
+<hr>
+<h2 id="六、创建-amp-获取仓库"><a href="#六、创建-amp-获取仓库" class="headerlink" title="六、创建 &amp; 获取仓库"></a>六、创建 &amp; 获取仓库</h2><h3 id="1️⃣-初始化仓库"><a href="#1️⃣-初始化仓库" class="headerlink" title="1️⃣ 初始化仓库"></a>1️⃣ 初始化仓库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git init<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>创建 <code>.git/</code></p>
+</li>
+<li><p>当前目录变成 Git 仓库</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p><code>.git/</code> 里包括：objects（对象库）、refs（分支指针）、HEAD、config 等。</p>
+</li>
+<li><p><strong>应用场景</strong>：你有一个本地项目文件夹，想从零开始用 Git 管理。</p>
+</li>
+<li><p>常见后续：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">git add .<br>git commit -m <span class="hljs-string">&quot;init&quot;</span><br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h3 id="2️⃣-克隆仓库"><a href="#2️⃣-克隆仓库" class="headerlink" title="2️⃣ 克隆仓库"></a>2️⃣ 克隆仓库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> &lt;repo-url&gt; [<span class="hljs-built_in">dir</span>]<br></code></pre></td></tr></table></figure>
+<ul>
+<li><p>创建目录</p>
+</li>
+<li><p>初始化 <code>.git</code></p>
+</li>
+<li><p>拉取完整历史</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>clone = init + fetch + checkout 的组合（概念上）。</p>
+</li>
+<li><p><code>[dir]</code> 可选：指定新目录名，否则默认用仓库名。</p>
+</li>
+<li><p><strong>应用场景</strong>：作业 starter code、加入团队项目。</p>
+</li>
+<li><p>常见参数（了解）：</p>
+<ul>
+<li><code>--depth 1</code> 浅克隆（只拿最新一层历史，省时间/空间，做 CI 常用）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="七、一次完整的-Git-操作流程（Walkthrough）"><a href="#七、一次完整的-Git-操作流程（Walkthrough）" class="headerlink" title="七、一次完整的 Git 操作流程（Walkthrough）"></a>七、一次完整的 Git 操作流程（Walkthrough）</h2><p>典型流程：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">git init<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;version 1&quot;</span> &gt; test.txt<br>git add test.txt<br>git commit -m <span class="hljs-string">&quot;first commit&quot;</span><br><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;version 2&quot;</span> &gt; test.txt<br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;new file&quot;</span> &gt; new.txt<br>git add test.txt new.txt<br>git commit -m <span class="hljs-string">&quot;second commit&quot;</span><br></code></pre></td></tr></table></figure>
+<p>📌逐句补充解释（每一行的作用）：</p>
+<ul>
+<li><p><code>git init</code></p>
+<ul>
+<li>在当前目录创建仓库，让 Git 开始管理。</li>
+</ul>
+</li>
+<li><p><code>echo &quot;version 1&quot; &gt; test.txt</code></p>
+<ul>
+<li><p>创建/覆盖写入文件内容。</p>
+</li>
+<li><p>这里模拟“初始版本”。</p>
+</li>
+</ul>
+</li>
+<li><p><code>git add test.txt</code></p>
+<ul>
+<li>把 <code>test.txt</code> 放入暂存区（Staged），表示“准备把它纳入下一次快照”。</li>
+</ul>
+</li>
+<li><p><code>git commit -m &quot;first commit&quot;</code></p>
+<ul>
+<li><p>生成第一个 commit，记录当下快照。</p>
+</li>
+<li><p><code>-m</code> 是 message（提交说明）。</p>
+</li>
+<li><p><strong>考试点</strong>：commit 是 DAG 节点。</p>
+</li>
+</ul>
+</li>
+<li><p><code>echo &quot;version 2&quot; &gt; test.txt</code></p>
+<ul>
+<li>修改已跟踪文件 → 状态变为 Modified。</li>
+</ul>
+</li>
+<li><p><code>echo &quot;new file&quot; &gt; new.txt</code></p>
+<ul>
+<li>创建新文件 → 状态是 Untracked。</li>
+</ul>
+</li>
+<li><p><code>git add test.txt new.txt</code></p>
+<ul>
+<li><p>把已修改文件和新文件都加入暂存区。</p>
+</li>
+<li><p>注意：add 不是“提交”，只是选中要提交的内容。</p>
+</li>
+</ul>
+</li>
+<li><p><code>git commit -m &quot;second commit&quot;</code></p>
+<ul>
+<li>第二次快照：包括 <code>test.txt</code> 新内容 + <code>new.txt</code>。</li>
+</ul>
+</li>
+</ul>
+<p>👉 每次 commit 都是一个快照</p>
+<p>📌补充：</p>
+<ul>
+<li><p>你可以用这些验证：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --oneline<br>git show HEAD<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="八、分支（Branching）——Git-的灵魂"><a href="#八、分支（Branching）——Git-的灵魂" class="headerlink" title="八、分支（Branching）——Git 的灵魂"></a>八、分支（Branching）——Git 的灵魂</h2><h3 id="1️⃣-创建分支"><a href="#1️⃣-创建分支" class="headerlink" title="1️⃣ 创建分支"></a>1️⃣ 创建分支</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">git branch feature<br>git checkout feature<br><span class="hljs-comment"># 或</span><br>git checkout -b feature<br></code></pre></td></tr></table></figure>
+<p>📌逐句补充解释：</p>
+<ul>
+<li><p><code>git branch feature</code></p>
+<ul>
+<li><p>创建一个名为 feature 的分支指针，指向当前 commit。</p>
+</li>
+<li><p>不会切过去（你还在原分支）。</p>
+</li>
+</ul>
+</li>
+<li><p><code>git checkout feature</code></p>
+<ul>
+<li><p>切换到 feature 分支：HEAD 指向 feature。</p>
+</li>
+<li><p>工作区会更新为 feature 当前指向的快照。</p>
+</li>
+</ul>
+</li>
+<li><p><code>git checkout -b feature</code></p>
+<ul>
+<li><p>等价于“创建 + 切换”一条龙。</p>
+</li>
+<li><p>新手最常用。</p>
+</li>
+</ul>
+</li>
+<li><p>新分支指向当前 commit</p>
+</li>
+<li><p>HEAD 跳到新分支</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li>用 <code>git status</code> 你会看到 “On branch feature”。</li>
+</ul>
+<hr>
+<h3 id="2️⃣-为什么分支这么牛？"><a href="#2️⃣-为什么分支这么牛？" class="headerlink" title="2️⃣ 为什么分支这么牛？"></a>2️⃣ 为什么分支这么牛？</h3><ul>
+<li><p>创建几乎零成本</p>
+</li>
+<li><p>鼓励：</p>
+<ul>
+<li><p>小步提交</p>
+</li>
+<li><p>实验性开发</p>
+</li>
+</ul>
+</li>
+<li><p>比 SVN 强太多</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>团队中常见约定：</p>
+<ul>
+<li><p><code>main/master</code>：稳定</p>
+</li>
+<li><p><code>feature/*</code>：新功能</p>
+</li>
+<li><p><code>fix/*</code>：修 bug</p>
+</li>
+</ul>
+</li>
+<li><p>对应协作流程：PR/MR。</p>
+</li>
+</ul>
+<hr>
+<h2 id="九、合并（Merge）"><a href="#九、合并（Merge）" class="headerlink" title="九、合并（Merge）"></a>九、合并（Merge）</h2><h3 id="1️⃣-合并流程"><a href="#1️⃣-合并流程" class="headerlink" title="1️⃣ 合并流程"></a>1️⃣ 合并流程</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git checkout master<br>git merge iss53<br>git branch -d iss53<br></code></pre></td></tr></table></figure>
+<p>📌逐句补充解释（每条指令作用 + 场景）：</p>
+<ul>
+<li><p><code>git checkout master</code></p>
+<ul>
+<li><p><strong>先切到接收方分支</strong>（你要把别人合进来的那个分支）。</p>
+</li>
+<li><p>这里 master 是“主线”。</p>
+</li>
+</ul>
+</li>
+<li><p><code>git merge iss53</code></p>
+<ul>
+<li><p>把 <strong>iss53 分支合并到当前分支 master</strong>（核心规则：merge 的结果落在当前分支）。</p>
+</li>
+<li><p>可能出现两种结果：</p>
+<ol>
+<li><p><strong>fast-forward</strong>：master 没改过，只是落后 → 指针直接前移，无 merge commit</p>
+</li>
+<li><p><strong>merge commit</strong>：两边都改过 → 产生新的 merge commit（两个父节点）</p>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><code>git branch -d iss53</code></p>
+<ul>
+<li><p>删除本地分支指针 iss53（只删“指针”，不删提交对象）</p>
+</li>
+<li><p><code>-d</code> 是安全删除：只有在 iss53 的提交都已合并时才允许删除。</p>
+</li>
+<li><p>强制删除用 <code>-D</code>（危险，可能丢失你未合并的工作）</p>
+</li>
+</ul>
+</li>
+<li><p>创建 <strong>merge commit</strong></p>
+</li>
+<li><p>有两个父节点</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>只有在“非 fast-forward”时才会真正创建 merge commit。</p>
+</li>
+<li><p>考试写法可以说：merge 可能产生 merge commit。</p>
+</li>
+</ul>
+<hr>
+<h3 id="2️⃣-冲突（Conflict）"><a href="#2️⃣-冲突（Conflict）" class="headerlink" title="2️⃣ 冲突（Conflict）"></a>2️⃣ 冲突（Conflict）</h3><p>发生条件：</p>
+<ul>
+<li><p>两个分支</p>
+</li>
+<li><p><strong>修改了同一个文件的同一位置</strong></p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>同一文件不同位置通常能自动合并。</p>
+</li>
+<li><p>二进制文件（如图片）通常无法自动合并，常直接要求你选版本。</p>
+</li>
+</ul>
+<p>Git 会插入：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD<br>当前分支内容<br>=======<br>被合并分支内容<br>&gt;&gt;&gt;&gt;&gt;&gt;&gt; commit-hash<br></code></pre></td></tr></table></figure>
+<p>📌补充：</p>
+<ul>
+<li><p><code>HEAD</code> 表示你当前分支那边的内容。</p>
+</li>
+<li><p><code>commit-hash</code> 表示被合并进来的那边对应的提交。</p>
+</li>
+</ul>
+<p>解决步骤：</p>
+<ol>
+<li><p>手动改文件</p>
+</li>
+<li><p><code>git add</code></p>
+</li>
+<li><p><code>git commit</code></p>
+</li>
+</ol>
+<p>📌补充：</p>
+<ul>
+<li><p><code>git add</code> 在这里的含义是：“标记冲突已解决，把最终版本加入暂存区”。</p>
+</li>
+<li><p>commit 生成一个 merge commit（或普通 commit，取决于情况），完成合并过程。</p>
+</li>
+</ul>
+<hr>
+<h2 id="十、Rebase（高阶，但常考）"><a href="#十、Rebase（高阶，但常考）" class="headerlink" title="十、Rebase（高阶，但常考）"></a>十、Rebase（高阶，但常考）</h2><h3 id="1️⃣-Rebase-的本质"><a href="#1️⃣-Rebase-的本质" class="headerlink" title="1️⃣ Rebase 的本质"></a>1️⃣ Rebase 的本质</h3><blockquote>
+<p>把一个分支的提交<br><strong>“搬到”另一个分支的最前面</strong></p>
+</blockquote>
+<p>📌补充：</p>
+<ul>
+<li><p>“搬”不是物理移动，是<strong>复制提交并改 parent</strong>，所以 commit hash 会变。</p>
+</li>
+<li><p>结果：历史看起来像“一条直线”。</p>
+</li>
+<li><p>不产生 merge commit</p>
+</li>
+<li><p>历史是线性的</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li>线性历史好读，但代价是可能“重写历史”。</li>
+</ul>
+<hr>
+<h3 id="2️⃣-示例"><a href="#2️⃣-示例" class="headerlink" title="2️⃣ 示例"></a>2️⃣ 示例</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">git checkout experiment<br>git rebase master<br>git checkout master<br>git merge experiment<br></code></pre></td></tr></table></figure>
+<p>📌逐句补充解释：</p>
+<ul>
+<li><p><code>git checkout experiment</code></p>
+<ul>
+<li>切到要被重排历史的分支（实验分支）。</li>
+</ul>
+</li>
+<li><p><code>git rebase master</code></p>
+<ul>
+<li><p>把 experiment 上“独有的提交”复制一份，接到 master 最新提交之后。</p>
+</li>
+<li><p>复制完成后，experiment 指向新复制出来的提交链。</p>
+</li>
+</ul>
+</li>
+<li><p><code>git checkout master</code></p>
+<ul>
+<li>切回主分支。</li>
+</ul>
+</li>
+<li><p><code>git merge experiment</code></p>
+<ul>
+<li><p>此时 master 只是落后，通常是 fast-forward 合并 → 不会产生 merge commit。</p>
+</li>
+<li><p>这就是常见的“rebase + ff merge”流程。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>📌 <strong>记忆点</strong>：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Merge</th>
+<th>Rebase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>保留历史</td>
+<td>重写历史</td>
+</tr>
+<tr>
+<td>有 merge commit</td>
+<td>无 merge commit（常见）</td>
+</tr>
+<tr>
+<td>更安全</td>
+<td>更干净</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>📌补充：</p>
+<ul>
+<li><p>“更安全”指 merge 不会改旧提交的 hash，协作中不容易把别人搞崩。</p>
+</li>
+<li><p>“更干净”指 rebase 历史线性，但要遵守公共分支禁忌。</p>
+</li>
+</ul>
+<p>⚠️ <strong>永远不要 rebase 已经 push 的公共分支</strong></p>
+<p>📌补充（为什么）：</p>
+<ul>
+<li>因为你 rebase 后提交 hash 全变了，远程和别人本地历史对不上，会逼大家做强制同步（很容易把别人工作覆盖）。</li>
+</ul>
+<hr>
+<h2 id="十一、远程仓库（Remote）"><a href="#十一、远程仓库（Remote）" class="headerlink" title="十一、远程仓库（Remote）"></a>十一、远程仓库（Remote）</h2><h3 id="1️⃣-基本概念"><a href="#1️⃣-基本概念" class="headerlink" title="1️⃣ 基本概念"></a>1️⃣ 基本概念</h3><ul>
+<li><p><code>origin</code>：默认远程名</p>
+<p>  📌补充：</p>
+<ul>
+<li>origin 只是名字，你也可以有多个 remote：upstream、backup 等。</li>
+</ul>
+</li>
+<li><p>远程分支形式：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">origin/master<br></code></pre></td></tr></table></figure>
+<p>  📌补充：</p>
+<ul>
+<li><p><code>origin/master</code> 是<strong>本地的远程跟踪分支</strong>（只读镜像指针）。</p>
+</li>
+<li><p>它在 <code>git fetch</code> 后更新，代表“远程 master 目前在哪个 commit”。</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2️⃣-常用命令"><a href="#2️⃣-常用命令" class="headerlink" title="2️⃣ 常用命令"></a>2️⃣ 常用命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git remote -v<br>git remote show origin<br>git fetch origin<br></code></pre></td></tr></table></figure>
+<p>📌逐条补充解释：</p>
+<ul>
+<li><p><code>git remote -v</code></p>
+<ul>
+<li><p>列出远程仓库的 fetch/push URL。</p>
+</li>
+<li><p><strong>场景</strong>：你怀疑 push 到了错误仓库、或者要检查是 SSH 还是 HTTPS。</p>
+</li>
+</ul>
+</li>
+<li><p><code>git remote show origin</code></p>
+<ul>
+<li><p>展示 origin 的详细信息：有哪些远程分支、哪些本地分支在跟踪它。</p>
+</li>
+<li><p><strong>场景</strong>：排查跟踪关系（upstream）、分支是否落后。</p>
+</li>
+</ul>
+</li>
+<li><p><code>git fetch origin</code></p>
+<ul>
+<li><p><strong>只下载远程的新对象 + 更新本地的 <code>origin/*</code> 指针</strong></p>
+</li>
+<li><p><strong>不改工作区</strong>、不动你当前分支指针。</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>⚠️ <code>git fetch</code>：</p>
+<ul>
+<li><p>只更新本地数据库</p>
+</li>
+<li><p><strong>不改工作区</strong></p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>fetch 之后你通常会：</p>
+<ul>
+<li><p><code>git log --oneline --graph --decorate --all</code> 看远程发生了什么</p>
+</li>
+<li><p>再决定 <code>merge</code> 或 <code>rebase</code> 或 <code>reset</code>（看团队规范）。</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="十二、Pull-amp-Push"><a href="#十二、Pull-amp-Push" class="headerlink" title="十二、Pull &amp; Push"></a>十二、Pull &amp; Push</h2><h3 id="1️⃣-Pull-Fetch-Merge"><a href="#1️⃣-Pull-Fetch-Merge" class="headerlink" title="1️⃣ Pull = Fetch + Merge"></a>1️⃣ Pull = Fetch + Merge</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">git pull<br><span class="hljs-comment"># 等价于</span><br>git fetch<br>git merge<br></code></pre></td></tr></table></figure>
+<p>📌补充：</p>
+<ul>
+<li><p>默认 pull 是 fetch + merge，但也可能被配置成 fetch + rebase：</p>
+<ul>
+<li><code>git pull --rebase</code>（线性历史团队常用）</li>
+</ul>
+</li>
+<li><p><strong>场景</strong>：你想“一键同步并把远程改动合进来”。</p>
+</li>
+<li><p><strong>风险</strong>：pull 会直接改变你的当前分支/工作区；如果你本地有未提交修改，可能产生冲突或失败。</p>
+</li>
+</ul>
+<hr>
+<h3 id="2️⃣-Push"><a href="#2️⃣-Push" class="headerlink" title="2️⃣ Push"></a>2️⃣ Push</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">git push origin branch<br></code></pre></td></tr></table></figure>
+<p>📌补充：</p>
+<ul>
+<li><p>作用：把本地 <code>branch</code> 的提交上传到 <code>origin</code>，更新远程分支指针。</p>
+</li>
+<li><p>常见简写：在已设置 upstream 后可用 <code>git push</code>。</p>
+</li>
+<li><p><strong>典型场景</strong>：</p>
+<ul>
+<li><p>提交作业到远程</p>
+</li>
+<li><p>发 PR 前 push feature 分支</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li><p>本地分支 ≠ 自动同步</p>
+</li>
+<li><p>可以有私有分支</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>你可以在本地创建很多实验分支，不 push 也没关系。</p>
+</li>
+<li><p>push 的本质是“共享”，不是“必须”。</p>
+</li>
+</ul>
+<p>📌 好习惯：</p>
+<blockquote>
+<p><strong>push 前先 pull</strong></p>
+</blockquote>
+<p>📌补充：</p>
+<ul>
+<li><p>更严格说：先 <code>fetch</code> 看一下，再 merge/rebase 再 push，更安全：</p>
+  <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">git fetch origin<br>git <span class="hljs-built_in">log</span> --oneline --decorate --graph --all<br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="十三、标准-Git-工作流（必背）"><a href="#十三、标准-Git-工作流（必背）" class="headerlink" title="十三、标准 Git 工作流（必背）"></a>十三、标准 Git 工作流（必背）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">git checkout master<br>git checkout -b feature<br><br><span class="hljs-comment"># 修改代码</span><br>git add .<br>git commit -m <span class="hljs-string">&quot;xxx&quot;</span><br>git push origin feature<br><br>git checkout master<br>git pull origin master<br>git merge feature<br>git push origin master<br></code></pre></td></tr></table></figure>
+<p>📌逐句补充解释（让你“背得有意义”）：</p>
+<ul>
+<li><p><code>git checkout master</code>：先从主线分支出发，确保 feature 基于最新主线。</p>
+</li>
+<li><p><code>git checkout -b feature</code>：创建并切换到功能分支，隔离开发。</p>
+</li>
+<li><p><code>git add .</code>：把本次要提交的修改加入暂存区（<code>.</code> 代表当前目录下所有变更，考试/实战都要会用，但也要知道它可能把不该提交的文件加进来）。</p>
+</li>
+<li><p><code>git commit -m &quot;xxx&quot;</code>：形成一个清晰的“逻辑提交单元”。</p>
+</li>
+<li><p><code>git push origin feature</code>：把 feature 分支发到远程，便于备份/协作/开 PR。</p>
+</li>
+<li><p><code>git checkout master</code>：合并前回到主线。</p>
+</li>
+<li><p><code>git pull origin master</code>：先同步主线（避免你合并时基于旧的 master）。</p>
+</li>
+<li><p><code>git merge feature</code>：把 feature 合并进 master（可能 ff 或 merge commit）。</p>
+</li>
+<li><p><code>git push origin master</code>：把合并结果推上远程，主线更新完成。</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li>很多团队现在用 PR/MR 来做 <code>merge feature -&gt; master</code>，但本质一样。</li>
+</ul>
+<hr>
+<h1 id="💾-Backups（备份）——血泪教训"><a href="#💾-Backups（备份）——血泪教训" class="headerlink" title="💾 Backups（备份）——血泪教训"></a>💾 Backups（备份）——血泪教训</h1><h2 id="一、一句话总结"><a href="#一、一句话总结" class="headerlink" title="一、一句话总结"></a>一、一句话总结</h2><blockquote>
+<p><strong>Your shit will break.</strong></p>
+</blockquote>
+<p>📌补充：</p>
+<ul>
+<li><p>这句的“考试含义”：系统设计必须假设失败是常态，而不是意外。</p>
+</li>
+<li><p>备份/容灾属于“工程现实主义”。</p>
+</li>
+</ul>
+<hr>
+<h2 id="二、为什么一定要备份"><a href="#二、为什么一定要备份" class="headerlink" title="二、为什么一定要备份"></a>二、为什么一定要备份</h2><h3 id="Murphy-定律："><a href="#Murphy-定律：" class="headerlink" title="Murphy 定律："></a>Murphy 定律：</h3><ul>
+<li><p>误删 / 恶意删除</p>
+</li>
+<li><p>硬件损坏</p>
+</li>
+<li><p>软件 Bug</p>
+</li>
+<li><p>被偷（Berkeley 特供）</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>Git 解决不了：硬盘坏 / 电脑丢 / 云端账号被封</p>
+</li>
+<li><p>所以备份要“多份 + 异地 + 可恢复”。</p>
+</li>
+</ul>
+<hr>
+<h2 id="三、备份基本原则"><a href="#三、备份基本原则" class="headerlink" title="三、备份基本原则"></a>三、备份基本原则</h2><ol>
+<li><p><strong>自动化</strong></p>
+<p> 📌补充：</p>
+<ul>
+<li><p>手动备份=迟早忘。</p>
+</li>
+<li><p>常见方式：cron 定时、CI 定时、备份软件计划任务。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>安全（防泄露）</strong></p>
+<p> 📌补充：</p>
+<ul>
+<li><p>备份里往往包含密钥、隐私数据。</p>
+</li>
+<li><p>需要：加密、权限控制、最小可见范围。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>定期测试恢复</strong></p>
+<p> 📌补充：</p>
+<ul>
+<li><p>备份的唯一价值=能恢复。</p>
+</li>
+<li><p>常见灾难：备份文件存在但损坏、备份脚本早就失败没人发现。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>👉 不能只“有备份”，还要“能恢复”</p>
+<p>📌补充：</p>
+<ul>
+<li>这句话在面试/考试里等于：<strong>备份必须包含恢复演练</strong>。</li>
+</ul>
+<hr>
+<h2 id="四、3-2-1-备份法则（考试必考）"><a href="#四、3-2-1-备份法则（考试必考）" class="headerlink" title="四、3-2-1 备份法则（考试必考）"></a>四、3-2-1 备份法则（考试必考）</h2><ul>
+<li><p><strong>3</strong> 份数据</p>
+</li>
+<li><p><strong>2</strong> 种介质</p>
+</li>
+<li><p><strong>1</strong> 份异地</p>
+</li>
+</ul>
+<p>📌补充（为什么这样设计）：</p>
+<ul>
+<li><p>3 份：至少 1 份坏了还有替代</p>
+</li>
+<li><p>2 种介质：避免同类介质系统性故障（同批硬盘、同一 NAS）</p>
+</li>
+<li><p>1 异地：防火灾/盗窃/地震/勒索病毒（同地点同时完蛋）</p>
+</li>
+</ul>
+<p>例子：</p>
+<ul>
+<li><p>本地硬盘</p>
+</li>
+<li><p>另一台电脑</p>
+</li>
+<li><p>云端 / 异地</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li>“异地”不一定是云，也可以是另一栋楼、另一城市机房。</li>
+</ul>
+<hr>
+<h2 id="五、GitLab-事故（经典案例）"><a href="#五、GitLab-事故（经典案例）" class="headerlink" title="五、GitLab 事故（经典案例）"></a>五、GitLab 事故（经典案例）</h2><h3 id="事故过程"><a href="#事故过程" class="headerlink" title="事故过程"></a>事故过程</h3><ul>
+<li><p>工程师误 <code>rm -rf</code></p>
+<p>  📌补充：</p>
+<ul>
+<li><p>典型人为事故：一个命令把重要目录清空。</p>
+</li>
+<li><p>说明：再强的系统也挡不住“误操作 + 无演练”。</p>
+</li>
+</ul>
+</li>
+<li><p>300GB 数据丢失</p>
+</li>
+<li><p>备份：</p>
+<ul>
+<li><p>S3 失败（几周没成功）</p>
+<p>  📌补充：</p>
+<ul>
+<li><p>备份策略存在 ≠ 备份成功。</p>
+</li>
+<li><p>没监控就等于没备份。</p>
+</li>
+</ul>
+</li>
+<li><p>Azure 快照没开</p>
+<p>  📌补充：</p>
+<ul>
+<li>“没开”=压根没配置。很多事故都不是技术做不到，而是流程没做。</li>
+</ul>
+</li>
+<li><p>最后靠 LVM 勉强救回</p>
+<p>  📌补充：</p>
+<ul>
+<li>这是运气救场，不可复制，不能当策略。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><ul>
+<li><p>丢失：</p>
+<ul>
+<li><p>5000 项目</p>
+</li>
+<li><p>5000 评论</p>
+</li>
+<li><p>~700 用户</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li>这些损失不仅是代码，还有元数据（issue、评论、用户关系），所以仅靠 Git 仓库备份不够。</li>
+</ul>
+<p>📌 教训：</p>
+<ul>
+<li><p>备份要 <strong>监控</strong></p>
+</li>
+<li><p>要 <strong>演练恢复</strong></p>
+</li>
+<li><p>不测试 = 没备份</p>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>监控：备份作业成功/失败告警</p>
+</li>
+<li><p>演练：定期在新机器上恢复一次，验证“端到端可用”。</p>
+</li>
+</ul>
+<hr>
+<h2 id="六、常见备份工具"><a href="#六、常见备份工具" class="headerlink" title="六、常见备份工具"></a>六、常见备份工具</h2><h3 id="1️⃣-rsync"><a href="#1️⃣-rsync" class="headerlink" title="1️⃣ rsync"></a>1️⃣ rsync</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">rsync -av -P <span class="hljs-built_in">source</span> user@host:dest<br></code></pre></td></tr></table></figure>
+<p>📌逐项补充（每个参数作用）：</p>
+<ul>
+<li><p><code>rsync</code>：远程同步工具（本地↔远程 / 本地↔本地都行）</p>
+</li>
+<li><p><code>-a</code>（archive）：递归 + 保留权限/时间戳/软链接等（常用的“完整同步模式”）</p>
+</li>
+<li><p><code>-v</code>（verbose）：输出更详细信息（便于看在干啥）</p>
+</li>
+<li><p><code>-P</code>：相当于 <code>--progress</code> + <code>--partial</code></p>
+<ul>
+<li><p><code>--progress</code> 显示进度</p>
+</li>
+<li><p><code>--partial</code> 断点续传（中断后不必从头传）</p>
+</li>
+</ul>
+</li>
+<li><p><code>source</code>：源路径（文件/目录）</p>
+</li>
+<li><p><code>user@host:dest</code>：目标（通过 SSH 到远程主机的路径）</p>
+</li>
+<li><p>增量</p>
+</li>
+<li><p>走 SSH</p>
+</li>
+<li><p>本地 ↔ 远程</p>
+</li>
+</ul>
+<p>📌补充（“增量”是什么意思）：</p>
+<ul>
+<li>rsync 会比较文件大小/时间戳/校验信息，只传变化部分，大幅节省流量。</li>
+</ul>
+<p>📌应用场景：</p>
+<ul>
+<li><p>每天夜里把项目目录同步到另一台机器</p>
+</li>
+<li><p>同步网站静态资源到服务器</p>
+</li>
+<li><p>结合 cron：自动化备份</p>
+</li>
+</ul>
+<p>⚠️常见坑（很重要）：</p>
+<ul>
+<li><p><code>rsync</code> 末尾有没有 <code>/</code> 含义不同：</p>
+<ul>
+<li><p><code>rsync -a src/ dest/</code>：把 src 目录内容同步到 dest</p>
+</li>
+<li><p><code>rsync -a src dest/</code>：把整个 src 目录作为子目录放进 dest</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2️⃣-rclone"><a href="#2️⃣-rclone" class="headerlink" title="2️⃣ rclone"></a>2️⃣ rclone</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">rclone <span class="hljs-built_in">sync</span> <span class="hljs-built_in">source</span>:path dest:path<br></code></pre></td></tr></table></figure>
+<p>📌逐项补充：</p>
+<ul>
+<li><p><code>rclone</code>：面向云存储的同步工具（“云端 rsync”）</p>
+</li>
+<li><p><code>sync</code>：让目标端变成和源端一致（目标端多余的文件会被删除）</p>
+</li>
+<li><p><code>source:path</code> / <code>dest:path</code>：rclone 配置里的“远程端”或本地路径</p>
+</li>
+<li><p>云端版 rsync</p>
+</li>
+<li><p>支持：</p>
+<ul>
+<li><p>Google Drive</p>
+</li>
+<li><p>S3</p>
+</li>
+<li><p>OneDrive</p>
+</li>
+</ul>
+</li>
+<li><p>可挂载为本地文件系统</p>
+</li>
+</ul>
+<p>📌应用场景：</p>
+<ul>
+<li><p>实现 3-2-1 的“异地 1 份”</p>
+</li>
+<li><p>把关键资料同步到云端（并加密/权限控制）</p>
+</li>
+</ul>
+<p>⚠️重要提示：</p>
+<ul>
+<li><p>因为 <code>sync</code> 会删除目标端多余文件，所以<strong>目标端别拿来存别的东西</strong>，否则可能被清掉。</p>
+</li>
+<li><p>更保守的命令是 <code>copy</code>（只复制不删除）。</p>
+</li>
+</ul>
+<hr>
+<h2 id="七、延伸阅读（强烈推荐）"><a href="#七、延伸阅读（强烈推荐）" class="headerlink" title="七、延伸阅读（强烈推荐）"></a>七、延伸阅读（强烈推荐）</h2><ul>
+<li><p><strong>Pro Git</strong></p>
+<ul>
+<li>Git 官方圣经</li>
+</ul>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>系统讲对象模型、分支、rebase、协作，是“概念补强”的最佳资料。</p>
+</li>
+<li><p><strong>Oh Shit, Git!?</strong></p>
+<ul>
+<li>Git 翻车自救指南</li>
+</ul>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li><p>适合应急：误删分支、reset 错了、merge 冲突等。</p>
+</li>
+<li><p>Vim + Git：</p>
+<ul>
+<li>vim-fugitive</li>
+</ul>
+</li>
+</ul>
+<p>📌补充：</p>
+<ul>
+<li>用 Vim 管 Git 的插件（了解即可，除非你常用 Vim）。</li>
+</ul>
+<hr>
+<h1 id="✅-额外补充：你这份笔记里“缺的高频指令块”（我直接插在这里，考试很可能考）"><a href="#✅-额外补充：你这份笔记里“缺的高频指令块”（我直接插在这里，考试很可能考）" class="headerlink" title="✅ 额外补充：你这份笔记里“缺的高频指令块”（我直接插在这里，考试很可能考）"></a>✅ 额外补充：你这份笔记里“缺的高频指令块”（我直接插在这里，考试很可能考）</h1><p>📌补充（建议你加进笔记末尾当速查表）：</p>
+<h2 id="A-查看历史-定位责任"><a href="#A-查看历史-定位责任" class="headerlink" title="A. 查看历史/定位责任"></a>A. 查看历史/定位责任</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git <span class="hljs-built_in">log</span> --oneline --graph --decorate --all   <span class="hljs-comment"># 看 DAG</span><br>git show &lt;<span class="hljs-built_in">hash</span>&gt;                               <span class="hljs-comment"># 看某次提交内容</span><br>git blame &lt;file&gt;                              <span class="hljs-comment"># 看每行是谁改的</span><br></code></pre></td></tr></table></figure>
+<h2 id="B-diff-的三种常见对比（特别容易混）"><a href="#B-diff-的三种常见对比（特别容易混）" class="headerlink" title="B. diff 的三种常见对比（特别容易混）"></a>B. diff 的三种常见对比（特别容易混）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">git diff                 <span class="hljs-comment"># 工作区 vs 暂存区</span><br>git diff --staged        <span class="hljs-comment"># 暂存区 vs HEAD</span><br>git diff HEAD            <span class="hljs-comment"># 工作区 vs HEAD（含未暂存+已暂存）</span><br></code></pre></td></tr></table></figure>
+<h2 id="C-撤销-回退（考试喜欢绕你）"><a href="#C-撤销-回退（考试喜欢绕你）" class="headerlink" title="C. 撤销/回退（考试喜欢绕你）"></a>C. 撤销/回退（考试喜欢绕你）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">git restore &lt;file&gt;             <span class="hljs-comment"># 丢弃工作区修改（未暂存）</span><br>git restore --staged &lt;file&gt;    <span class="hljs-comment"># 把暂存区撤回到工作区</span><br>git revert &lt;<span class="hljs-built_in">hash</span>&gt;              <span class="hljs-comment"># 安全撤销：生成反向提交</span><br>git reset --hard &lt;<span class="hljs-built_in">hash</span>&gt;        <span class="hljs-comment"># 危险：改历史+丢工作区（慎用）</span><br></code></pre></td></tr></table></figure>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/LSAD/" class="print-no-link">#LSAD</a>
+      
+        <a href="/tags/note/" class="print-no-link">#note</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OCF Linux System Administration DeCal note8</div>
+      <div>https://zjjyyds.github.io/2026/02/15/学院派/LSAD/LSAD note8/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年2月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/02/15/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD/LSAD%20lab8/" title="OCF Linux System Administration DeCal lab8">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab8</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/02/14/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD/LSAD%20lab7/" title="OCF Linux System Administration DeCal lab7">
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab7</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

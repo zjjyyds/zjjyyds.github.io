@@ -1,0 +1,948 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="简介 #欢迎来到第一次实验！ 所有实验都会根据完整度和投入程度进行评分，所以不用太担心是否得到完全正确的答案。（我们会在实验截止后发布助教参考答案！） 实验通常在布置后一周截止。如果你需要帮助，记得在 Edstem 或 Discord &#x2F; Matrix &#x2F; IRC 的 #decal 频道提问！ 在完成实验的同时，将答案同步提交到 Gradescope 可能会比较方便。 实用小技巧（Pro Tips">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OCF Linux System Administration DeCal lab1">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/01/29/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD/LSAD%20lab1/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="简介 #欢迎来到第一次实验！ 所有实验都会根据完整度和投入程度进行评分，所以不用太担心是否得到完全正确的答案。（我们会在实验截止后发布助教参考答案！） 实验通常在布置后一周截止。如果你需要帮助，记得在 Edstem 或 Discord &#x2F; Matrix &#x2F; IRC 的 #decal 频道提问！ 在完成实验的同时，将答案同步提交到 Gradescope 可能会比较方便。 实用小技巧（Pro Tips">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://imgs.xkcd.com/comics/tar.png">
+<meta property="article:published_time" content="2026-01-28T16:48:00.000Z">
+<meta property="article:modified_time" content="2026-01-28T16:06:47.709Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="LSAD">
+<meta property="article:tag" content="lab">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://imgs.xkcd.com/comics/tar.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>OCF Linux System Administration DeCal lab1 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OCF Linux System Administration DeCal lab1"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-01-29 00:48" pubdate>
+          2026年1月29日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          26 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OCF Linux System Administration DeCal lab1</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="简介"><a href="#简介" class="headerlink" title="简介 #"></a>简介 <a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/1/#introduction">#</a></h2><p>欢迎来到第一次实验！</p>
+<p>所有实验都会根据<strong>完整度和投入程度</strong>进行评分，所以不用太担心是否得到完全正确的答案。（我们会在实验截止后发布助教参考答案！）</p>
+<p>实验通常在布置后一周截止。如果你需要帮助，记得在 Edstem 或 Discord / Matrix / IRC 的 <code>#decal</code> 频道提问！</p>
+<p>在完成实验的同时，将答案同步提交到 Gradescope 可能会比较方便。</p>
+<p><strong>实用小技巧（Pro Tips）</strong></p>
+<ul>
+<li>以下命令可能会对你有所帮助：<br><code>vim, ls, cd, man, file, grep, cat, less, wget, nano, tar, ...</code>（以及其他较差的文本编辑器）</li>
+<li>Google 和 <code>man</code> 是你的好朋友！</li>
+</ul>
+<p><strong>有多余时间？想让这个实验更简单一些？</strong></p>
+<ul>
+<li>如果你想在开始实验前更熟悉 vim，可以运行 <code>vimtutor</code> 命令完成 vim 教程。</li>
+<li>查看 <a target="_blank" rel="noopener" href="https://labex.io/linuxjourney">linuxjourney.com</a>，尤其是其中的<br>“Command Line”、“Text-Fu” 和 “Advanced Text-Fu” 部分。</li>
+</ul>
+<hr>
+<h2 id="第一部分：Shell-探险"><a href="#第一部分：Shell-探险" class="headerlink" title="第一部分：Shell 探险 #"></a>第一部分：Shell 探险 <a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/1/#part-1-shell-spelunking">#</a></h2><p><strong>所有操作都必须通过 shell 完成！</strong></p>
+<p>本实验的目的是让你熟悉使用 shell 来完成你通常会使用图形界面（GUI）完成的事情。虽然这些任务看起来可能很简单或受限，但你很快就会发现，这些命令拥有大量不同的选项（flags），可以完成许多使用传统方法几乎不可能或极其繁琐的操作。</p>
+<p>现在不需要完全理解这些命令是如何工作的——只要你能逐渐熟悉这些工具即可。下周我们将更深入地探索它们！</p>
+<ol>
+<li>使用你的 OCF 账号，在 OCF 的台式机、笔记本或其他电脑上，通过 <code>ssh</code> 登录：</li>
+</ol>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><br>tsunami<span class="hljs-selector-class">.ocf</span><span class="hljs-selector-class">.berkeley</span><span class="hljs-selector-class">.edu</span><br><br></code></pre></td></tr></table></figure>
+<ol>
+<li>运行以下命令下载我们提供的文件：</li>
+</ol>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk"><br>wget [https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/0xcf/</span>decal-labs<span class="hljs-regexp">/raw/m</span>aster<span class="hljs-regexp">/b1/</span>b01.tgz](https:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/0xcf/</span>decal-labs<span class="hljs-regexp">/raw/m</span>aster<span class="hljs-regexp">/b1/</span>b01.tgz)<br><br></code></pre></td></tr></table></figure>
+<p><code>.tgz</code> 文件实际上是两种文件格式的组合。有时你也会看到 <code>.tar.gz</code>。</p>
+<p>一种常见（而且很古老）的归档方式是使用磁带。然而，为了进行归档，数据必须是单个文件，而我们往往希望一次归档多个文件。这正是 <code>tar</code> 命令的用途（<code>tar</code> 是 <em>tape archive</em> 的缩写）。</p>
+<p><code>tar</code> 会将多个文件打包（或解包）成一个文件。</p>
+<p>但除非你明确要求，否则 <code>tar</code> 本身并不会进行压缩。这时就需要使用 <code>gzip</code>（或 <code>bzip2</code>）。</p>
+<p><code>gzip</code> 会压缩文件，因此通常会联合使用 tar + gzip。流程如下：</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs livescript"><br>file --<span class="hljs-function"><span class="hljs-params">(tar)</span>--&gt;</span> file.tar --<span class="hljs-function"><span class="hljs-params">(gzip)</span>--&gt;</span> file.tar.gz<br><br></code></pre></td></tr></table></figure>
+<p>如果你仔细阅读 <code>tar</code> 的文档，会发现可以通过一个选项让它在打包时同时使用 <code>gzip</code>，从而节省一整行 shell 命令！</p>
+<p>要解压我们提供的文件，请运行：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><br>tar xvzf <span class="hljs-keyword">b01.tgz</span><br><span class="hljs-keyword"></span><br></code></pre></td></tr></table></figure>
+<p>这会生成一个名为 <code>b01</code> 的目录，供你完成本实验的其余部分。</p>
+<p><code>tar</code> 因其参数选项复杂而“臭名昭著”：</p>
+<p><img src="https://imgs.xkcd.com/comics/tar.png" srcset="/img/loading.gif" lazyload alt="XKCD 1168" title="我不知道更糟糕的是：使用 tar 15 年后我依旧记不住参数，还是在技术进步了 15 年之后，我仍然在折腾那些在我刚开始用 tar 时就已经 15 岁的参数。"></p>
+<ol>
+<li><p>进入 <code>b01</code> 目录。运行 <code>pwd</code>（Present Working Directory）确保你在该目录中。<br><strong>从概念上讲，<code>pwd</code> 输出的是什么？</strong></p>
+</li>
+<li><p><code>b01</code> 目录中有一个隐藏文件。<br><strong>秘密是什么？</strong></p>
+</li>
+</ol>
+<blockquote>
+<p>hunter2</p>
+</blockquote>
+<ol>
+<li>一个恶意用户入侵了我的电脑，并在 <code>nonsense/</code> 目录中的所有文件里分散留下了一条信息。<br>这条信息写了什么？<br><strong>你是如何找到这条信息的？</strong></li>
+</ol>
+<h3 id="1-cat-naming-is-hard-：批量读取"><a href="#1-cat-naming-is-hard-：批量读取" class="headerlink" title="1. cat naming_is_hard*：批量读取"></a>1. <code>cat naming_is_hard*</code>：批量读取</h3><ul>
+<li><p><strong><code>cat</code></strong>: 这个命令的作用是“连接（concatenate）并打印”文件内容。</p>
+</li>
+<li><p><strong><code>naming_is_hard*</code></strong>: 这里的 <code>*</code> 是一个<strong>通配符</strong>。</p>
+<ul>
+<li><p>它告诉 Shell：“帮我找到当前目录下所有以 <code>naming_is_hard</code> 开头的文件。”</p>
+</li>
+<li><p>因为你的文件末尾有编号（00, 01, 02…），Shell 会按照<strong>字母/数字顺序</strong>将它们排列好。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>结果</strong>：它会将这 19 个文件的内容按顺序首尾相连地“喷”出来。</p>
+</li>
+</ul>
+<h3 id="2-管道符-：接力传输"><a href="#2-管道符-：接力传输" class="headerlink" title="2. | (管道符)：接力传输"></a>2. <code>|</code> (管道符)：接力传输</h3><ul>
+<li><p><strong>作用</strong>：管道符就像一根水管。</p>
+</li>
+<li><p>它把左边 <code>cat</code> 命令产生的全部文字（原本要显示在屏幕上的），直接传送到右边命令的“入口”。</p>
+</li>
+</ul>
+<h3 id="3-tr-d-39-n-39-：清理格式"><a href="#3-tr-d-39-n-39-：清理格式" class="headerlink" title="3. tr -d &#39;\n&#39;：清理格式"></a>3. <code>tr -d &#39;\n&#39;</code>：清理格式</h3><ul>
+<li><p><strong><code>tr</code></strong>: 代表 “translate”，用于转换或删除字符。</p>
+</li>
+<li><p><strong><code>-d</code></strong>: 代表 “delete”（删除）。</p>
+</li>
+<li><p><strong><code>&#39;\n&#39;</code></strong>: 代表 <strong>换行符</strong>。</p>
+</li>
+<li><p><strong>为什么要写这一步？</strong></p>
+<ul>
+<li><p>通常每个文件存入内容时，结尾可能自带一个换行。如果你直接 <code>cat</code>，输出可能是 19 行零散的字符。</p>
+</li>
+<li><p>删除换行符后，所有文件里的碎片会被<strong>强行挤在同一行</strong>，组成一个完整的句子或字符串。</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ol>
+<li><p>使用一条命令删除 <code>nonsense/</code> 中的所有内容。<br><strong>你是如何做到的？</strong></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-section"># Bash</span><br><br>rm -rf nonsense/*<br><br>---<br><br><span class="hljs-section">### ⚠️ 危险指令说明：请务必核对路径</span><br><br>在执行这条命令前，请确保你已经通过 <span class="hljs-code">`ls`</span> 确认了你确实在 <span class="hljs-code">`nonsense/`</span> 的上一级目录，或者使用的是绝对路径。<br><br><span class="hljs-section">### 命令拆解：</span><br><br><span class="hljs-bullet">*</span> <span class="hljs-code">`rm`</span>：代表 &quot;remove&quot;（删除）。<br><span class="hljs-bullet">*</span> <span class="hljs-code">`-r`</span>：代表 &quot;recursive&quot;（递归）。它会告诉系统删除文件夹下的所有文件以及子文件夹。<br><span class="hljs-bullet">*</span> <span class="hljs-code">`-f`</span>：代表 &quot;force&quot;（强制）。它会跳过确认步骤，直接删除那些受保护的文件（除非你没有权限），且在文件不存在时不会报错。<br><span class="hljs-bullet">*</span> <span class="hljs-code">`nonsense/*`</span>：<br><span class="hljs-bullet">    *</span> <span class="hljs-code">`nonsense/`</span> 指定了目标目录。<br><span class="hljs-bullet">    *</span> <span class="hljs-code">`*`</span> 是通配符，代表“该目录下的所有东西”。使用它意味着你保留了 <span class="hljs-code">`nonsense/`</span> 这个文件夹本身，但清空了它的“肚子”。<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><code>b01</code> 中有一个名为 <code>big_data.txt</code> 的文件。<br>它包含 80 MB 的随机文本。</p>
+</li>
+</ol>
+<p>作为对比：列夫·托尔斯泰的《战争与和平》这本描写法国入侵俄国、拿破仑时代对沙皇社会影响、并通过五个俄国贵族家庭展开叙事、且包含大量哲学独白章节的巨著，全文也只有 <strong>3.2 MB</strong>。</p>
+<p>因此，我不推荐你使用 <code>cat</code> 来打印这个文件。你可以试试，但你会等很久。</p>
+<p>文件中有你需要找到的文本！请在<strong>不真正打开整个文件</strong>的情况下找到它。</p>
+<p>在文件中唯一的 URL 上方两行，有一个隐藏答案。<br><strong>这个答案是什么？</strong></p>
+<p>=================== THE SOLUTION IS MORE COFFEE ===============================</p>
+<p>请在终端输入以下命令</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">grep -<span class="hljs-keyword">B </span><span class="hljs-number">2</span> <span class="hljs-string">&quot;http&quot;</span> <span class="hljs-keyword">big_data.txt</span><br><span class="hljs-keyword"></span><br>🔍 命令参数解析<br><br>grep：强大的文本搜索工具，它会逐行扫描文件，而不会把整个大文件一次性加载到内存中。<br><br><span class="hljs-string">&quot;http&quot;</span>：这是我们要找的关键词。绝大多数 URL 都包含这个前缀。<br><br>-<span class="hljs-keyword">B </span><span class="hljs-number">2</span>：这里的 <span class="hljs-keyword">B </span>代表 <span class="hljs-keyword">Before（之前）。2 </span>表示打印匹配行及其前面的 <span class="hljs-number">2</span> 行内容。<br></code></pre></td></tr></table></figure>
+<p>提示：  </p>
+<ul>
+<li>URL 是由什么构成的（https…）？  </li>
+<li>什么是 <em>Context Line Control</em>？</li>
+</ul>
+<ol>
+<li>尝试执行：</li>
+</ol>
+<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey"><br>./<span class="hljs-built_in">a_script</span><br><br></code></pre></td></tr></table></figure>
+<p>你应该会看到：</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix"><br>permission <span class="hljs-params">denied:</span> <span class="hljs-symbol">./a_script</span><br><br></code></pre></td></tr></table></figure>
+<p>这是因为文件有三种不同的权限：</p>
+<ul>
+<li>读（read）</li>
+<li>写（write）</li>
+<li>执行（execute）</li>
+</ul>
+<p><strong><code>a_script</code> 缺少哪一种权限？</strong><br>修改文件权限，使你能够运行该脚本。<br><strong>你是如何做到的？</strong></p>
+<h2 id="1-使用符号模式（推荐，更直观）"><a href="#1-使用符号模式（推荐，更直观）" class="headerlink" title="1. 使用符号模式（推荐，更直观）"></a>1. 使用符号模式（推荐，更直观）</h2><p>在终端输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> +x a_script<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>解释：</strong> <code>+x</code> 表示为当前用户、组和其他用户同时<strong>添加（+）执行（x）权限</strong>。</li>
+</ul>
+<h2 id="2-使用绝对模式（数字模式）"><a href="#2-使用绝对模式（数字模式）" class="headerlink" title="2. 使用绝对模式（数字模式）"></a>2. 使用绝对模式（数字模式）</h2><p>如果你想赋予自己完全的读、写、执行权限，可以输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> 755 a_script<br></code></pre></td></tr></table></figure>
+<ul>
+<li><strong>解释：</strong> <code>7</code> (4+2+1) 代表拥有者拥有读、写、执行权限；<code>5</code> (4+1) 代表组用户和其他用户拥有读和执行权限。</li>
+</ul>
+<ol>
+<li>最后，目录中有一个名为 <code>hello_world</code> 的空文件。<br>请把你的名字写进去！<br><strong>你是如何完成的？</strong></li>
+</ol>
+<blockquote>
+<p>打开我的vscode直接输入hello jayzhao</p>
+</blockquote>
+<hr>
+<h2 id="第二部分：综合问题"><a href="#第二部分：综合问题" class="headerlink" title="第二部分：综合问题 #"></a>第二部分：综合问题 <a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/1/#part-2-general-questions">#</a></h2><p>你可以自由使用 Google，并在终端中（如适用）验证你的推测。</p>
+<ol>
+<li><p>Linux / OSX 与 Windows 等操作系统的主要区别是什么？</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-bullet">- </span>Linux / macOS 属于 <span class="hljs-strong">**类 Unix 系统**</span>，遵循 Unix 设计思想<br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span>Windows 使用 <span class="hljs-strong">**NT 内核**</span>，体系不同<br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span>Linux 使用单一目录树（<span class="hljs-code">`/`</span>），Windows 使用盘符（C:、D:）<br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span>Linux 权限严格，Windows 相对宽松<br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span>Linux 更适合服务器与开发环境<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>命令行使用方式与普通（图形化）操作系统使用方式有哪些不同？</p>
+</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs">命令行：通过输入命令操作，支持脚本和自动化<br><br>图形界面：通过鼠标点击操作，直观但效率低<br><br>命令行适合批量、远程和重复操作<br><br>图形界面适合日常普通使用<br></code></pre></td></tr></table></figure>
+<ol>
+<li><p>Linux 文件系统中的根目录是什么？<br>请从概念层面回答，越深入越好。</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-bullet">- </span>根目录是 <span class="hljs-code">`/`</span><br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span>是整个 Linux 文件系统的起点<br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span>所有文件、磁盘、设备最终都挂载在 <span class="hljs-code">`/`</span> 下<br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span>Linux 只有一棵目录树，没有盘符概念<br></code></pre></td></tr></table></figure>
+</li>
+<li><p><code>ls</code> 有很多有用的参数。请尝试使用它们获取以下信息：</p>
+</li>
+</ol>
+<ul>
+<li>文件权限  </li>
+<li>所有者名称  </li>
+<li>所属用户组  </li>
+<li>文件大小  </li>
+<li>最近修改日期  </li>
+</ul>
+<p>此外，我希望：</p>
+<ul>
+<li>显示文件大小  </li>
+<li>按最后修改时间排序  </li>
+<li>最旧的文件排在最上面  </li>
+</ul>
+<p>我该如何实现？<br><figure class="highlight ldif"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs ldif">示例命令：<br>ls -lhtr<br><br>各参数含义：<br>参数	含义<br>ls	列出目录内容（list）<br><span class="hljs-literal">-</span>l	使用长格式显示详细信息<br><span class="hljs-literal">-</span>h	以人类可读方式显示文件大小（KB / MB / GB）<br><span class="hljs-literal">-</span>t	按最后修改时间排序<br><span class="hljs-literal">-</span>r	反向排序（旧的在前，新 的在后）<br><br><span class="hljs-comment">### `-l` 显示的信息包括：</span><br><br>`-rw-r--r--  1 user group  4096  Jan 28 12:30 file.txt`<br><br>含义依次是：<br><br>1. 文件类型和权限<br>    <br>2. 硬链接数量<br>    <br>3. 所有者用户名<br>    <br>4. 所属用户组<br>    <br>5. 文件大小（字节）<br>    <br>6. 最近修改时间<br>    <br>7. 文件名<br></code></pre></td></tr></table></figure></p>
+<ol>
+<li><p>我希望使用 <code>head</code> 命令显示 <code>big_data.txt</code> 的前 <strong>4 行</strong>，而不是默认的 10 行。<br>我该怎么做？</p>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs gherkin"><span class="hljs-comment">### 命令：</span><br><br>`head -n 4 big_data.txt`<br><br>---<br><br><span class="hljs-comment">### 参数说明：</span><br><br>|<span class="hljs-string">参数</span>|<span class="hljs-string">含义</span>|<br>|<span class="hljs-string">---</span>|<span class="hljs-string">---</span>|<br>|<span class="hljs-string">`head`</span>|<span class="hljs-string">显示文件开头内容</span>|<br>|<span class="hljs-string">`-n`</span>|<span class="hljs-string">指定显示的行数</span>|<br>|<span class="hljs-string">`4`</span>|<span class="hljs-string">显示前 4 行</span>|<br>|<span class="hljs-string">`big_data.txt`</span>|<span class="hljs-string">要读取的文件</span>|<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>以下两条命令有什么区别？</p>
+</li>
+</ol>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stata"><br><span class="hljs-keyword">cat</span> foo &gt; <span class="hljs-keyword">out</span>.txt<br><br></code></pre></td></tr></table></figure>
+<p>与</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stata"><br><span class="hljs-keyword">cat</span> foo &gt;&gt; <span class="hljs-keyword">out</span>.txt<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight gherkin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs gherkin"><span class="hljs-comment">### 覆盖写入：</span><br><br>`cat foo &gt; out.txt`<br><br>|<span class="hljs-string">部分</span>|<span class="hljs-string">含义</span>|<br>|<span class="hljs-string">---</span>|<span class="hljs-string">---</span>|<br>|<span class="hljs-string">`cat`</span>|<span class="hljs-string">输出文件内容</span>|<br>|<span class="hljs-string">`foo`</span>|<span class="hljs-string">被读取的文件</span>|<br>|<span class="hljs-string">`&gt;`</span>|<span class="hljs-string">输出重定向（覆盖原文件）</span>|<br>|<span class="hljs-string">`out.txt`</span>|<span class="hljs-string">写入目标文件</span>|<br><br>📌 若文件存在，会先清空内容。<br><br>---<br><br><span class="hljs-comment">### 追加写入：</span><br><br>`cat foo &gt;&gt; out.txt`<br><br>|<span class="hljs-string">部分</span>|<span class="hljs-string">含义</span>|<br>|<span class="hljs-string">---</span>|<span class="hljs-string">---</span>|<br>|<span class="hljs-string">`&gt;&gt;`</span>|<span class="hljs-string">输出重定向（追加到末尾）</span>|<br><br>📌 原内容不会被删除。<br></code></pre></td></tr></table></figure>
+<ol>
+<li>简要说明：<strong>宽松许可证（permissive）</strong> 与 <strong>copyleft 许可证</strong> 的区别是什么？<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment">## 🟢 宽松许可证（Permissive）</span><br><br><span class="hljs-string">特点：</span><br><br><span class="hljs-bullet">-</span> <span class="hljs-string">几乎无限制</span><br>    <br><span class="hljs-bullet">-</span> <span class="hljs-string">可闭源</span><br>    <br><span class="hljs-bullet">-</span> <span class="hljs-string">可商业使用</span><br>    <br><span class="hljs-bullet">-</span> <span class="hljs-string">只需保留版权声明</span><br>    <br><br><span class="hljs-string">👉</span> <span class="hljs-string">**“你爱咋用咋用”**</span><br><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-comment">## 🔴 Copyleft 许可证（传染式）</span><br><br><span class="hljs-string">特点：</span><br><br><span class="hljs-bullet">-</span> <span class="hljs-string">修改后必须开源</span><br>    <br><span class="hljs-bullet">-</span> <span class="hljs-string">衍生作品必须使用同许可证</span><br>    <br><span class="hljs-bullet">-</span> <span class="hljs-string">强制共享改进成果</span><br>    <br><br><span class="hljs-string">👉</span> <span class="hljs-string">**“你用我，就必须开放”**</span><br><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-comment">## 📌 核心区别一句话：</span><br><br><span class="hljs-string">|类型|是否强制开源|</span><br><span class="hljs-string">|---|---|</span><br><span class="hljs-string">|Permissive|❌</span> <span class="hljs-string">不强制|</span><br><span class="hljs-string">|Copyleft|✅</span> <span class="hljs-string">强制|</span><br></code></pre></td></tr></table></figure></li>
+<li>请举一个宽松许可证的例子。<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-string">常见宽松许可证：</span><br><br><span class="hljs-bullet">-</span> <span class="hljs-string">**MIT</span> <span class="hljs-string">License**</span><br>    <br><span class="hljs-bullet">-</span> <span class="hljs-string">BSD</span> <span class="hljs-string">License</span><br>    <br><span class="hljs-bullet">-</span> <span class="hljs-string">Apache</span> <span class="hljs-string">License</span> <span class="hljs-number">2.0</span><br>    <br><br><span class="hljs-meta">---</span><br><span class="hljs-meta"></span><br><span class="hljs-comment">### ⭐ 最典型例子：</span><br><br><span class="hljs-string">&gt;</span> <span class="hljs-string">**MIT</span> <span class="hljs-string">License**</span><br><br><span class="hljs-string">几乎所有前端框架都在用：</span><br><br><span class="hljs-bullet">-</span> <span class="hljs-string">React</span><br>    <br><span class="hljs-bullet">-</span> <span class="hljs-string">Vue</span><br>    <br><span class="hljs-bullet">-</span> <span class="hljs-string">jQuery</span><br>    <br><span class="hljs-bullet">-</span> <span class="hljs-string">Node.js</span><br></code></pre></td></tr></table></figure></li>
+<li>请各举一个你正在使用的：</li>
+</ol>
+<ul>
+<li>(a) 开源软件  </li>
+<li>(b) 自由但闭源的软件  <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc">## (a) 正在使用的开源软件<br><br>例如：<br><br><span class="hljs-bullet">- </span><span class="hljs-strong">**Linux**</span><br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span><span class="hljs-strong">**Git**</span><br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span><span class="hljs-strong">**VS Code**</span><br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span><span class="hljs-strong">**Firefox**</span><br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span><span class="hljs-strong">**Vim**</span><br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span><span class="hljs-strong">**Docker**</span><br><span class="hljs-code">    </span><br><br>（源码可看、可改、可编译）<br><br><span class="hljs-bullet">---</span><br><span class="hljs-bullet"></span><br><span class="hljs-bullet"></span>## (b) 自由但闭源的软件<br><br>特点：<br><br><span class="hljs-bullet">- </span>免费使用<br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span>不提供源码<br><span class="hljs-code">    </span><br><br>例如：<br><br><span class="hljs-bullet">- </span><span class="hljs-strong">**Google Chrome**</span><br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span><span class="hljs-strong">**Discord**</span><br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span><span class="hljs-strong">**Zoom**</span><br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span><span class="hljs-strong">**Spotify**</span><br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span><span class="hljs-strong">**微信**</span><br><span class="hljs-code">    </span><br><span class="hljs-bullet">- </span><span class="hljs-strong">**QQ**</span><br></code></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="第三部分：获取你的虚拟机"><a href="#第三部分：获取你的虚拟机" class="headerlink" title="第三部分：获取你的虚拟机 #"></a>第三部分：获取你的虚拟机 <a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/1/#part-3-obtaining-your-vm">#</a></h2><p>使用公共的 OCF 登录服务器可以完成类似本实验的基础操作，但如果你想拥有 root 权限（几乎可以做任何事），你就需要一台属于自己的机器！</p>
+<p>我们将为所有拥有 Berkeley CalNet 账号的 DeCal 学生提供一台虚拟机（VM）。<br>请查看你的 <code>@berkeley.edu</code> 邮箱！</p>
+<p>如果你不是伯克利学生，则需要自行获取一台机器。当然，如果你只是出于兴趣，也可以自行搭建虚拟机。</p>
+<p>一般来说，有两种方式获得虚拟机：</p>
+<ul>
+<li>使用你自己的电脑（本地）</li>
+<li>使用别人的电脑（云端）</li>
+</ul>
+<hr>
+<h3 id="本地方案"><a href="#本地方案" class="headerlink" title="本地方案 #"></a>本地方案 <a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/1/#local-setups">#</a></h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.virtualbox.org/">VirtualBox</a></li>
+<li><a target="_blank" rel="noopener" href="https://getutm.app/">UTM</a> —— 仅适用于 macOS</li>
+</ul>
+<hr>
+<h3 id="云端方案"><a href="#云端方案" class="headerlink" title="云端方案 #"></a>云端方案 <a target="_blank" rel="noopener" href="https://decal.ocf.berkeley.edu/labs/1/#cloud-setups">#</a></h3><p>这些通常是付费服务，但如果你拥有学生邮箱，它们通常会提供<strong>完全足够本课程使用的免费额度</strong>。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.digitalocean.com/github-students">Digital Ocean</a></li>
+<li><a target="_blank" rel="noopener" href="https://cloud.google.com/free/">GCP</a></li>
+<li><a target="_blank" rel="noopener" href="https://azure.microsoft.com/en-us/free/students/">Azure</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/LSAD/" class="print-no-link">#LSAD</a>
+      
+        <a href="/tags/lab/" class="print-no-link">#lab</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OCF Linux System Administration DeCal lab1</div>
+      <div>https://zjjyyds.github.io/2026/01/29/学院派/LSAD/LSAD lab1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年1月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/02/08/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD/LSAD%20lab3/" title="OCF Linux System Administration DeCal lab3">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab3</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/01/28/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD/LSAD%20note1/" title="OCF Linux System Administration DeCal note1">
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal note1</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
