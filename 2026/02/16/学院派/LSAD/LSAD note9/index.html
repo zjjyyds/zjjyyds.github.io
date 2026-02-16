@@ -1,0 +1,1178 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/biaoqian.jpg">
+  <link rel="icon" href="/img/biaoqian.jpg">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Jay">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="🐳 Containers（Docker）完整笔记一、Container vs Docker：先把名字搞清楚1️⃣ Container 是什么？ 容器（Container） 是一种技术概念  本质：  👉 “带隔离的进程”  👉 把程序 + 运行环境 + 依赖一起打包   2️⃣ Docker 是什么？ Docker 是一家公司的产品  是 Container 技术的一种实现  类比理解：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OCF Linux System Administration DeCal note9">
+<meta property="og:url" content="https://zjjyyds.github.io/2026/02/16/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD/LSAD%20note9/index.html">
+<meta property="og:site_name" content="大雪深埋">
+<meta property="og:description" content="🐳 Containers（Docker）完整笔记一、Container vs Docker：先把名字搞清楚1️⃣ Container 是什么？ 容器（Container） 是一种技术概念  本质：  👉 “带隔离的进程”  👉 把程序 + 运行环境 + 依赖一起打包   2️⃣ Docker 是什么？ Docker 是一家公司的产品  是 Container 技术的一种实现  类比理解：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-02-16T07:37:00.000Z">
+<meta property="article:modified_time" content="2026-02-16T07:38:15.993Z">
+<meta property="article:author" content="Jay">
+<meta property="article:tag" content="LSAD">
+<meta property="article:tag" content="note">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>OCF Linux System Administration DeCal note9 - 大雪深埋</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zjjyyds.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>大雪深埋</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/guts.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="OCF Linux System Administration DeCal note9"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-02-16 15:37" pubdate>
+          2026年2月16日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">OCF Linux System Administration DeCal note9</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <hr>
+<h1 id="🐳-Containers（Docker）完整笔记"><a href="#🐳-Containers（Docker）完整笔记" class="headerlink" title="🐳 Containers（Docker）完整笔记"></a>🐳 Containers（Docker）完整笔记</h1><h2 id="一、Container-vs-Docker：先把名字搞清楚"><a href="#一、Container-vs-Docker：先把名字搞清楚" class="headerlink" title="一、Container vs Docker：先把名字搞清楚"></a>一、Container vs Docker：先把名字搞清楚</h2><h3 id="1️⃣-Container-是什么？"><a href="#1️⃣-Container-是什么？" class="headerlink" title="1️⃣ Container 是什么？"></a>1️⃣ Container 是什么？</h3><ul>
+<li><p><strong>容器（Container）</strong> 是一种技术概念</p>
+</li>
+<li><p>本质：<br>  👉 <strong>“带隔离的进程”</strong><br>  👉 把程序 + 运行环境 + 依赖一起打包</p>
+</li>
+</ul>
+<h3 id="2️⃣-Docker-是什么？"><a href="#2️⃣-Docker-是什么？" class="headerlink" title="2️⃣ Docker 是什么？"></a>2️⃣ Docker 是什么？</h3><ul>
+<li><p><strong>Docker 是一家公司的产品</strong></p>
+</li>
+<li><p>是 <strong>Container 技术的一种实现</strong></p>
+</li>
+<li><p>类比理解：</p>
+<ul>
+<li><p>🧻 纸巾 = Container</p>
+</li>
+<li><p>🟦 Kleenex = Docker</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>👉 所以：</p>
+<blockquote>
+<p><strong>不是所有容器都是 Docker，但 Docker 是最流行的容器平台</strong></p>
+</blockquote>
+<hr>
+<h2 id="二、什么是容器（Container）？本质讲清楚"><a href="#二、什么是容器（Container）？本质讲清楚" class="headerlink" title="二、什么是容器（Container）？本质讲清楚"></a>二、什么是容器（Container）？本质讲清楚</h2><h3 id="一句话定义"><a href="#一句话定义" class="headerlink" title="一句话定义"></a>一句话定义</h3><blockquote>
+<p><strong>容器 = 一个被强隔离的 Linux 进程</strong></p>
+</blockquote>
+<h3 id="它具备什么特征？"><a href="#它具备什么特征？" class="headerlink" title="它具备什么特征？"></a>它具备什么特征？</h3><ul>
+<li><p>📦 打包好的软件单元</p>
+</li>
+<li><p>🔒 进程级隔离（不是虚拟整台机器）</p>
+</li>
+<li><p>🐧 在几乎所有 Linux 上表现一致</p>
+</li>
+</ul>
+<hr>
+<h2 id="三、容器是怎么实现隔离的？（重点偏底层）"><a href="#三、容器是怎么实现隔离的？（重点偏底层）" class="headerlink" title="三、容器是怎么实现隔离的？（重点偏底层）"></a>三、容器是怎么实现隔离的？（重点偏底层）</h2><h3 id="核心机制：Linux-Namespaces-cgroups"><a href="#核心机制：Linux-Namespaces-cgroups" class="headerlink" title="核心机制：Linux Namespaces + cgroups"></a>核心机制：Linux Namespaces + cgroups</h3><h4 id="1️⃣-Namespaces（“你看到的世界”）"><a href="#1️⃣-Namespaces（“你看到的世界”）" class="headerlink" title="1️⃣ Namespaces（“你看到的世界”）"></a>1️⃣ Namespaces（“你看到的世界”）</h4><p>每个容器<strong>看到的是一个假的、隔离的世界</strong></p>
+<ul>
+<li><p><strong>mount namespace</strong>：<br>  👉 看不到宿主机的文件系统</p>
+</li>
+<li><p><strong>network namespace</strong>：<br>  👉 自己的 IP / 网卡 / 端口</p>
+</li>
+<li><p><strong>pid namespace</strong>：<br>  👉 只能看到自己内部的进程</p>
+</li>
+<li><p><strong>user namespace</strong>：<br>  👉 root ≠ 宿主机 root</p>
+</li>
+<li><p><strong>IPC / UTS 等</strong>：<br>  👉 主机名、进程通信隔离</p>
+</li>
+</ul>
+<h4 id="2️⃣-cgroups（“你能用多少资源”）"><a href="#2️⃣-cgroups（“你能用多少资源”）" class="headerlink" title="2️⃣ cgroups（“你能用多少资源”）"></a>2️⃣ cgroups（“你能用多少资源”）</h4><ul>
+<li><p>限制 CPU</p>
+</li>
+<li><p>限制内存</p>
+</li>
+<li><p>限制 IO</p>
+</li>
+</ul>
+<p>📌 <strong>结论一句话</strong>：</p>
+<blockquote>
+<p>Namespaces 决定你“看到什么”，cgroups 决定你“能用多少”</p>
+</blockquote>
+<hr>
+<h2 id="四、Container-和-VM（虚拟机）到底哪里不一样？"><a href="#四、Container-和-VM（虚拟机）到底哪里不一样？" class="headerlink" title="四、Container 和 VM（虚拟机）到底哪里不一样？"></a>四、Container 和 VM（虚拟机）到底哪里不一样？</h2><h3 id="1️⃣-最大本质区别"><a href="#1️⃣-最大本质区别" class="headerlink" title="1️⃣ 最大本质区别"></a>1️⃣ 最大本质区别</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>容器</th>
+<th>虚拟机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内核</td>
+<td><strong>共享宿主机内核</strong></td>
+<td>每个 VM 一个内核</td>
+</tr>
+<tr>
+<td>启动</td>
+<td>秒级</td>
+<td>分钟级</td>
+</tr>
+<tr>
+<td>资源</td>
+<td>非常轻量</td>
+<td>非常重</td>
+</tr>
+<tr>
+<td>隔离</td>
+<td>进程级</td>
+<td>OS 级</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>👉 <strong>容器不是“轻量虚拟机”</strong><br>👉 而是：<strong>隔离进程</strong></p>
+<hr>
+<h3 id="2️⃣-为什么容器这么快？"><a href="#2️⃣-为什么容器这么快？" class="headerlink" title="2️⃣ 为什么容器这么快？"></a>2️⃣ 为什么容器这么快？</h3><ul>
+<li><p>不需要启动内核</p>
+</li>
+<li><p>不需要 systemd</p>
+</li>
+<li><p>没有 cron / ssh / ntp 等服务</p>
+</li>
+</ul>
+<p>所以你在容器里的 Ubuntu：</p>
+<blockquote>
+<p>❌ 不是“完整 Ubuntu”<br>✅ 只是 Ubuntu 的文件系统</p>
+</blockquote>
+<hr>
+<h3 id="3️⃣-那-Windows-macOS-怎么跑-Docker？"><a href="#3️⃣-那-Windows-macOS-怎么跑-Docker？" class="headerlink" title="3️⃣ 那 Windows / macOS 怎么跑 Docker？"></a>3️⃣ 那 Windows / macOS 怎么跑 Docker？</h3><ul>
+<li><p>Docker Desktop <strong>先跑一个 Linux VM</strong></p>
+</li>
+<li><p>所有容器 <strong>都跑在这个 VM 里的同一个 Linux 内核上</strong></p>
+</li>
+</ul>
+<p>⚠️ 这是新手最容易迷糊的点</p>
+<hr>
+<h2 id="五、Containers-vs-VMs：优缺点总结（考试爱考）"><a href="#五、Containers-vs-VMs：优缺点总结（考试爱考）" class="headerlink" title="五、Containers vs VMs：优缺点总结（考试爱考）"></a>五、Containers vs VMs：优缺点总结（考试爱考）</h2><h3 id="Containers-优点"><a href="#Containers-优点" class="headerlink" title="Containers 优点"></a>Containers 优点</h3><ul>
+<li><p>🚀 启动快</p>
+</li>
+<li><p>📦 镜像小</p>
+</li>
+<li><p>💡 资源占用低</p>
+</li>
+<li><p>📤 易分发</p>
+</li>
+<li><p>🐄 Cattle not Pets（随时可删可建）</p>
+</li>
+<li><p>💻 本地开发极其友好</p>
+</li>
+</ul>
+<h3 id="VMs-优点"><a href="#VMs-优点" class="headerlink" title="VMs 优点"></a>VMs 优点</h3><ul>
+<li><p>🔐 隔离更强</p>
+</li>
+<li><p>🔁 支持 Live Migration</p>
+</li>
+<li><p>🌍 可运行非 Linux OS</p>
+</li>
+</ul>
+<p>👉 <strong>现代云：两者并存，各司其职</strong></p>
+<hr>
+<h2 id="六、Docker-镜像是怎么工作的？（洋葱模型）"><a href="#六、Docker-镜像是怎么工作的？（洋葱模型）" class="headerlink" title="六、Docker 镜像是怎么工作的？（洋葱模型）"></a>六、Docker 镜像是怎么工作的？（洋葱模型）</h2><h3 id="核心思想：Layer（层）"><a href="#核心思想：Layer（层）" class="headerlink" title="核心思想：Layer（层）"></a>核心思想：Layer（层）</h3><ul>
+<li><p>Dockerfile <strong>每一条指令 = 一层</strong></p>
+</li>
+<li><p>每一层都是文件系统差异</p>
+</li>
+<li><p>多个镜像可共享底层层</p>
+</li>
+</ul>
+<p>🧅 类比：</p>
+<blockquote>
+<p>Docker 镜像 ≈ 洋葱<br>每一层都是一圈</p>
+</blockquote>
+<h3 id="好处"><a href="#好处" class="headerlink" title="好处"></a>好处</h3><ul>
+<li><p>节省磁盘</p>
+</li>
+<li><p>节省网络流量</p>
+</li>
+<li><p>易于复用基础镜像（如 ubuntu / node / python）</p>
+</li>
+</ul>
+<hr>
+<h2 id="七、Image-vs-Container（必考概念）"><a href="#七、Image-vs-Container（必考概念）" class="headerlink" title="七、Image vs Container（必考概念）"></a>七、Image vs Container（必考概念）</h2><h3 id="Image（镜像）"><a href="#Image（镜像）" class="headerlink" title="Image（镜像）"></a>Image（镜像）</h3><ul>
+<li><p>静态</p>
+</li>
+<li><p>只读</p>
+</li>
+<li><p>类似：<strong>类 / 模板 / 快照</strong></p>
+</li>
+</ul>
+<h3 id="Container（容器）"><a href="#Container（容器）" class="headerlink" title="Container（容器）"></a>Container（容器）</h3><ul>
+<li><p>运行态</p>
+</li>
+<li><p>有进程</p>
+</li>
+<li><p>类似：<strong>对象 / 实例</strong></p>
+</li>
+</ul>
+<p>👉 <strong>一个镜像可以启动多个容器</strong></p>
+<hr>
+<h2 id="八、Docker-常用命令（实战级）"><a href="#八、Docker-常用命令（实战级）" class="headerlink" title="八、Docker 常用命令（实战级）"></a>八、Docker 常用命令（实战级）</h2><hr>
+<h1 id="镜像相关（Image）"><a href="#镜像相关（Image）" class="headerlink" title="镜像相关（Image）"></a>镜像相关（Image）</h1><h2 id="1-docker-images"><a href="#1-docker-images" class="headerlink" title="1) docker images"></a>1) <code>docker images</code></h2><p><strong>作用：</strong>列出本机已有的镜像（镜像仓库、tag、image id、大小、创建时间）。</p>
+<p><strong>常用写法：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker images<br>docker images ubuntu<br>docker images ubuntu:22.04<br></code></pre></td></tr></table></figure>
+<p><strong>常用参数：</strong></p>
+<ul>
+<li><code>-a</code>：显示所有镜像（包括中间层镜像，通常构建时产生）</li>
+<li><code>-q</code>：只输出 image id（很适合配合 xargs 批量操作）</li>
+<li><code>--no-trunc</code>：不截断 id（排查时有用）</li>
+</ul>
+<p><strong>实战例子：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker images -q               <span class="hljs-comment"># 只列出所有镜像ID</span><br>docker images | <span class="hljs-built_in">head</span>           <span class="hljs-comment"># 看看顶部几行</span><br></code></pre></td></tr></table></figure>
+<p><strong>坑：</strong></p>
+<ul>
+<li>看到的 <code>SIZE</code> 是镜像体积，不代表容器运行时真实占用（容器还有可写层 + volume）。</li>
+</ul>
+<hr>
+<h2 id="2-docker-rmi-IMAGE"><a href="#2-docker-rmi-IMAGE" class="headerlink" title="2) docker rmi IMAGE"></a>2) <code>docker rmi IMAGE</code></h2><p><strong>作用：</strong>删除镜像（IMAGE 可以是 <code>repo:tag</code> 或 <code>image id</code>）。</p>
+<p><strong>基本用法：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker rmi ubuntu:22.04<br>docker rmi 3b418d7b466e<br></code></pre></td></tr></table></figure>
+<p><strong>常用参数：</strong></p>
+<ul>
+<li><code>-f</code>：强制删除（注意：如果还有容器在引用该镜像，通常删不掉；<code>-f</code> 会更激进）</li>
+</ul>
+<p><strong>实战：清理“悬挂镜像”(dangling)</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker images -f dangling=<span class="hljs-literal">true</span><br>docker rmi $(docker images -f dangling=<span class="hljs-literal">true</span> -q)<br></code></pre></td></tr></table></figure>
+<p><strong>坑：</strong></p>
+<ul>
+<li><p><strong>镜像被容器引用时不能删</strong>：哪怕容器是 stopped 的，只要存在就会占用引用。</p>
+<ul>
+<li>解决：先删容器（<code>docker rm</code>，你清单里没写但实战经常需要）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="3-docker-build-t-name-tag"><a href="#3-docker-build-t-name-tag" class="headerlink" title="3) docker build -t name:tag ."></a>3) <code>docker build -t name:tag .</code></h2><p><strong>作用：</strong>用当前目录的 <code>Dockerfile</code> 构建镜像。</p>
+<p><strong>基本用法：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker build -t myapp:1.0 .<br></code></pre></td></tr></table></figure>
+<p><strong>常用参数：</strong></p>
+<ul>
+<li><code>-t</code>：打标签（repo:tag），不打也能 build，但会难管理</li>
+<li><code>-f Dockerfile.dev</code>：指定 Dockerfile 文件名</li>
+<li><code>--no-cache</code>：不使用缓存（排查“怎么改了没生效”必用）</li>
+<li><code>--pull</code>：构建前先拉取最新基础镜像</li>
+<li><code>--build-arg KEY=VAL</code>：传构建参数（Dockerfile 里用 <code>ARG</code> 接）</li>
+</ul>
+<p><strong>实战例子：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker build -t web:dev -f Dockerfile.dev .<br>docker build --no-cache -t web:debug .<br></code></pre></td></tr></table></figure>
+<p><strong>坑（非常常见）：</strong></p>
+<ol>
+<li><strong>上下文(context)太大</strong>：你写了 <code>COPY . .</code>，会把当前目录打包发给 Docker。<br>✅ 解决：写 <code>.dockerignore</code>（忽略 node_modules、target、.git 等）</li>
+<li><strong>缓存导致“我明明改了怎么没变”</strong>：<br>✅ 用 <code>--no-cache</code> 或调整 Dockerfile 指令顺序（把不常变的依赖安装放前面）</li>
+</ol>
+<hr>
+<h2 id="4-docker-history-IMAGE"><a href="#4-docker-history-IMAGE" class="headerlink" title="4) docker history IMAGE"></a>4) <code>docker history IMAGE</code></h2><p><strong>作用：</strong>查看镜像每一层（layer）的构建命令与体积贡献（对应 PPT 的“层”概念）。 </p>
+<p><strong>基本用法：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker <span class="hljs-built_in">history</span> myapp:1.0<br></code></pre></td></tr></table></figure>
+<p><strong>常用参数：</strong></p>
+<ul>
+<li><code>--no-trunc</code>：显示完整命令</li>
+<li><code>-q</code>：只显示层 id</li>
+</ul>
+<p><strong>用它干什么（很实用）：</strong></p>
+<ul>
+<li>找出镜像为什么大（哪一层占了几百 MB）</li>
+<li>检查 Dockerfile 每条 <code>RUN/COPY</code> 的后果</li>
+</ul>
+<p><strong>坑：</strong></p>
+<ul>
+<li>你看到“Removing intermediate container”不代表层没了；<strong>层信息仍会合并进最终镜像</strong>（PPT 有提到这个现象）。 </li>
+</ul>
+<hr>
+<h1 id="容器相关（Container）"><a href="#容器相关（Container）" class="headerlink" title="容器相关（Container）"></a>容器相关（Container）</h1><h2 id="5-docker-ps"><a href="#5-docker-ps" class="headerlink" title="5) docker ps"></a>5) <code>docker ps</code></h2><p><strong>作用：</strong>列出正在运行的容器。</p>
+<p><strong>常用写法：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker ps<br>docker ps -a<br></code></pre></td></tr></table></figure>
+<p><strong>常用参数：</strong></p>
+<ul>
+<li><code>-a</code>：包含停止的容器（排查“容器去哪了”必用）</li>
+<li><code>-q</code>：只输出容器 id（批量操作）</li>
+<li><code>--format</code>：自定义输出（很适合脚本）</li>
+</ul>
+<p><strong>实战：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker ps -a<br>docker ps --format <span class="hljs-string">&quot;table &#123;&#123;.Names&#125;&#125;\t&#123;&#123;.Status&#125;&#125;\t&#123;&#123;.Ports&#125;&#125;&quot;</span><br></code></pre></td></tr></table></figure>
+<p><strong>坑：</strong></p>
+<ul>
+<li><code>docker ps</code> 默认看不到停止容器，所以很多人误以为“容器没创建成功”。</li>
+</ul>
+<hr>
+<h2 id="6-docker-run-IMAGE-COMMAND"><a href="#6-docker-run-IMAGE-COMMAND" class="headerlink" title="6) docker run IMAGE [COMMAND]"></a>6) <code>docker run IMAGE [COMMAND]</code></h2><p><strong>作用：</strong>从镜像创建并启动一个新容器（“从 image 生成 container 的入口”）。 </p>
+<p><strong>最常用参数（你 PPT 也提到 -ti / -v / -p）：</strong> </p>
+<ul>
+<li><code>-it</code>：交互式（给你一个终端，常用于调试）</li>
+<li><code>--rm</code>：退出后自动删容器（临时跑一下很爽）</li>
+<li><code>-d</code>：后台运行（daemon）</li>
+<li><code>--name xxx</code>：给容器起名字（不然名字随机）</li>
+<li><code>-p 主机端口:容器端口</code>：端口映射（让宿主机访问容器服务）</li>
+<li><code>-v 主机路径:容器路径</code>：挂载卷（数据持久化/共享代码）</li>
+<li><code>-e KEY=VAL</code>：环境变量</li>
+<li><code>--network xxx</code>：加入某个网络（compose里经常用）</li>
+</ul>
+<p><strong>实战例子：</strong></p>
+<ol>
+<li>跑一个交互式 ubuntu：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -it --<span class="hljs-built_in">rm</span> ubuntu:22.04 bash<br></code></pre></td></tr></table></figure>
+<ol>
+<li>跑一个后台 web，并映射端口：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -d --name web -p 8080:80 nginx:latest<br></code></pre></td></tr></table></figure>
+<ol>
+<li>挂载当前目录到容器，开发调试：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run -it --<span class="hljs-built_in">rm</span> -v <span class="hljs-string">&quot;<span class="hljs-variable">$PWD</span>&quot;</span>:/app -w /app node:18 bash<br></code></pre></td></tr></table></figure>
+<p><strong>坑（超级常见）：</strong></p>
+<ol>
+<li><code>-p 8080:80</code> <strong>左边是宿主机端口，右边是容器端口</strong></li>
+<li>容器里服务要监听 <code>0.0.0.0</code>，不要只绑 <code>127.0.0.1</code>，否则端口映射也访问不到（你 PPT 的 compose 示例里 rails 用了 <code>-b 0.0.0.0</code> 就是这个原因）。 </li>
+<li><code>docker run</code> 每执行一次就新建一个容器；想“再启动同一个容器”，用 <code>docker start</code>。</li>
+</ol>
+<hr>
+<h2 id="7-docker-stop-CONTAINER"><a href="#7-docker-stop-CONTAINER" class="headerlink" title="7) docker stop CONTAINER"></a>7) <code>docker stop CONTAINER</code></h2><p><strong>作用：</strong>优雅停止容器（发送 <code>SIGTERM</code>，等一段时间再 <code>SIGKILL</code>）。</p>
+<p><strong>用法：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker stop web<br>docker stop 1a2b3c<br></code></pre></td></tr></table></figure>
+<p><strong>常用参数：</strong></p>
+<ul>
+<li><code>-t 10</code>：等待 10 秒后强杀（默认也有超时）</li>
+</ul>
+<p><strong>坑：</strong></p>
+<ul>
+<li>stop 只是停止，不会删除容器；容器仍占名字、仍引用镜像。</li>
+</ul>
+<hr>
+<h2 id="8-docker-start-CONTAINER"><a href="#8-docker-start-CONTAINER" class="headerlink" title="8) docker start CONTAINER"></a>8) <code>docker start CONTAINER</code></h2><p><strong>作用：</strong>启动一个已存在但停止的容器（不会新建）。</p>
+<p><strong>用法：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker start web<br></code></pre></td></tr></table></figure>
+<p><strong>常用参数：</strong></p>
+<ul>
+<li><code>-a</code>：附着到容器输出（类似看前台日志）</li>
+<li><code>-i</code>：附着 stdin（配合交互）</li>
+</ul>
+<p><strong>坑：</strong></p>
+<ul>
+<li>很多人拿它“启动镜像”：不行。<strong>start 对象是容器，不是镜像</strong>（你那句关键记忆点完全正确）。 </li>
+</ul>
+<hr>
+<h2 id="9-docker-restart-CONTAINER"><a href="#9-docker-restart-CONTAINER" class="headerlink" title="9) docker restart CONTAINER"></a>9) <code>docker restart CONTAINER</code></h2><p><strong>作用：</strong>重启容器（相当于 stop + start）。</p>
+<p><strong>用法：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker restart web<br></code></pre></td></tr></table></figure>
+<p><strong>场景：</strong></p>
+<ul>
+<li>改了环境变量/配置（但注意：环境变量通常是创建时决定的，重启不一定改变；要改往往得重新 run）</li>
+</ul>
+<hr>
+<h2 id="10-docker-logs-CONTAINER"><a href="#10-docker-logs-CONTAINER" class="headerlink" title="10) docker logs CONTAINER"></a>10) <code>docker logs CONTAINER</code></h2><p><strong>作用：</strong>查看容器标准输出/标准错误日志（排查容器起不来第一招）。 </p>
+<p><strong>常用写法：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker logs web<br>docker logs -f web<br>docker logs --<span class="hljs-built_in">tail</span> 200 web<br></code></pre></td></tr></table></figure>
+<p><strong>常用参数：</strong></p>
+<ul>
+<li><code>-f</code>：跟随输出（tail -f）</li>
+<li><code>--tail N</code>：只看最后 N 行</li>
+<li><code>--since 10m</code>：最近 10 分钟</li>
+<li><code>-t</code>：加时间戳</li>
+</ul>
+<p><strong>坑：</strong></p>
+<ul>
+<li>logs 只能看到 stdout/stderr；如果程序把日志写文件里，你要 exec 进去看文件。</li>
+</ul>
+<hr>
+<h2 id="11-docker-exec-ti-CONTAINER-bin-bash"><a href="#11-docker-exec-ti-CONTAINER-bin-bash" class="headerlink" title="11) docker exec -ti CONTAINER /bin/bash"></a>11) <code>docker exec -ti CONTAINER /bin/bash</code></h2><p><strong>作用：</strong>在运行中的容器里执行命令（最常用于“进去看一眼”调试）。 </p>
+<p><strong>用法：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker <span class="hljs-built_in">exec</span> -it web /bin/bash<br>docker <span class="hljs-built_in">exec</span> -it web sh<br>docker <span class="hljs-built_in">exec</span> web <span class="hljs-built_in">ls</span> -la /app<br></code></pre></td></tr></table></figure>
+<p><strong>关键参数：</strong></p>
+<ul>
+<li><code>-i</code>：保持 stdin</li>
+<li><code>-t</code>：分配伪终端（让你有交互体验）</li>
+<li>没有 bash 就用 <code>sh</code>（alpine 常见）</li>
+</ul>
+<p><strong>和 <code>docker run -it</code> 区别：</strong></p>
+<ul>
+<li><code>run -it</code>：创建并启动一个新容器后进入</li>
+<li><code>exec -it</code>：对“已经在跑”的容器开个新终端进去</li>
+</ul>
+<p><strong>坑：</strong></p>
+<ul>
+<li>容器必须是 running 状态才能 exec</li>
+<li>有些极简镜像（distroless）根本没 shell，exec 也进不去（生产环境常见）</li>
+</ul>
+<hr>
+<h1 id="把这些命令串成“排错流程”（你背起来就很稳）"><a href="#把这些命令串成“排错流程”（你背起来就很稳）" class="headerlink" title="把这些命令串成“排错流程”（你背起来就很稳）"></a>把这些命令串成“排错流程”（你背起来就很稳）</h1><ol>
+<li>先看容器在不在：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker ps -a<br></code></pre></td></tr></table></figure>
+<ol>
+<li>起不来先看日志：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker logs --<span class="hljs-built_in">tail</span> 200 容器名<br></code></pre></td></tr></table></figure>
+<ol>
+<li>需要进容器排查：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker <span class="hljs-built_in">exec</span> -it 容器名 sh<br></code></pre></td></tr></table></figure>
+<ol>
+<li>要重新跑一个干净的：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker run --<span class="hljs-built_in">rm</span> -it 镜像 bash<br></code></pre></td></tr></table></figure>
+<hr>
+<h2 id="九、Dockerfile：一眼看懂版"><a href="#九、Dockerfile：一眼看懂版" class="headerlink" title="九、Dockerfile：一眼看懂版"></a>九、Dockerfile：一眼看懂版</h2><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><span class="hljs-keyword">FROM</span> node:<span class="hljs-number">18</span>        <span class="hljs-comment"># 基础镜像</span><br><span class="hljs-keyword">WORKDIR</span><span class="language-bash"> /app        <span class="hljs-comment"># 工作目录</span></span><br><span class="hljs-keyword">COPY</span><span class="language-bash"> . .            <span class="hljs-comment"># 拷贝文件</span></span><br><span class="hljs-keyword">RUN</span><span class="language-bash"> npm install     <span class="hljs-comment"># 构建期执行</span></span><br><span class="hljs-keyword">CMD</span><span class="language-bash"> [<span class="hljs-string">&quot;node&quot;</span>,<span class="hljs-string">&quot;src/index.js&quot;</span>]  <span class="hljs-comment"># 运行期执行</span></span><br><span class="hljs-keyword">EXPOSE</span> <span class="hljs-number">3000</span><br></code></pre></td></tr></table></figure>
+<h3 id="RUN-vs-CMD（面试常问）"><a href="#RUN-vs-CMD（面试常问）" class="headerlink" title="RUN vs CMD（面试常问）"></a>RUN vs CMD（面试常问）</h3><ul>
+<li><p><code>RUN</code>：构建镜像时执行</p>
+</li>
+<li><p><code>CMD</code>：容器启动时执行</p>
+</li>
+</ul>
+<hr>
+<h2 id="十、Multi-stage-Build（生产级必会）"><a href="#十、Multi-stage-Build（生产级必会）" class="headerlink" title="十、Multi-stage Build（生产级必会）"></a>十、Multi-stage Build（生产级必会）</h2><h3 id="为什么要？"><a href="#为什么要？" class="headerlink" title="为什么要？"></a>为什么要？</h3><ul>
+<li><p>编译环境 ≠ 运行环境</p>
+</li>
+<li><p>编译工具不该进最终镜像</p>
+</li>
+</ul>
+<h3 id="经典两阶段"><a href="#经典两阶段" class="headerlink" title="经典两阶段"></a>经典两阶段</h3><p>1️⃣ builder：</p>
+<ul>
+<li>带 gcc / go / node / npm</li>
+</ul>
+<p>2️⃣ runtime：</p>
+<ul>
+<li><p>alpine / distroless</p>
+</li>
+<li><p>只放可执行文件</p>
+</li>
+</ul>
+<p>👉 <strong>镜像更小 + 更安全</strong></p>
+<hr>
+<h2 id="十一、多个容器怎么一起跑？Docker-Compose"><a href="#十一、多个容器怎么一起跑？Docker-Compose" class="headerlink" title="十一、多个容器怎么一起跑？Docker Compose"></a>十一、多个容器怎么一起跑？Docker Compose</h2><h3 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h3><ul>
+<li><p>web + db + cache</p>
+</li>
+<li><p>一个个 docker run 会崩溃</p>
+</li>
+</ul>
+<h3 id="解决方案：docker-compose-yml"><a href="#解决方案：docker-compose-yml" class="headerlink" title="解决方案：docker-compose.yml"></a>解决方案：docker-compose.yml</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">services:</span><br>  <span class="hljs-attr">db:</span><br>    <span class="hljs-attr">image:</span> <span class="hljs-string">postgres:14</span><br>  <span class="hljs-attr">web:</span><br>    <span class="hljs-attr">build:</span> <span class="hljs-string">.</span><br>    <span class="hljs-attr">ports:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">&quot;3000:3000&quot;</span><br>    <span class="hljs-attr">depends_on:</span><br>      <span class="hljs-bullet">-</span> <span class="hljs-string">db</span><br></code></pre></td></tr></table></figure>
+<hr>
+<h3 id="常用-Compose-命令"><a href="#常用-Compose-命令" class="headerlink" title="常用 Compose 命令"></a>常用 Compose 命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker compose up -d<br>docker compose ps<br>docker compose logs<br>docker compose stop<br>docker compose down<br></code></pre></td></tr></table></figure>
+<p>⚠️ <code>down</code> 会删容器 + 网络 + 非持久数据</p>
+<hr>
+<h2 id="十二、真实世界：OCF-如何用-Containers？"><a href="#十二、真实世界：OCF-如何用-Containers？" class="headerlink" title="十二、真实世界：OCF 如何用 Containers？"></a>十二、真实世界：OCF 如何用 Containers？</h2><ul>
+<li><p>Kubernetes 集群</p>
+</li>
+<li><p>每个服务一个或多个容器</p>
+</li>
+<li><p>请求通过 proxy 分发</p>
+</li>
+<li><p>CI/CD（GitHub Actions）</p>
+</li>
+<li><p>静态网站构建（Jekyll）</p>
+</li>
+</ul>
+<p>👉 容器是 <strong>现代云原生的地基</strong></p>
+<hr>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%AD%A6%E9%99%A2%E6%B4%BE/" class="category-chain-item">学院派</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/LSAD/" class="print-no-link">#LSAD</a>
+      
+        <a href="/tags/note/" class="print-no-link">#note</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>OCF Linux System Administration DeCal note9</div>
+      <div>https://zjjyyds.github.io/2026/02/16/学院派/LSAD/LSAD note9/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Jay</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年2月16日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/02/16/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD/LSAD%20lab9/" title="OCF Linux System Administration DeCal lab9">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab9</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/02/15/%E5%AD%A6%E9%99%A2%E6%B4%BE/LSAD/LSAD%20lab8/" title="OCF Linux System Administration DeCal lab8">
+                        <span class="hidden-mobile">OCF Linux System Administration DeCal lab8</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
