@@ -19,25 +19,30 @@
   <meta name="author" content="Jay">
   <meta name="keywords" content="">
   
-    <meta name="description" content="这是一个问到 Java 设计“核心骨架”的问题。我先给你一句结论级答案，然后我们像拆发动机一样，把每一层都拆开。  String 的不可变性不是靠一句 final，而是靠一整套“多层封锁 + JVM 协同”的设计体系共同保证的。  下面我们分 5 道防线 来看。  第一层防线：String 类本身是 final1public final class String &#123; ... &#125;">
+    <meta name="description" content="面对 116kg 的初始体重，你的减脂潜力巨大，但也需要科学地安排以保护关节和肌肉。既然你追求“最快”，我们需要在保证蛋白质充足的前提下，制造一个较大的热量缺口。 根据你提供的 TDEE（3221 大卡）和要求的营养比例（碳水 45%：蛋白质 30%：脂肪 25%），我为你制定了以下方案。  一、 核心参数设定考虑到你的体重基数和减脂效率，建议初始每日摄入热量设定在 2200 - 2300 大卡">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Java怎么实现Stirng不变的">
-<meta property="og:url" content="https://zjjyyds.github.io/2026/01/03/JavaSE/Java%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81String%E4%B8%8D%E5%8F%98%E7%9A%84/index.html">
+<meta property="og:title" content="针对116kg体重的快速减脂饮食与训练计划">
+<meta property="og:url" content="https://zjjyyds.github.io/2023/10/27/%E9%92%88%E5%AF%B9116kg%E4%BD%93%E9%87%8D%E7%9A%84%E5%BF%AB%E9%80%9F%E5%87%8F%E8%84%82%E9%A5%AE%E9%A3%9F%E4%B8%8E%E8%AE%AD%E7%BB%83%E8%AE%A1%E5%88%92/index.html">
 <meta property="og:site_name" content="大雪深埋">
-<meta property="og:description" content="这是一个问到 Java 设计“核心骨架”的问题。我先给你一句结论级答案，然后我们像拆发动机一样，把每一层都拆开。  String 的不可变性不是靠一句 final，而是靠一整套“多层封锁 + JVM 协同”的设计体系共同保证的。  下面我们分 5 道防线 来看。  第一层防线：String 类本身是 final1public final class String &#123; ... &#125;">
+<meta property="og:description" content="面对 116kg 的初始体重，你的减脂潜力巨大，但也需要科学地安排以保护关节和肌肉。既然你追求“最快”，我们需要在保证蛋白质充足的前提下，制造一个较大的热量缺口。 根据你提供的 TDEE（3221 大卡）和要求的营养比例（碳水 45%：蛋白质 30%：脂肪 25%），我为你制定了以下方案。  一、 核心参数设定考虑到你的体重基数和减脂效率，建议初始每日摄入热量设定在 2200 - 2300 大卡">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-01-03T06:01:00.000Z">
-<meta property="article:modified_time" content="2026-01-03T06:17:42.055Z">
+<meta property="article:published_time" content="2023-10-27T02:30:00.000Z">
+<meta property="article:modified_time" content="2026-02-20T09:45:12.597Z">
 <meta property="article:author" content="Jay">
-<meta property="article:tag" content="JavaSE">
-<meta property="article:tag" content="思考">
+<meta property="article:tag" content="减脂">
+<meta property="article:tag" content="减肥">
+<meta property="article:tag" content="饮食计划">
+<meta property="article:tag" content="训练计划">
+<meta property="article:tag" content="大体重减脂">
+<meta property="article:tag" content="力量训练">
+<meta property="article:tag" content="有氧运动">
 <meta name="twitter:card" content="summary_large_image">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>Java怎么实现Stirng不变的 - 大雪深埋</title>
+  <title>针对116kg体重的快速减脂饮食与训练计划 - 大雪深埋</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -203,7 +208,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Java怎么实现Stirng不变的"></span>
+            <span id="subtitle" data-typed-text="针对116kg体重的快速减脂饮食与训练计划"></span>
           
         </div>
 
@@ -214,8 +219,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2026-01-03 14:01" pubdate>
-          2026年1月3日 下午
+        <time datetime="2023-10-27 10:30" pubdate>
+          2023年10月27日 上午
         </time>
       </span>
     
@@ -226,7 +231,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          815 字
+          916 字
         
       </span>
     
@@ -237,7 +242,7 @@
         
         
         
-          7 分钟
+          8 分钟
         
       </span>
     
@@ -283,151 +288,106 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Java怎么实现Stirng不变的</h1>
+            <h1 id="seo-header">针对116kg体重的快速减脂饮食与训练计划</h1>
             
             
               <div class="markdown-body">
                 
-                <p>这是一个<strong>问到 Java 设计“核心骨架”的问题</strong>。<br>我先给你一句<strong>结论级答案</strong>，然后我们像拆发动机一样，把每一层都拆开。</p>
-<blockquote>
-<p><strong><code>String</code> 的不可变性不是靠一句 <code>final</code>，<br>而是靠一整套“多层封锁 + JVM 协同”的设计体系共同保证的。</strong></p>
-</blockquote>
-<p>下面我们分 <strong>5 道防线</strong> 来看。</p>
+                <p>面对 116kg 的初始体重，你的减脂潜力巨大，但也需要科学地安排以保护关节和肌肉。既然你追求<strong>“最快”</strong>，我们需要在保证蛋白质充足的前提下，制造一个较大的热量缺口。</p>
+<p>根据你提供的 TDEE（3221 大卡）和要求的营养比例（碳水 45%：蛋白质 30%：脂肪 25%），我为你制定了以下方案。</p>
 <hr>
-<h2 id="第一层防线：String-类本身是-final"><a href="#第一层防线：String-类本身是-final" class="headerlink" title="第一层防线：String 类本身是 final"></a>第一层防线：<code>String</code> 类本身是 <code>final</code></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">String</span> &#123; ... &#125;<br></code></pre></td></tr></table></figure>
-<h3 id="这意味着什么？"><a href="#这意味着什么？" class="headerlink" title="这意味着什么？"></a>这意味着什么？</h3><ul>
-<li>❌ 不能被继承</li>
-<li>❌ 不能通过子类添加“破坏性方法”</li>
-<li>❌ 不能 override 任何行为</li>
-</ul>
-<h3 id="为什么这是第一道防线？"><a href="#为什么这是第一道防线？" class="headerlink" title="为什么这是第一道防线？"></a>为什么这是第一道防线？</h3><p>假如 <code>String</code> <strong>可以被继承</strong>：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">class</span> <span class="hljs-title class_">EvilString</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">String</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">hack</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">// 改内部 char[]</span><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<p>那么：</p>
-<ul>
-<li>JVM</li>
-<li>HashMap</li>
-<li>ClassLoader</li>
-<li>安全管理器</li>
-</ul>
-<p>都会被<strong>彻底破坏</strong></p>
-<p>📌 <strong>第一层作用</strong>：<br>👉 <strong>防止通过继承破坏不可变性</strong></p>
+<h2 id="一、-核心参数设定"><a href="#一、-核心参数设定" class="headerlink" title="一、 核心参数设定"></a>一、 核心参数设定</h2><p>考虑到你的体重基数和减脂效率，建议初始每日摄入热量设定在 <strong>2200 - 2300 大卡</strong> 左右（比 TDEE 低约 1000 大卡）。这是比较激进但对大体重男性相对安全的水平。</p>
+<h3 id="每日营养目标-按-2200-大卡计"><a href="#每日营养目标-按-2200-大卡计" class="headerlink" title="每日营养目标 (按 2200 大卡计)"></a>每日营养目标 (按 2200 大卡计)</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>营养素</strong></th>
+<th><strong>比例</strong></th>
+<th><strong>每日摄入量 (约)</strong></th>
+<th><strong>建议食物来源</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>蛋白质</strong></td>
+<td>30%</td>
+<td><strong>165g</strong></td>
+<td>鸡胸肉、瘦牛肉、鸡蛋、鱼虾、希腊酸奶</td>
+</tr>
+<tr>
+<td><strong>碳水化合物</strong></td>
+<td>45%</td>
+<td><strong>247g</strong></td>
+<td>糙米、燕麦、红薯、玉米、全麦面包</td>
+</tr>
+<tr>
+<td><strong>脂肪</strong></td>
+<td>25%</td>
+<td>**61g</td>
+<td>橄榄油、坚果、蛋黄、牛油果</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
-<h2 id="第二层防线：内部状态是-private-final"><a href="#第二层防线：内部状态是-private-final" class="headerlink" title="第二层防线：内部状态是 private final"></a>第二层防线：内部状态是 <code>private final</code></h2><h3 id="早期-JDK（≤8）："><a href="#早期-JDK（≤8）：" class="headerlink" title="早期 JDK（≤8）："></a>早期 JDK（≤8）：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">char</span>[] value;<br></code></pre></td></tr></table></figure>
-<h3 id="JDK-9-（压缩字符串）："><a href="#JDK-9-（压缩字符串）：" class="headerlink" title="JDK 9+（压缩字符串）："></a>JDK 9+（压缩字符串）：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">byte</span>[] value;<br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">byte</span> coder; <span class="hljs-comment">// LATIN1 / UTF16</span><br></code></pre></td></tr></table></figure>
-<h3 id="这两点非常关键："><a href="#这两点非常关键：" class="headerlink" title="这两点非常关键："></a>这两点非常关键：</h3><ol>
-<li><p><strong><code>final</code></strong></p>
-<ul>
-<li>引用不能被替换</li>
-</ul>
+<h2 id="二、-饮食计划建议-中国胃版"><a href="#二、-饮食计划建议-中国胃版" class="headerlink" title="二、 饮食计划建议 (中国胃版)"></a>二、 饮食计划建议 (中国胃版)</h2><p>为了操作简单，你可以参考以下一日三餐的构思：</p>
+<h3 id="早餐-约-500-kcal"><a href="#早餐-约-500-kcal" class="headerlink" title="早餐 (约 500 kcal)"></a>早餐 (约 500 kcal)</h3><ul>
+<li><p><strong>蛋白质：</strong> 2 个全蛋 + 2 个蛋白 (水煮或少油煎)。</p>
 </li>
-<li><p><strong><code>private</code></strong></p>
-<ul>
-<li>外界完全无法访问</li>
+<li><p><strong>优质碳水：</strong> 60g 燕麦片 (加水/脱脂奶) 或 1 片全麦面包。</p>
+</li>
+<li><p><strong>纤维：</strong> 一小份黄瓜或番茄。</p>
+</li>
 </ul>
+<h3 id="午餐-约-800-kcal-训练前后的重点餐"><a href="#午餐-约-800-kcal-训练前后的重点餐" class="headerlink" title="午餐 (约 800 kcal) - 训练前后的重点餐"></a>午餐 (约 800 kcal) - 训练前后的重点餐</h3><ul>
+<li><p><strong>蛋白质：</strong> 180g 煎鸡胸肉或瘦牛肉。</p>
+</li>
+<li><p><strong>优质碳水：</strong> 150g 蒸红薯或 1 碗糙米饭。</p>
+</li>
+<li><p><strong>蔬菜：</strong> 250g 清炒或水煮绿叶菜 (少油)。</p>
+</li>
+</ul>
+<h3 id="晚餐-约-700-kcal"><a href="#晚餐-约-700-kcal" class="headerlink" title="晚餐 (约 700 kcal)"></a>晚餐 (约 700 kcal)</h3><ul>
+<li><p><strong>蛋白质：</strong> 200g 瘦鱼肉、虾仁或豆腐。</p>
+</li>
+<li><p><strong>优质碳水：</strong> 100g 玉米或紫薯。</p>
+</li>
+<li><p><strong>蔬菜：</strong> 一大盘大拌菜（生菜、甘蓝、胡萝卜），加少量油醋汁。</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>💡 建议：</strong> 准备一个食物秤。大体重减脂初期，“感觉吃得少”往往不如“算得准”有效。</p>
+</blockquote>
+<hr>
+<h2 id="三、-锻炼计划-针对-116kg-的安全高效方案"><a href="#三、-锻炼计划-针对-116kg-的安全高效方案" class="headerlink" title="三、 锻炼计划 (针对 116kg 的安全高效方案)"></a>三、 锻炼计划 (针对 116kg 的安全高效方案)</h2><p>追求最快速度，必须是<strong>“力量训练 + 有氧运动”</strong>。力量训练防止肌肉流失（保持代谢），有氧直接消耗热量。</p>
+<h3 id="1-力量训练-每周-4-5-次"><a href="#1-力量训练-每周-4-5-次" class="headerlink" title="1. 力量训练 (每周 4-5 次)"></a>1. 力量训练 (每周 4-5 次)</h3><p>建议采取全身体力分配或推、拉、腿循环。</p>
+<ul>
+<li><p><strong>重点动作：</strong> 哑铃/杠铃卧推、器械划船、高位下拉、坐姿腿屈伸。</p>
+</li>
+<li><p><strong>注意：</strong> 目前体重较大，<strong>深蹲、硬拉等动作建议在有专业教练指导或使用固定器械（如史密斯机）下进行</strong>，以保护膝盖和腰椎。</p>
+</li>
+</ul>
+<h3 id="2-有氧运动-每天-45-60-分钟"><a href="#2-有氧运动-每天-45-60-分钟" class="headerlink" title="2. 有氧运动 (每天 45-60 分钟)"></a>2. 有氧运动 (每天 45-60 分钟)</h3><ul>
+<li><p><strong>最佳选择：</strong> <strong>坡度快走</strong>（坡度 4-8，速度 5-6）。</p>
+</li>
+<li><p><strong>原因：</strong> 116kg 的体重跑步会对膝盖产生巨大冲击。坡度快走能有效提高心率（保持在 130-140 bpm 的脂肪燃烧区间），且不伤关节。</p>
+</li>
+<li><p><strong>安排：</strong> 放在力量训练后进行，减脂效率最高。</p>
+</li>
+</ul>
+<hr>
+<h2 id="四、-快速减脂的-3-个关键细节"><a href="#四、-快速减脂的-3-个关键细节" class="headerlink" title="四、 快速减脂的 3 个关键细节"></a>四、 快速减脂的 3 个关键细节</h2><ol>
+<li><p><strong>多喝水：</strong> 每天保证 3L 以上的水。代谢脂肪需要水的参与，且水能增加饱腹感。</p>
+</li>
+<li><p><strong>睡眠充足：</strong> 每天睡够 7-8 小时。熬夜会导致皮质醇上升，让你腹部堆积脂肪，并产生强烈的食欲。</p>
+</li>
+<li><p><strong>戒掉液态热量：</strong> 所有的含糖饮料、果汁、奶茶必须彻底切断。这是最快看到腹部变化的手段。</p>
 </li>
 </ol>
-<p>📌 注意：<br><code>final</code> 只保证“引用不变”，<br><strong>真正防修改的是 <code>private</code> + 不暴露引用</strong>。</p>
 <hr>
-<h2 id="第三层防线：没有任何“修改自身”的方法"><a href="#第三层防线：没有任何“修改自身”的方法" class="headerlink" title="第三层防线：没有任何“修改自身”的方法"></a>第三层防线：没有任何“修改自身”的方法</h2><p>你仔细想一下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br></code></pre></td></tr></table></figure>
-<h3 id="String-提供的方法是什么？"><a href="#String-提供的方法是什么？" class="headerlink" title="String 提供的方法是什么？"></a>String 提供的方法是什么？</h3><ul>
-<li><code>substring</code></li>
-<li><code>replace</code></li>
-<li><code>toUpperCase</code></li>
-<li><code>concat</code></li>
-</ul>
-<p><strong>它们全部：</strong></p>
-<blockquote>
-<p>❌ 不修改原对象<br>✅ 返回一个新 <code>String</code></p>
-</blockquote>
-<p>例如：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">s.toUpperCase();<br></code></pre></td></tr></table></figure>
-<p>实际等价于：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">newStr</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(...);<br></code></pre></td></tr></table></figure>
-<p>📌 <strong>这是不可变设计的“行为层保证”</strong>。</p>
-<hr>
-<h2 id="第四层防线：构造阶段的“防御性拷贝”"><a href="#第四层防线：构造阶段的“防御性拷贝”" class="headerlink" title="第四层防线：构造阶段的“防御性拷贝”"></a>第四层防线：构造阶段的“防御性拷贝”</h2><h3 id="你以为这样能破坏-String？"><a href="#你以为这样能破坏-String？" class="headerlink" title="你以为这样能破坏 String？"></a>你以为这样能破坏 String？</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">char</span>[] arr = &#123;<span class="hljs-string">&#x27;a&#x27;</span>,<span class="hljs-string">&#x27;b&#x27;</span>,<span class="hljs-string">&#x27;c&#x27;</span>&#125;;<br><span class="hljs-type">String</span> <span class="hljs-variable">s</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">String</span>(arr);<br>arr[<span class="hljs-number">0</span>] = <span class="hljs-string">&#x27;x&#x27;</span>;<br>System.out.println(s);<br></code></pre></td></tr></table></figure>
-<h3 id="实际输出："><a href="#实际输出：" class="headerlink" title="实际输出："></a>实际输出：</h3><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">abc</span><br></code></pre></td></tr></table></figure>
-<h3 id="为什么？"><a href="#为什么？" class="headerlink" title="为什么？"></a>为什么？</h3><p>因为 <code>String</code> 构造器里做了：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-built_in">this</span>.value = Arrays.copyOf(arr, arr.length);<br></code></pre></td></tr></table></figure>
-<p>📌 <strong>String 永远不信任外部传入的数据</strong></p>
-<blockquote>
-<p>这是“不可变类”的黄金法则之一。</p>
-</blockquote>
-<hr>
-<h2 id="第五层防线（终极）：JVM-amp-语言层级的“特权协作”"><a href="#第五层防线（终极）：JVM-amp-语言层级的“特权协作”" class="headerlink" title="第五层防线（终极）：JVM &amp; 语言层级的“特权协作”"></a>第五层防线（终极）：JVM &amp; 语言层级的“特权协作”</h2><p>这是很多人<strong>不知道但最关键的一层</strong>。</p>
-<hr>
-<h3 id="1️⃣-字符串常量池（String-Pool）"><a href="#1️⃣-字符串常量池（String-Pool）" class="headerlink" title="1️⃣ 字符串常量池（String Pool）"></a>1️⃣ 字符串常量池（String Pool）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">String</span> <span class="hljs-variable">a</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br><span class="hljs-type">String</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> <span class="hljs-string">&quot;abc&quot;</span>;<br></code></pre></td></tr></table></figure>
-<ul>
-<li><code>a</code> 和 <code>b</code> 指向 <strong>同一个对象</strong></li>
-<li><p>如果 String 可变：</p>
-<ul>
-<li>改一个，全世界跟着改</li>
-</ul>
-</li>
-</ul>
-<p>👉 所以 <strong>String 必须不可变</strong></p>
-<hr>
-<h3 id="2️⃣-hashCode-缓存"><a href="#2️⃣-hashCode-缓存" class="headerlink" title="2️⃣ hashCode 缓存"></a>2️⃣ <code>hashCode</code> 缓存</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-type">int</span> hash;<br></code></pre></td></tr></table></figure>
-<ul>
-<li><code>hashCode()</code> 只算一次</li>
-<li>之后直接缓存</li>
-</ul>
-<p>如果 String 可变：</p>
-<ul>
-<li>hash 失效</li>
-<li>HashMap 直接崩溃</li>
-</ul>
-<hr>
-<h3 id="3️⃣-ClassLoader-安全模型依赖-String"><a href="#3️⃣-ClassLoader-安全模型依赖-String" class="headerlink" title="3️⃣ ClassLoader / 安全模型依赖 String"></a>3️⃣ ClassLoader / 安全模型依赖 String</h3><ul>
-<li>类名</li>
-<li>方法名</li>
-<li>权限名</li>
-<li>文件路径</li>
-</ul>
-<p>📌 <strong>如果 String 可变，Java 的安全模型不成立</strong></p>
-<hr>
-<h2 id="一句话拆穿所有误解（非常重要）"><a href="#一句话拆穿所有误解（非常重要）" class="headerlink" title="一句话拆穿所有误解（非常重要）"></a>一句话拆穿所有误解（非常重要）</h2><blockquote>
-<p><strong>String 的不可变性不是“防你”，<br>而是“防整个 Java 世界被你不小心炸掉”。</strong></p>
-</blockquote>
-<hr>
-<h2 id="用一个“完整类比”帮你彻底定型"><a href="#用一个“完整类比”帮你彻底定型" class="headerlink" title="用一个“完整类比”帮你彻底定型"></a>用一个“完整类比”帮你彻底定型</h2><p>把 <code>String</code> 想成：</p>
-<blockquote>
-<p><strong>法律里的“身份证号码”</strong></p>
-</blockquote>
-<ul>
-<li>不能改</li>
-<li>可以复制</li>
-<li>可以传递</li>
-<li>可以比较</li>
-<li>但绝不允许“修改原值”</li>
-</ul>
-<p>而：</p>
-<ul>
-<li><code>StringBuilder</code> = 草稿纸</li>
-<li><code>char[]</code> = 可随意涂改的纸</li>
-</ul>
-<hr>
-<h2 id="最容易被忽略的一点（高手标志）"><a href="#最容易被忽略的一点（高手标志）" class="headerlink" title="最容易被忽略的一点（高手标志）"></a>最容易被忽略的一点（高手标志）</h2><h3 id="为什么-String-的-value-数组不是暴露的？"><a href="#为什么-String-的-value-数组不是暴露的？" class="headerlink" title="为什么 String 的 value 数组不是暴露的？"></a>为什么 <code>String</code> 的 <code>value</code> 数组不是暴露的？</h3><p>如果有：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">char</span>[] getValue();<br></code></pre></td></tr></table></figure>
-<p>哪怕是 <code>final</code>，<strong>整个设计立刻崩塌</strong>。</p>
-<p>📌 所以不可变性的真正核心是：</p>
-<blockquote>
-<p><strong>不暴露任何可变内部状态的引用</strong></p>
-</blockquote>
-<hr>
-<h2 id="终极总结（请记住）"><a href="#终极总结（请记住）" class="headerlink" title="终极总结（请记住）"></a>终极总结（请记住）</h2><p><code>String</code> 的不可变性 =</p>
-<ol>
-<li>类是 <code>final</code></li>
-<li>内部状态 <code>private final</code></li>
-<li>不提供修改自身的方法</li>
-<li>构造期防御性拷贝</li>
-<li>JVM / 常量池 / hash / 安全模型共同依赖</li>
-</ol>
-<blockquote>
-<p><strong>它是 Java 中“不可变设计”的教科书级范例。</strong></p>
-</blockquote>
-<hr>
+<h2 id="五、-给你的特别提醒"><a href="#五、-给你的特别提醒" class="headerlink" title="五、 给你的特别提醒"></a>五、 给你的特别提醒</h2><p>你现在的 BMI 超过了 34。在刚开始执行的 2-4 周，体重会掉得非常快（主要是水分和炎症消退），这是正常现象。</p>
+<p>下一步行动建议：</p>
+<p>你需要我为你列出一份详细的超市购物清单，还是想先确定一份具体的居家/健身房力量训练动作表？</p>
 
                 
               </div>
@@ -446,8 +406,22 @@
     
       <span class="category-chain">
         
-  <a href="/categories/JavaSE/" class="category-chain-item">JavaSE</a>
+  <a href="/categories/%E5%81%A5%E5%BA%B7/" class="category-chain-item">健康</a>
   
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%81%A5%E5%BA%B7/%E5%81%A5%E8%BA%AB/" class="category-chain-item">健身</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E5%81%A5%E5%BA%B7/%E5%81%A5%E8%BA%AB/%E5%87%8F%E8%84%82%E6%96%B9%E6%A1%88/" class="category-chain-item">减脂方案</a>
+  
+  
+
+  
+
   
 
       </span>
@@ -461,9 +435,19 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/JavaSE/" class="print-no-link">#JavaSE</a>
+        <a href="/tags/%E5%87%8F%E8%84%82/" class="print-no-link">#减脂</a>
       
-        <a href="/tags/%E6%80%9D%E8%80%83/" class="print-no-link">#思考</a>
+        <a href="/tags/%E5%87%8F%E8%82%A5/" class="print-no-link">#减肥</a>
+      
+        <a href="/tags/%E9%A5%AE%E9%A3%9F%E8%AE%A1%E5%88%92/" class="print-no-link">#饮食计划</a>
+      
+        <a href="/tags/%E8%AE%AD%E7%BB%83%E8%AE%A1%E5%88%92/" class="print-no-link">#训练计划</a>
+      
+        <a href="/tags/%E5%A4%A7%E4%BD%93%E9%87%8D%E5%87%8F%E8%84%82/" class="print-no-link">#大体重减脂</a>
+      
+        <a href="/tags/%E5%8A%9B%E9%87%8F%E8%AE%AD%E7%BB%83/" class="print-no-link">#力量训练</a>
+      
+        <a href="/tags/%E6%9C%89%E6%B0%A7%E8%BF%90%E5%8A%A8/" class="print-no-link">#有氧运动</a>
       
     </div>
   
@@ -475,8 +459,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Java怎么实现Stirng不变的</div>
-      <div>https://zjjyyds.github.io/2026/01/03/JavaSE/Java怎么保证String不变的/</div>
+      <div>针对116kg体重的快速减脂饮食与训练计划</div>
+      <div>https://zjjyyds.github.io/2023/10/27/针对116kg体重的快速减脂饮食与训练计划/</div>
     </div>
     <div class="license-meta">
       
@@ -488,7 +472,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2026年1月3日</div>
+          <div>2023年10月27日</div>
         </div>
       
       
@@ -520,21 +504,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/01/03/Leetcode/%E4%BA%8C%E5%88%86/" title="二分思想不只能查找">
+                      <a href="/2025/12/21/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/Hexo%E5%92%8CGitHub%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E5%85%A8%E8%AE%B0%E5%BD%95/" title="Hexo和GitHub搭建博客全记录">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">二分思想不只能查找</span>
+                        <span class="hidden-mobile">Hexo和GitHub搭建博客全记录</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
                   </article>
                   <article class="post-next col-6">
                     
-                    
-                      <a href="/2026/01/01/%E5%AD%A6%E9%99%A2%E6%B4%BE/CS50AI/CS50X%20project0%20TicTacToc/" title="CS50 AI project0 Tic-Tac-Toe">
-                        <span class="hidden-mobile">CS50 AI project0 Tic-Tac-Toe</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
                     
                   </article>
                 </div>
